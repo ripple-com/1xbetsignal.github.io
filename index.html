@@ -1,502 +1,452 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="si">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Signal List Maker – Neo-Dark Theme (HH:MM:SS) - SLST Adjusted</title>
-  <style>
-    /* Neo-Dark Theme (Deep Blue/Purple) - Styles UNCHANGED */
-    :root{
-      --bg:#121212; /* Very dark background */
-      --card:#1f1f1f; /* Darker card background */
-      --ink:#f0f0f0; /* Light text */
-      --muted:#b0b0b0; /* Muted light gray */
-      --line:#333333; /* Dark border/line */
-      --pill-bg:#2a2a2a; /* Pill background */
-      --accent:#bb86fc; /* Primary purple accent (Classic Dark Mode accent) */
-      --accent-dark:#9063c4; /* Darker purple */
-      --success:#03dac6; /* Cyan for success */
-      --danger:#cf6679; /* Soft red for danger */
-      --warning:#ffeb3b; /* Yellow for warning */
-    }
-    *{box-sizing:border-box}
-    html,body{height:100%} 
-    body{
-      margin:0;
-      font:15px/1.6 system-ui,-apple-system,Segoe UI,Roboto,Ubuntu,Arial;
-      color:var(--ink);
-      background:var(--bg);
-    }
-    .wrap{max-width:860px;margin:36px auto;padding:0 16px}
-    
-    /* Header & Clock */
-    header{display:flex;align-items:center;justify-content:space-between;margin-bottom:28px}
-    h1{margin:0;font-size:26px;color:var(--accent);font-weight:700}
-    .clock{
-      padding:10px 16px;
-      border:1px solid var(--line);
-      border-radius:14px;
-      background:var(--card);
-      font-variant-numeric:tabular-nums;
-      color:var(--ink);
-      font-weight:600;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
-    }
-    
-    /* Panel/Card Style */
-    .panel, .sheet{
-      background:var(--card);
-      border:1px solid var(--line);
-      border-radius:20px;
-      padding:25px;
-      margin-bottom:24px;
-      box-shadow: 0 8px 16px rgba(0,0,0,0.3);
-    }
-    
-    label{display:block;font-size:13px;color:var(--muted);margin:6px 0}
-    input,select,button,textarea{font:inherit;border:none;outline:none;}
-    
-    /* Form Controls */
-    .row{display:grid;grid-template-columns:repeat(12,1fr);gap:20px}
-    .ctrl{
-      width:100%;
-      padding:14px 16px;
-      border-radius:12px;
-      border:1px solid var(--line);
-      background:var(--pill-bg);
-      color:var(--ink);
-      transition: border-color 0.3s, box-shadow 0.3s;
-    }
-    .ctrl:focus{border-color:var(--accent); box-shadow: 0 0 0 3px rgba(187, 134, 252, 0.3);}
-    textarea.ctrl{height:140px;resize:vertical}
-    
-    /* Buttons */
-    .btn{
-      padding:14px 24px;
-      border:none;
-      border-radius:12px;
-      cursor:pointer;
-      font-weight:700;
-      letter-spacing: 0.5px;
-      transition: background 0.3s, box-shadow 0.3s;
-    }
-    .btn-primary{
-      background:var(--accent);
-      color:var(--bg); /* Dark text on bright accent */
-      box-shadow: 0 4px 15px rgba(187, 134, 252, 0.4);
-    }
-    .btn-primary:hover{
-      background:var(--accent-dark);
-      box-shadow: 0 2px 8px rgba(187, 134, 252, 0.6);
-    }
-    .btn-ghost{
-      background:transparent;
-      border:1px solid var(--muted);
-      color:var(--ink);
-    }
-    .btn-ghost:hover{
-      background:rgba(255,255,255,0.08);
-      border-color:var(--accent);
-    }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aviator Super Clone (Canvas)</title>
+    <style>
+        /* =================================
+           CSS: සැබෑ Aviator UI පෙනුම
+           ================================= */
+        :root {
+            --dark-bg: #212529;
+            --bet-bg: #3C4146;
+            --green: #00B100;
+            --multiplier-color: #ffffff;
+            --history-low: #6a1b9a;
+            --history-medium: #cc00cc;
+            --history-high: #ffc107;
+            --text-color: #ffffff;
+        }
 
-    .hint{font-size:12px;color:var(--muted);margin-top:8px}
-    
-    /* Signal List */
-    .sig{padding:18px 0;border-bottom:1px solid var(--line);}
-    .sig:last-child{border-bottom:0}
-    .sig h3{margin:0 0 10px 0;letter-spacing:.8px;font-size:18px;color:var(--success)}
-    .sig ul{margin:0;padding:0;list-style:none;}
-    .sig li{margin:10px 0;display:flex;align-items:center;gap:12px;}
-    .sig li b{font-weight:700;color:var(--ink);font-size:16px;}
-    .sig li span.muted{color:var(--muted);font-size:14px;}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: var(--dark-bg);
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            align-items: flex-start;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    /* Badges/Pills */
-    .badge{
-      display:inline-flex;
-      align-items:center;
-      gap:8px;
-      background:var(--pill-bg);
-      border:1px solid var(--line);
-      border-radius:999px;
-      padding:10px 18px;
-      margin:0 10px 15px 0;
-      color:var(--ink);
-      font-size:14px;
-      font-weight:600;
-    }
-    .bad{color:var(--danger);border-color:#5c353e;background:#2c191e;}
-    .good{color:var(--success);border-color:#1e4c49;background:#172a29;}
-    .warn{color:var(--warning);border-color:#5c5831;background:#2c2b18;}
-    
-    /* Auth overlay */
-    .gate{position:fixed;inset:0;background:rgba(0,0,0,.8);display:flex;align-items:center;justify-content:center;z-index:50}
-    .gate .box{width:min(92vw,440px);background:var(--card);border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow: 0 15px 35px rgba(0,0,0,0.5);}
-    .gate h2{margin:0 0 15px;color:var(--accent);font-size:24px;}
-    .gate .muted{color:var(--muted);font-size:15px;margin-bottom:15px}
+        #app-container {
+            width: 100%;
+            max-width: 600px; 
+            background-color: var(--dark-bg);
+        }
 
-    /* Responsive adjustments */
-    @media (max-width:560px){ 
-      .row{grid-template-columns:1fr} 
-      .row > *{grid-column:span 1 !important} 
-      .btn{width:100%;}
-      .wrap{margin:16px auto;}
-      .panel, .sheet{padding:15px;}
-      header{margin-bottom:20px;}
-    }
-  </style>
+        /* ------------------ Header/History ------------------ */
+        #header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 10px 15px;
+            background-color: var(--dark-bg);
+            border-bottom: 1px solid #333;
+        }
+        #logo { color: #d10034; font-size: 1.5em; font-weight: bold; }
+        #balance { color: var(--green); font-size: 1.1em; }
+
+        #history-bar {
+            padding: 8px 15px;
+            background-color: #1a1e21; 
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            gap: 10px;
+            border-bottom: 1px solid #333;
+        }
+        .result-chip {
+            flex-shrink: 0;
+            padding: 3px 8px;
+            border-radius: 15px;
+            font-size: 0.8em;
+            font-weight: bold;
+            color: var(--text-color);
+        }
+        .color-low { background-color: var(--history-low); } 
+        .color-medium { background-color: var(--history-medium); }
+        .color-high { background-color: var(--history-high); } 
+        
+
+        /* ------------------ ප්‍රධාන ක්‍රීඩා ප්‍රදේශය (Canvas) ------------------ */
+        #game-area {
+            position: relative;
+            background-color: #1a1e21; /* තද පසුබිම */
+            border-bottom: 1px solid #333;
+        }
+        #gameCanvas {
+            display: block;
+            width: 100%;
+            height: 300px; /* Canvas උස */
+        }
+        #multiplier-display {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-size: 5em;
+            font-weight: 900;
+            color: var(--multiplier-color);
+            transition: color 0.3s;
+            z-index: 10;
+        }
+        /* ගුවන් ගමන අතරතුර අළු පැහැයට හැරීම */
+        .multiplier-playing { color: #CCC !important; }
+        .multiplier-crashed { color: #FF0000 !important; }
+        
+        /* ------------------ පාලක පැනල (වෙනස් නොවන) ------------------ */
+        #control-panel-container {
+            display: flex;
+            justify-content: space-around;
+            padding: 10px;
+            gap: 10px;
+        }
+
+        .bet-panel {
+            flex: 1;
+            background-color: var(--bet-bg);
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .bet-type-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px;
+            background-color: #495057;
+            border-radius: 5px;
+        }
+        .bet-type-bar button {
+            flex: 1;
+            padding: 5px;
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 0.9em;
+            cursor: pointer;
+        }
+        .bet-type-bar button:first-child { background-color: #5A6268; border-radius: 5px; color: white; }
+        
+        .bet-input-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--dark-bg);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 15px;
+        }
+        .bet-input-group button {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .bet-input-group input {
+            flex-grow: 1;
+            background: none;
+            border: none;
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            padding: 10px 0;
+            width: 100%;
+        }
+
+        .quick-bets {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            gap: 5px;
+        }
+        .quick-bets button {
+            flex: 1;
+            background-color: #495057;
+            color: white;
+            border: none;
+            padding: 8px 0;
+            border-radius: 5px;
+            font-size: 0.8em;
+            cursor: pointer;
+        }
+
+        .main-action-button {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.4em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: var(--green);
+            color: white;
+            transition: background-color 0.3s;
+        }
+        .main-action-button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        
+    </style>
 </head>
 <body>
 
-  <div id="gate" class="gate" style="display:none">
-    <div class="box">
-      <h2>🔒 Enter Password</h2>
-      <div class="muted">This app is protected. Attempts remaining: <b id="left">3</b></div>
-      <input id="pw" class="ctrl" type="password" placeholder="Password" autocomplete="off">
-      <div class="row" style="margin-top:20px">
-        <button class="btn btn-primary" id="login" style="grid-column:span 6">Login</button>
-        <button class="btn btn-ghost" id="logout" style="grid-column:span 6">Reset Session</button>
-      </div>
-      <div id="gateMsg" class="hint" style="margin-top:12px"></div>
+    <div id="app-container">
+        
+        <div id="header">
+            <div id="logo">Aviator</div>
+            <div id="balance">0.00 LKR ☰</div>
+        </div>
+        
+        <div id="history-bar">
+            <span class="result-chip color-low">1.04x</span>
+            <span class="result-chip color-medium">4.24x</span>
+            <span class="result-chip color-high">18.47x</span>
+        </div>
+
+        <div id="game-area">
+            <canvas id="gameCanvas" width="600" height="300"></canvas> 
+            <div id="multiplier-display">1.00x</div>
+        </div>
+
+        <div id="control-panel-container">
+            
+            <div class="bet-panel">
+                <div class="bet-type-bar">
+                    <button>Bet</button>
+                    <button>Auto</button>
+                </div>
+                
+                <div class="bet-input-group">
+                    <button id="minus1">-</button>
+                    <input type="text" id="bet1-amount" value="20.00" readonly>
+                    <button id="plus1">+</button>
+                </div>
+
+                <div class="quick-bets">
+                    <button>100</button>
+                    <button>200</button>
+                    <button>500</button>
+                    <button>10,000</button>
+                </div>
+
+                <button id="bet1-action" class="main-action-button">Bet 20.00 LKR</button>
+            </div>
+
+            <div class="bet-panel">
+                <div class="bet-type-bar">
+                    <button>Bet</button>
+                    <button>Auto</button>
+                </div>
+
+                <div class="bet-input-group">
+                    <button id="minus2">-</button>
+                    <input type="text" id="bet2-amount" value="20.00" readonly>
+                    <button id="plus2">+</button>
+                </div>
+
+                <div class="quick-bets">
+                    <button>100</button>
+                    <button>200</button>
+                    <button>500</button>
+                    <button>10,000</button>
+                </div>
+
+                <button id="bet2-action" class="main-action-button">Bet 20.00 LKR</button>
+            </div>
+
+        </div>
     </div>
-  </div>
-  <div class="wrap">
-    <header>
-      <h1>Signal List Maker (SLST)</h1> 
-      <div class="clock" id="clock">--:--:--</div>
-    </header>
 
-    <div class="badge good" id="leftPill">🟢 Remaining today: <b id="remain">–</b></div>
-    <div class="badge warn" id="coolPill" style="display:none"></div>
-    <div class="badge" id="trialPill" style="display:none"></div>
-    
-    <section class="panel">
-      <div class="row">
-        <div style="grid-column:span 6">
-          <label for="history">Recent rounds (newest last)</label>
-          <textarea id="history" class="ctrl" placeholder="23:47:15 21.59x
-1.31x
-1.22x
-3.18x
-1.09x
-1.07x"></textarea>
-          <div class="hint">Format per line: <code>HH:MM:SS 20.30x</code> or <code>20.30x</code> (time optional).</div>
-        </div>
-
-        <div style="grid-column:span 3">
-          <label for="start">Start from (HH:MM) - UTC Time</label> <input id="start" class="ctrl" type="time" step="60">
-        </div>
-        <div style="grid-column:span 3">
-          <label for="mode">Mode</label>
-          <select id="mode" class="ctrl">
-            <option value="mid">Mid Odds 11x–15x (safer)</option>
-            <option value="high">High Odds 20x–35x (riskier)</option>
-          </select>
-          <label for="count" style="margin-top:16px">Signals Count</label>
-          <input id="count" class="ctrl" type="number" min="1" max="12" value="3">
-        </div>
-      </div>
-
-      <div style="margin-top:25px;display:flex;gap:15px;flex-wrap:wrap">
-        <button class="btn btn-primary" id="gen">Generate Signals</button>
-        <button class="btn btn-ghost" id="clear">Clear List</button>
-        <button class="btn btn-ghost" id="copy">Copy for WhatsApp</button>
-      </div>
-      <div class="hint" style="margin-top:12px;">Realistic spacing (≈3–5, 6–10, 9–14 mins). Confidence auto-adjusts with higher odds. Generated times are SLST (UTC+5:30).</div>
-    </section>
-
-    <section class="sheet">
-      <div id="lastHighBar" style="display:none;margin-bottom:20px"></div>
-      <div id="sheet"></div>
-    </section>
-
-    <p class="hint" style="text-align:center;">Note: Crash/RNG games have no guaranteed outcomes. These signals format is for demo/testing.</p>
-  </div>
-
-  <script>
-    // ===== CONFIG (UNCHANGED) =====
-    const CONFIG = {
-      PASSWORD: '123',          // password not required
-      MAX_PER_DAY: Infinity,    // no daily limit
-      MIN_SECONDS_BETWEEN: 0,   // no cooldown
-      ALLOW_DAYS: 999999        // practically unlimited trial
-    };
-
-    // ===== helpers (MODIFIED for seconds & UTC time functions) =====
-    const $ = s => document.querySelector(s);
-    const pad = n => String(n).padStart(2,'0');
-    const rand = (a,b) => Math.floor(Math.random()*(b-a+1))+a;
-
-    // Get current time with seconds (local time - SLST if device is set correctly)
-    function nowHM(){ const d=new Date(); return {h:d.getHours(), m:d.getMinutes(), s:d.getSeconds()}; }
-    
-    // Get current UTC time
-    function nowUTC(){ const d=new Date(); return {h:d.getUTCHours(), m:d.getUTCMinutes(), s:d.getUTCSeconds()}; }
-
-    // Update clock to HH:MM:SS (Shows local device time)
-    function setClock(){ const {h,m,s}=nowHM(); $('#clock').textContent = `${pad(h)}:${pad(m)}:${pad(s)}`; }
-    setInterval(setClock, 1000); setClock();
-
-    // Utility to convert time in minutes to HH:MM:SS string
-    function formatMinutesToHMS(totalMinutes, seconds) {
-        let h = Math.floor(totalMinutes / 60) % 24;
-        let m = totalMinutes % 60;
-        let s = seconds; // Seconds are retained/passed from generation
-        return `${pad(h)}:${pad(m)}:${pad(s)}`;
-    }
-
-    // ===== storage, trial days, usage counter, cool-down timer (UNCHANGED) =====
-    const KEY = 'sig_list_emoji_v2';
-    const load = ()=> JSON.parse(localStorage.getItem(KEY)||'[]');
-    const save = a => localStorage.setItem(KEY, JSON.stringify(a));
-
-    const TRIAL_KEY = 'first_use_date_v1';
-    function getFirstUseDate() {
-      let d = localStorage.getItem(TRIAL_KEY);
-      if (!d) { d = new Date().toISOString().slice(0,10); localStorage.setItem(TRIAL_KEY, d); }
-      return d;
-    }
-    function trialInfo() {
-      const start = new Date(getFirstUseDate());
-      const now   = new Date();
-      const used  = Math.floor((now - start) / (1000*60*60*24));
-      const left  = Math.max(0, CONFIG.ALLOW_DAYS - used);
-      return { used, left };
-    }
-    function enforceTrial() {
-      const { left } = trialInfo();
-      const pill = document.getElementById('trialPill');
-      if (left > 0) {
-        pill.style.display = 'inline-flex';
-        pill.className = 'badge ' + (left <= 2 ? 'bad' : 'good');
-        pill.textContent = `🗓 Trial: ${left} day${left===1?'':'s'} left`;
-        return true;
-      } else {
-        document.body.innerHTML =
-          `<div style="max-width:760px;margin:18vh auto;padding:16px;color:var(--danger);font:16px system-ui;background:var(--bg)">
-             <h2 style="color:var(--danger);margin:0 0 8px">⛔ Trial expired</h2>
-             <p>Your ${CONFIG.ALLOW_DAYS}-day access has ended.</p>
-           </div>`;
-        return false;
-      }
-    }
-
-    function yyyy_mm_dd(){const d=new Date();return `${d.getFullYear()}-${pad(d.getMonth()+1)}-${pad(d.getDate())}`;}
-    function getUsage(){
-      const k='usage_'+yyyy_mm_dd(); const v=+localStorage.getItem(k)||0; return {key:k, used:v};
-    }
-    function incUsage(n){ const u=getUsage(); localStorage.setItem(u.key, String(u.used + n)); refreshRemain(); }
-
-    let lastActionAt = 0;
-    function canRunNow(){
-      const secs = Math.floor((Date.now()-lastActionAt)/1000);
-      const need = CONFIG.MIN_SECONDS_BETWEEN - secs;
-      if(need>0){
-        $('#coolPill').style.display='inline-flex';
-        $('#coolPill').className='badge bad';
-        $('#coolPill').textContent = `⏱ Wait ${need}s`;
-        return false;
-      }
-      $('#coolPill').style.display='none';
-      return true;
-    }
-
-    // ===== History parsing & last high detection (UNCHANGED) =====
-    function parseHistory(text){
-      return text.split(/\n+/).map(t=>t.trim()).filter(Boolean).map(L=>{
-        // New regex to optionally capture HH:MM:SS or HH:MM
-        const m=L.match(/^((?:\d{1,2}):(\d{2})(?::(\d{2}))?\s+)?([0-9]+(?:\.[0-9]+)?)x$/i);
-        if(!m) return null;
-        // m[2] is MM, m[3] is optional SS
-        const time = m[1] 
-            ? `${pad(m[2])}:${pad(m[3]||'00')}` // HH:MM:SS format
-            : null;
-        return {t: time, x: +m[4]}; // m[4] is the odd value
-      }).filter(Boolean);
-    }
-    function findLastHigh(rows, thr=20){
-      for(let i=rows.length-1;i>=0;i--){
-        if(rows[i].x >= thr) return {val: rows[i].x, t: rows[i].t, idx:i, ago: rows.length-1-i};
-      }
-      return null;
-    }
-
-    // ===== Signal builder (Generates time based on startH/startM and adds random seconds) =====
-    function genSignals(startH, startM, mode, count){
-      const out=[]; 
-      let h=startH, m=startM;
-      let s = rand(0, 59); // Initial random second value for the first signal
-
-      // Gaps logic is unchanged: [3-5, 6-10, 9-14, 4-7, 5-9]
-      const gaps = [ () => rand(3,5), () => rand(6,10), () => rand(9,14), () => rand(4,7), () => rand(5,9) ];
-      
-      for(let i=0;i<count;i++){
-        const incMin = gaps[i % gaps.length]();
+    <script>
+        /* =================================
+           JavaScript: Canvas තර්කනය සහ ග්‍රැෆික්
+           ================================= */
         
-        // Add minutes
-        m += incMin; 
-        if(m>=60){ h=(h+1)%24; m-=60; }
+        const canvas = document.getElementById('gameCanvas');
+        const ctx = canvas.getContext('2d');
+        const multiplierDisplay = document.getElementById('multiplier-display');
+        const historyBar = document.getElementById('history-bar');
+        // ... (අනෙක් HTML මූලද්‍රව්‍ය කලින් කේතයේ තිබූ පරිදිම) ...
+
+        let currentMultiplier = 1.00;
+        let isPlaying = false;
+        let crashPoint = 0;
+        let animationFrameId; // requestAnimationFrame සඳහා
+        let startTime;
+
+        // ඉතිහාසයේ ඇති වර්ණය තීරණය කිරීම (කලින් කේතයේ තිබූ පරිදිම)
+        function getHistoryColorClass(multiplier) {
+            if (multiplier < 2.00) return 'color-low';
+            if (multiplier < 10.00) return 'color-medium';
+            return 'color-high';
+        }
         
-        // Add a NEW random second for this signal (0-59)
-        s = rand(0, 59); 
+        // ඉතිහාසයට නව ප්‍රතිඵලයක් එකතු කිරීම (කලින් කේතයේ තිබූ පරිදිම)
+        function addHistoryResult(multiplier) {
+            const chip = document.createElement('span');
+            chip.textContent = multiplier.toFixed(2) + 'x';
+            chip.className = 'result-chip ' + getHistoryColorClass(multiplier);
+            historyBar.prepend(chip);
+            historyBar.scrollLeft = 0;
+            if (historyBar.children.length > 30) {
+                historyBar.removeChild(historyBar.lastChild);
+            }
+        }
         
-        // Odd generation logic is unchanged
-        const odd = (mode==='mid') ? (rand(110,150)/10) : (rand(200,350)/10);
+        // ගුණකය කාලය මත පදනම්ව ගණනය කිරීම (සැබෑ Aviator අල්ගොරිතමය අනුකරණය)
+        function calculateMultiplier(timeElapsed) {
+            // F(t) = 1 + A * t^B වැනි සූත්‍රයක සරල අනුකරණයක්
+            // කාලය අනුව ඝාතීය වර්ධනයක් ලබා දීම
+            if (timeElapsed < 1000) return 1.00 + timeElapsed / 1000 * 0.1; // පළමු තත්පරය මන්දගාමීව
+            return 1.1 + Math.pow(timeElapsed / 1000, 1.5) * 0.5;
+        }
+
+        // ----------------------------------------------------
+        // Canvas ඇඳීම
+        // ----------------------------------------------------
+        function drawGraph() {
+            // කැන්වසය හිස් කරන්න
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            
+            // ග්‍රිඩ් එක ඇඳීම
+            ctx.strokeStyle = '#333';
+            ctx.lineWidth = 1;
+            for (let i = 0; i < 10; i++) {
+                // සිරස් රේඛා
+                ctx.beginPath();
+                ctx.moveTo(i * (canvas.width / 10), 0);
+                ctx.lineTo(i * (canvas.width / 10), canvas.height);
+                ctx.stroke();
+                // තිරස් රේඛා
+                ctx.beginPath();
+                ctx.moveTo(0, i * (canvas.height / 10));
+                ctx.lineTo(canvas.width, i * (canvas.height / 10));
+                ctx.stroke();
+            }
+
+            // ගුණක වක්‍රය ඇඳීම
+            if (isPlaying) {
+                const timeElapsed = performance.now() - startTime;
+                const m = currentMultiplier;
+
+                // Canvas හි ඛණ්ඩාංක පරිවර්තනය (Multiplier to Y-axis)
+                // අපි X අක්ෂය කාලයටත් Y අක්ෂය ගුණකයටත් ගනිමු.
+                
+                // උපරිම ගුණකයක් (Max Y Value) සහ කාලයක් (Max X Value) නියම කරමු
+                const MAX_TIME = 15000; // 15s
+                const MAX_MULTIPLIER_VISIBLE = 10;
+                
+                const x = (timeElapsed / MAX_TIME) * canvas.width;
+                // y අගය ලඝුගණක පරිමාණයෙන් ගැනීමෙන් වක්‍රය වඩා හොඳින් පෙන්විය හැකියි
+                const y_norm = Math.log10(m) / Math.log10(MAX_MULTIPLIER_VISIBLE); 
+                const y = canvas.height - (y_norm * canvas.height * 0.9 + canvas.height * 0.1); 
+
+                ctx.strokeStyle = '#00FF00'; // කොළ පැහැති වක්‍රය
+                ctx.lineWidth = 3;
+                ctx.beginPath();
+                
+                // (0, height) සිට පටන් ගන්න
+                ctx.moveTo(0, canvas.height); 
+
+                // වත්මන් ලක්ෂ්‍යයට වක්‍රය ඇඳීම
+                ctx.lineTo(x, y); 
+                
+                // Smooth වක්‍රයක් සඳහා quadraticCurveTo භාවිතා කරන්න
+                // මෙය වඩාත් සංකීර්ණ බැවින් සරල LineTo භාවිතා කරමු.
+                ctx.stroke();
+
+                // ගුවන් යානය නියෝජනය කරන ලක්ෂ්‍යය ඇඳීම
+                ctx.fillStyle = '#D10034'; // රතු පැහැය
+                ctx.beginPath();
+                ctx.arc(x, y, 5, 0, Math.PI * 2); 
+                ctx.fill();
+
+                // ගුණක අගය මැද පෙන්වීම
+                multiplierDisplay.textContent = m.toFixed(2) + 'x';
+            }
+        }
+
+        // ප්‍රධාන සජීවීකරණ ලූප් එක
+        function animate(timestamp) {
+            if (!startTime) startTime = timestamp;
+            const timeElapsed = timestamp - startTime;
+
+            if (isPlaying) {
+                // කාලය අනුව ගුණකය යාවත්කාලීන කරන්න
+                currentMultiplier = calculateMultiplier(timeElapsed);
+                
+                if (currentMultiplier >= crashPoint) {
+                    crashGame();
+                }
+
+                drawGraph();
+            } else {
+                 // ක්‍රෑෂ් වූ පසු අවසන් වක්‍රය පෙන්වීමට
+                 drawGraph();
+            }
+
+            animationFrameId = requestAnimationFrame(animate);
+        }
+
+        // ----------------------------------------------------
+        // ක්‍රීඩා තර්කනය (කලින් කේතයෙන් ගෙන ඇත)
+        // ----------------------------------------------------
         
-        // Confidence/Crash logic is unchanged
-        const baseConf = (mode==='mid') ? 84 : 74;
-        const slope    = (mode==='mid') ? 2.2 : 1.6;
-        let conf = Math.round(Math.max(55, Math.min(90, baseConf - (odd - (mode==='mid'?11:20))*slope + (rand(-3,3)))));
-        const crash = Math.max(5, Math.min(40, 100 - conf + rand(-1,2)));
+        function startGame() {
+            if (isPlaying) return;
 
-        // Output contains UTC-based time in total minutes (for easier SLST conversion later)
-        const totalMin = (h*60) + m; 
+            isPlaying = true;
+            currentMultiplier = 1.00;
+            crashPoint = 1.01 + Math.random() * 8.99; 
+            startTime = performance.now(); // කාලය නැවත සකසන්න
+            
+            multiplierDisplay.className = 'multiplier-playing'; 
+            // ... (බොත්තම් තර්කනය මෙහිදී ඇතුළත් කරන්න) ...
+            
+            // සජීවීකරණය ආරම්භ කරන්න
+            if (!animationFrameId) {
+                animationFrameId = requestAnimationFrame(animate);
+            }
+        }
 
-        // Return a temporary object containing all necessary data, including total minutes
-        out.push({ totalMin, s, odd:odd.toFixed(1), conf, crash });
-      }
-      return out;
-    }
+        function crashGame() {
+            isPlaying = false;
+            cancelAnimationFrame(animationFrameId);
+            animationFrameId = null;
+            
+            const finalMultiplier = currentMultiplier; 
+            addHistoryResult(finalMultiplier);
+            
+            multiplierDisplay.className = 'multiplier-crashed'; 
+            // ... (Lost පෙන්වීමේ සහ බොත්තම් reset කිරීමේ තර්කනය මෙහි ඇතුළත් කරන්න) ...
+            
+            setTimeout(resetGame, 4000); 
+        }
 
-    // ===== Rendering function (MODIFIED to convert time to SLST/Local before display) =====
-    function render(){
-      const box = $('#sheet'); box.innerHTML='';
-      const data = load();
-      
-      // UTC to SLST Offset: 5 hours 30 minutes = 330 minutes
-      const SLST_OFFSET_MINUTES = 330; 
-      
-      data.forEach((s,idx)=>{
-        // Convert the UTC-based total minutes to SLST total minutes
-        const slstTotalMin = s.totalMin + SLST_OFFSET_MINUTES;
-        const slstTime = formatMinutesToHMS(slstTotalMin, s.s); // Use the helper to format
+        function resetGame() {
+             multiplierDisplay.className = '';
+             // ... (බොත්තම් යථා තත්ත්වයට පත් කිරීමේ තර්කනය මෙහි ඇතුළත් කරන්න) ...
+             setTimeout(startGame, 1000); 
+        }
+
+        // ... (Event Listeners සහ අනෙක් ශ්‍රිතයන් මෙහිදී ඇතුළත් කරන්න) ...
         
-        const el = document.createElement('div');
-        el.className='sig';
-        el.innerHTML = `
-          <h3>SIGNAL ${idx+1}</h3>
-          <ul>
-            <li><span style="color:var(--accent)">⏰</span> <span class="muted">Time (SLST):</span> <b>${slstTime}</b></li>
-            <li><span style="color:var(--warning)">🎲</span> <span class="muted">Target Odd:</span> <b>${s.odd}x</b></li>
-            <li><span style="color:var(--danger)">💥</span> <span class="muted">Crash Prob (before ${s.odd}x):</span> <b>~${s.crash}%</b></li>
-            <li><span style="color:var(--success)">🔒</span> <span class="muted">Confidence:</span> <b>~${s.conf}%</b></li>
-          </ul>`;
-        box.appendChild(el);
-      });
-    }
+        // ආරම්භයේදී ගේම් එක පටන් ගන්න
+        // setTimeout(startGame, 1000); 
+        // මුලින්ම animate ලූප් එක පටන් ගෙන නැවත සැකසීම කරමු
+        animate(performance.now());
+        resetGame(); // මෙය startGame වෙත යොමු කරයි
 
-    // ===== Copy function (MODIFIED to convert time to SLST/Local before copy) =====
-    function copyForWhatsApp(){
-      const data = load();
-      if(!data.length){ alert('No signals to copy'); return; }
-      
-      const SLST_OFFSET_MINUTES = 330; // 5 hours 30 minutes
-      
-      // WhatsApp format includes the new HH:MM:SS time
-      const txt = data.map((s,i)=>{
-        const slstTotalMin = s.totalMin + SLST_OFFSET_MINUTES;
-        const slstTime = formatMinutesToHMS(slstTotalMin, s.s);
-        return `*SIGNAL ${i+1}*\n⏰ ${slstTime} (SLST)\n🎲 Target Odd: *${s.odd}x*\n💥 Crash Prob (before ${s.odd}x): ~${s.crash}%\n🔒 Confidence: ~${s.conf}%`;
-      }).join("\n\n");
-      
-      navigator.clipboard.writeText(txt).then(()=>alert('Copied to clipboard 👍'));
-    }
-
-    // ===== All other functions (Password, Usage) remain UNCHANGED/Corrected =====
-    const GATE_KEY='sess_ok_v1', ATTEMPT_KEY='sess_attempts_v1', COOLDOWN_KEY='sess_lock_until_v1';
-    function showGate(){ $('#gate').style.display='flex'; $('#pw').value=''; $('#pw').focus(); updateGateUI(); }
-    function hideGate(){ $('#gate').style.display='none'; }
-    function isUnlocked(){ return sessionStorage.getItem(GATE_KEY)==='1'; }
-    function updateGateUI(){
-      const left = 3 - (parseInt(sessionStorage.getItem(ATTEMPT_KEY)||'0',10));
-      $('#left').textContent = left;
-      const until = parseInt(sessionStorage.getItem(COOLDOWN_KEY)||'0',10);
-      const msg = $('#gateMsg');
-      if(Date.now()<until){
-        const sec=Math.ceil((until-Date.now())/1000);
-        msg.textContent=`Too many attempts. Try again in ${sec}s.`;
-      }else msg.textContent='';
-    }
-    function tryLogin(){
-      const until = parseInt(sessionStorage.getItem(COOLDOWN_KEY)||'0',10);
-      if(Date.now()<until){ updateGateUI(); return; }
-      const ok = ($('#pw').value === CONFIG.PASSWORD);
-      if(ok){ sessionStorage.setItem(GATE_KEY,'1'); sessionStorage.removeItem(ATTEMPT_KEY); hideGate(); }
-      else{
-        let a = parseInt(sessionStorage.getItem(ATTEMPT_KEY)||'0',10)+1;
-        sessionStorage.setItem(ATTEMPT_KEY,String(a));
-        if(a>=3){ sessionStorage.setItem(COOLDOWN_KEY, String(Date.now()+60*1000)); }
-        updateGateUI();
-      }
-    }
-    function resetSession(){ sessionStorage.clear(); showGate(); }
-    function refreshRemain(){
-      const u=getUsage(); const left=CONFIG.MAX_PER_DAY - u.used;
-      $('#remain').textContent = `${left}/${CONFIG.MAX_PER_DAY}`;
-      $('#leftPill').className = 'badge ' + (left ? 'good':'bad');
-    }
-
-    // ===== wire UI (MODIFIED: Set start time to current UTC HH:MM) =====
-    (function init(){
-      // Trial check FIRST
-      if (!enforceTrial()) return;
-
-      // auth
-      if(!isUnlocked()) showGate();
-      $('#login').onclick=tryLogin;
-      $('#logout').onclick=resetSession;
-      $('#pw').addEventListener('keydown',e=>{ if(e.key==='Enter') tryLogin(); });
-
-      // Set start time input to current UTC HH:MM
-      const n = nowUTC(); // *** MODIFIED: Use UTC time for the input field ***
-      $('#start').value = `${pad(n.h)}:${pad(n.m)}`;
-      
-      render(); refreshRemain();
-
-      $('#gen').onclick = ()=>{
-        if(!isUnlocked()) return showGate();
-        if(!canRunNow()) return;
-
-        // re-check trial each action
-        if (!enforceTrial()) return;
-
-        const u=getUsage(); const left=CONFIG.MAX_PER_DAY - u.used;
-        const want = Math.max(1, Math.min(12, +$('#count').value||3));
-        if(left<=0){ alert('Daily limit reached. Try again tomorrow.'); return; }
-        const take = Math.min(left, want);
-
-        // last ≥20x from history
-        const hist = parseHistory($('#history').value);
-        const bar  = $('#lastHighBar');
-        if(hist.length){
-          const H20 = findLastHigh(hist,20);
-          bar.style.display='inline-flex';
-          bar.className = 'badge warn';
-          bar.innerHTML = H20
-            ? `⚠️ Last ≥20x: <b>${(H20.t||`${H20.ago} rounds ago`)}</b> • ${H20.val.toFixed(2)}x`
-            : `✅ Last ≥20x: not found in pasted list`;
-        }else bar.style.display='none';
-
-        // generate
-        // The input HH:MM is treated as UTC.
-        const [hStr,mStr] = ($('#start').value || `${pad(n.h)}:${pad(n.m)}`).split(':');
-        const mode = $('#mode').value;
-        // genSignals returns UTC-based total minutes and seconds
-        const newOnes = genSignals(+hStr, +mStr, mode, take); 
-        const arr = load(); arr.push(...newOnes);
-
-        // (optional) keep last 200 only
-        const LIMIT_LIST = 200;
-        if (arr.length > LIMIT_LIST) arr.splice(0, arr.length - LIMIT_LIST);
-
-        save(arr); render(); // render() now converts the UTC-based time to SLST before display
-
-        incUsage(take);
-        lastActionAt = Date.now();
-      };
-
-      $('#clear').onclick = ()=>{ if(!isUnlocked()) return showGate(); localStorage.removeItem(KEY); render(); };
-      $('#copy').onclick  = ()=>{ if(!isUnlocked()) return showGate(); copyForWhatsApp(); };
-    })();
-  </script>
+    </script>
 </body>
 </html>
