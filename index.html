@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Super Clone (Canvas)</title>
+    <title>Aviator Super Clone (Fixed Betting)</title>
     <style>
         /* =================================
-           CSS: සැබෑ Aviator UI පෙනුම
+           CSS: පෙර කේතයේ තිබූ පරිදිම
            ================================= */
         :root {
             --dark-bg: #212529;
@@ -17,6 +17,7 @@
             --history-medium: #cc00cc;
             --history-high: #ffc107;
             --text-color: #ffffff;
+            --bet-placed-color: #6A1B9A; /* ඔට්ටු ඇල්ලූ පසු දම් පැහැය */
         }
 
         body {
@@ -75,13 +76,13 @@
         /* ------------------ ප්‍රධාන ක්‍රීඩා ප්‍රදේශය (Canvas) ------------------ */
         #game-area {
             position: relative;
-            background-color: #1a1e21; /* තද පසුබිම */
+            background-color: #1a1e21; 
             border-bottom: 1px solid #333;
         }
         #gameCanvas {
             display: block;
             width: 100%;
-            height: 300px; /* Canvas උස */
+            height: 300px;
         }
         #multiplier-display {
             position: absolute;
@@ -94,11 +95,10 @@
             transition: color 0.3s;
             z-index: 10;
         }
-        /* ගුවන් ගමන අතරතුර අළු පැහැයට හැරීම */
         .multiplier-playing { color: #CCC !important; }
         .multiplier-crashed { color: #FF0000 !important; }
         
-        /* ------------------ පාලක පැනල (වෙනස් නොවන) ------------------ */
+        /* ------------------ පාලක පැනල ------------------ */
         #control-panel-container {
             display: flex;
             justify-content: space-around;
@@ -204,14 +204,11 @@
         
         <div id="header">
             <div id="logo">Aviator</div>
-            <div id="balance">0.00 LKR ☰</div>
+            <div id="balance">1000.00 LKR ☰</div>
         </div>
         
         <div id="history-bar">
-            <span class="result-chip color-low">1.04x</span>
-            <span class="result-chip color-medium">4.24x</span>
-            <span class="result-chip color-high">18.47x</span>
-        </div>
+            </div>
 
         <div id="game-area">
             <canvas id="gameCanvas" width="600" height="300"></canvas> 
@@ -227,16 +224,16 @@
                 </div>
                 
                 <div class="bet-input-group">
-                    <button id="minus1">-</button>
-                    <input type="text" id="bet1-amount" value="20.00" readonly>
-                    <button id="plus1">+</button>
+                    <button class="minus-btn" data-input-id="bet1-amount" data-step="1">-</button>
+                    <input type="number" id="bet1-amount" value="20.00" min="1.00" step="1.00">
+                    <button class="plus-btn" data-input-id="bet1-amount" data-step="1">+</button>
                 </div>
 
                 <div class="quick-bets">
-                    <button>100</button>
-                    <button>200</button>
-                    <button>500</button>
-                    <button>10,000</button>
+                    <button class="quick-btn" data-amount="100">100</button>
+                    <button class="quick-btn" data-amount="200">200</button>
+                    <button class="quick-btn" data-amount="500">500</button>
+                    <button class="quick-btn" data-amount="10000">10,000</button>
                 </div>
 
                 <button id="bet1-action" class="main-action-button">Bet 20.00 LKR</button>
@@ -249,16 +246,16 @@
                 </div>
 
                 <div class="bet-input-group">
-                    <button id="minus2">-</button>
-                    <input type="text" id="bet2-amount" value="20.00" readonly>
-                    <button id="plus2">+</button>
+                    <button class="minus-btn" data-input-id="bet2-amount" data-step="1">-</button>
+                    <input type="number" id="bet2-amount" value="20.00" min="1.00" step="1.00">
+                    <button class="plus-btn" data-input-id="bet2-amount" data-step="1">+</button>
                 </div>
 
                 <div class="quick-bets">
-                    <button>100</button>
-                    <button>200</button>
-                    <button>500</button>
-                    <button>10,000</button>
+                    <button class="quick-btn" data-amount="100">100</button>
+                    <button class="quick-btn" data-amount="200">200</button>
+                    <button class="quick-btn" data-amount="500">500</button>
+                    <button class="quick-btn" data-amount="10000">10,000</button>
                 </div>
 
                 <button id="bet2-action" class="main-action-button">Bet 20.00 LKR</button>
@@ -269,29 +266,47 @@
 
     <script>
         /* =================================
-           JavaScript: Canvas තර්කනය සහ ග්‍රැෆික්
+           JavaScript: Canvas තර්කනය සහ ඔට්ටු ඇල්ලීම
            ================================= */
         
         const canvas = document.getElementById('gameCanvas');
         const ctx = canvas.getContext('2d');
         const multiplierDisplay = document.getElementById('multiplier-display');
         const historyBar = document.getElementById('history-bar');
-        // ... (අනෙක් HTML මූලද්‍රව්‍ය කලින් කේතයේ තිබූ පරිදිම) ...
-
+        const bet1Action = document.getElementById('bet1-action');
+        const bet2Action = document.getElementById('bet2-action');
+        const bet1Input = document.getElementById('bet1-amount');
+        const bet2Input = document.getElementById('bet2-amount');
+        
+        // ඔට්ටු තත්ත්වයන්
         let currentMultiplier = 1.00;
         let isPlaying = false;
         let crashPoint = 0;
-        let animationFrameId; // requestAnimationFrame සඳහා
+        let animationFrameId; 
         let startTime;
 
-        // ඉතිහාසයේ ඇති වර්ණය තීරණය කිරීම (කලින් කේතයේ තිබූ පරිදිම)
+        let bet1Placed = false;
+        let bet1CashedOut = false;
+        let bet2Placed = false;
+        let bet2CashedOut = false;
+
+        let balance = 1000.00; // ආරම්භක ශේෂය
+        const balanceDisplay = document.getElementById('balance');
+
+        // ===================================
+        // UI & History Functions
+        // ===================================
+        function updateBalance(amount) {
+            balance += amount;
+            balanceDisplay.textContent = `${balance.toFixed(2)} LKR ☰`;
+        }
+
         function getHistoryColorClass(multiplier) {
             if (multiplier < 2.00) return 'color-low';
             if (multiplier < 10.00) return 'color-medium';
             return 'color-high';
         }
         
-        // ඉතිහාසයට නව ප්‍රතිඵලයක් එකතු කිරීම (කලින් කේතයේ තිබූ පරිදිම)
         function addHistoryResult(multiplier) {
             const chip = document.createElement('span');
             chip.textContent = multiplier.toFixed(2) + 'x';
@@ -303,150 +318,281 @@
             }
         }
         
-        // ගුණකය කාලය මත පදනම්ව ගණනය කිරීම (සැබෑ Aviator අල්ගොරිතමය අනුකරණය)
+        function updateBetButton(betNumber) {
+            const betAction = (betNumber === 1) ? bet1Action : bet2Action;
+            const betInput = (betNumber === 1) ? bet1Input : bet2Input;
+            const amount = parseFloat(betInput.value);
+
+            if (betNumber === 1 ? bet1Placed : bet2Placed) {
+                if (betNumber === 1 ? bet1CashedOut : bet2CashedOut) {
+                    betAction.textContent = `CASHOUTED ${currentMultiplier.toFixed(2)}x`;
+                    betAction.style.backgroundColor = '#6A1B9A';
+                    betAction.disabled = true;
+                } else if (isPlaying) {
+                    // ගේම් එකේදී Cash Out පෙන්වන්න
+                    betAction.textContent = `Cash Out x${currentMultiplier.toFixed(2)}`;
+                    betAction.style.backgroundColor = 'var(--green)';
+                    betAction.disabled = false;
+                } else {
+                    // ගේම් එක පටන් ගන්න කලින් "Bet Placed" පෙන්වන්න
+                     betAction.textContent = `Bet Placed ${amount.toFixed(2)}`;
+                     betAction.style.backgroundColor = 'var(--bet-placed-color)';
+                     betAction.disabled = true;
+                }
+            } else {
+                // ඔට්ටු අල්ලා නැත, "Bet" පෙන්වන්න
+                betAction.textContent = `Bet ${amount.toFixed(2)} LKR`;
+                betAction.style.backgroundColor = 'var(--green)';
+                betAction.disabled = false;
+            }
+        }
+
+        // ===================================
+        // Game Logic Functions
+        // ===================================
         function calculateMultiplier(timeElapsed) {
-            // F(t) = 1 + A * t^B වැනි සූත්‍රයක සරල අනුකරණයක්
-            // කාලය අනුව ඝාතීය වර්ධනයක් ලබා දීම
-            if (timeElapsed < 1000) return 1.00 + timeElapsed / 1000 * 0.1; // පළමු තත්පරය මන්දගාමීව
+            // තත්පර 0 සිට 15 දක්වා ඝාතීය වර්ධනයක් අනුකරණය
+            if (timeElapsed < 1000) return 1.00 + timeElapsed / 1000 * 0.1; 
             return 1.1 + Math.pow(timeElapsed / 1000, 1.5) * 0.5;
         }
 
-        // ----------------------------------------------------
-        // Canvas ඇඳීම
-        // ----------------------------------------------------
         function drawGraph() {
-            // කැන්වසය හිස් කරන්න
+            // ... (ග්‍රිඩ් එක, වක්‍රය සහ ලක්ෂ්‍යය ඇඳීමේ තර්කනය මෙහි ඇතුළත් වේ) ...
             ctx.clearRect(0, 0, canvas.width, canvas.height);
             
+            // ඛණ්ඩාංක සකස් කිරීම
+            const timeElapsed = performance.now() - startTime;
+            const m = currentMultiplier;
+            const MAX_TIME = 15000;
+            const MAX_MULTIPLIER_VISIBLE = 10;
+            const x = (timeElapsed / MAX_TIME) * canvas.width;
+            
+            // ලඝුගණක පරිමාණයෙන් Y-අක්ෂය ගණනය කිරීම
+            const y_norm = Math.log10(m) / Math.log10(MAX_MULTIPLIER_VISIBLE); 
+            const y = canvas.height - (y_norm * canvas.height * 0.9 + canvas.height * 0.1); 
+
             // ග්‍රිඩ් එක ඇඳීම
             ctx.strokeStyle = '#333';
             ctx.lineWidth = 1;
-            for (let i = 0; i < 10; i++) {
-                // සිරස් රේඛා
+            for (let i = 1; i < 10; i++) { // X අක්ෂයේ ලේබල
                 ctx.beginPath();
                 ctx.moveTo(i * (canvas.width / 10), 0);
                 ctx.lineTo(i * (canvas.width / 10), canvas.height);
                 ctx.stroke();
-                // තිරස් රේඛා
+            }
+            for (let i = 1; i < 5; i++) { // Y අක්ෂයේ ලේබල (2x, 4x, 6x, 8x)
+                const y_grid_norm = Math.log10(i * 2) / Math.log10(MAX_MULTIPLIER_VISIBLE);
+                const y_grid = canvas.height - (y_grid_norm * canvas.height * 0.9 + canvas.height * 0.1);
                 ctx.beginPath();
-                ctx.moveTo(0, i * (canvas.height / 10));
-                ctx.lineTo(canvas.width, i * (canvas.height / 10));
+                ctx.moveTo(0, y_grid);
+                ctx.lineTo(canvas.width, y_grid);
                 ctx.stroke();
             }
 
             // ගුණක වක්‍රය ඇඳීම
-            if (isPlaying) {
-                const timeElapsed = performance.now() - startTime;
-                const m = currentMultiplier;
-
-                // Canvas හි ඛණ්ඩාංක පරිවර්තනය (Multiplier to Y-axis)
-                // අපි X අක්ෂය කාලයටත් Y අක්ෂය ගුණකයටත් ගනිමු.
-                
-                // උපරිම ගුණකයක් (Max Y Value) සහ කාලයක් (Max X Value) නියම කරමු
-                const MAX_TIME = 15000; // 15s
-                const MAX_MULTIPLIER_VISIBLE = 10;
-                
-                const x = (timeElapsed / MAX_TIME) * canvas.width;
-                // y අගය ලඝුගණක පරිමාණයෙන් ගැනීමෙන් වක්‍රය වඩා හොඳින් පෙන්විය හැකියි
-                const y_norm = Math.log10(m) / Math.log10(MAX_MULTIPLIER_VISIBLE); 
-                const y = canvas.height - (y_norm * canvas.height * 0.9 + canvas.height * 0.1); 
-
-                ctx.strokeStyle = '#00FF00'; // කොළ පැහැති වක්‍රය
+            if (m > 1.00) {
+                ctx.strokeStyle = '#00FF00';
                 ctx.lineWidth = 3;
                 ctx.beginPath();
-                
-                // (0, height) සිට පටන් ගන්න
                 ctx.moveTo(0, canvas.height); 
-
-                // වත්මන් ලක්ෂ්‍යයට වක්‍රය ඇඳීම
                 ctx.lineTo(x, y); 
-                
-                // Smooth වක්‍රයක් සඳහා quadraticCurveTo භාවිතා කරන්න
-                // මෙය වඩාත් සංකීර්ණ බැවින් සරල LineTo භාවිතා කරමු.
                 ctx.stroke();
 
                 // ගුවන් යානය නියෝජනය කරන ලක්ෂ්‍යය ඇඳීම
-                ctx.fillStyle = '#D10034'; // රතු පැහැය
+                ctx.fillStyle = '#D10034';
                 ctx.beginPath();
                 ctx.arc(x, y, 5, 0, Math.PI * 2); 
                 ctx.fill();
-
-                // ගුණක අගය මැද පෙන්වීම
-                multiplierDisplay.textContent = m.toFixed(2) + 'x';
             }
+
+            // බොත්තම් යාවත්කාලීන කිරීම
+            updateBetButton(1);
+            updateBetButton(2);
         }
 
-        // ප්‍රධාන සජීවීකරණ ලූප් එක
         function animate(timestamp) {
             if (!startTime) startTime = timestamp;
-            const timeElapsed = timestamp - startTime;
-
+            
             if (isPlaying) {
-                // කාලය අනුව ගුණකය යාවත්කාලීන කරන්න
+                const timeElapsed = timestamp - startTime;
                 currentMultiplier = calculateMultiplier(timeElapsed);
                 
                 if (currentMultiplier >= crashPoint) {
                     crashGame();
                 }
-
-                drawGraph();
-            } else {
-                 // ක්‍රෑෂ් වූ පසු අවසන් වක්‍රය පෙන්වීමට
-                 drawGraph();
             }
-
+            
+            drawGraph();
             animationFrameId = requestAnimationFrame(animate);
         }
 
-        // ----------------------------------------------------
-        // ක්‍රීඩා තර්කනය (කලින් කේතයෙන් ගෙන ඇත)
-        // ----------------------------------------------------
-        
         function startGame() {
-            if (isPlaying) return;
+            // ඔට්ටු ඇල්ලුවොත් පමණක් පටන් ගන්න
+            if (!bet1Placed && !bet2Placed) {
+                // යළි ඔට්ටු ඇල්ලීමට සූදානම්
+                multiplierDisplay.textContent = 'Place Your Bets';
+                multiplierDisplay.className = '';
+                return; 
+            }
 
             isPlaying = true;
             currentMultiplier = 1.00;
             crashPoint = 1.01 + Math.random() * 8.99; 
-            startTime = performance.now(); // කාලය නැවත සකසන්න
+            startTime = performance.now(); 
             
             multiplierDisplay.className = 'multiplier-playing'; 
-            // ... (බොත්තම් තර්කනය මෙහිදී ඇතුළත් කරන්න) ...
             
-            // සජීවීකරණය ආරම්භ කරන්න
-            if (!animationFrameId) {
-                animationFrameId = requestAnimationFrame(animate);
+            // බොත්තම්: Cash Out පෙන්වීමට යාවත්කාලීන කරන්න
+            updateBetButton(1);
+            updateBetButton(2);
+        }
+
+        function cashOut(betNumber) {
+            if (!isPlaying || (betNumber === 1 ? bet1CashedOut : bet2CashedOut)) return;
+
+            const betInput = (betNumber === 1) ? bet1Input : bet2Input;
+            const betAmount = parseFloat(betInput.value);
+            const winnings = betAmount * currentMultiplier;
+
+            updateBalance(winnings);
+            
+            if (betNumber === 1) {
+                bet1CashedOut = true;
+            } else {
+                bet2CashedOut = true;
             }
+            updateBetButton(betNumber);
         }
 
         function crashGame() {
             isPlaying = false;
-            cancelAnimationFrame(animationFrameId);
-            animationFrameId = null;
             
             const finalMultiplier = currentMultiplier; 
             addHistoryResult(finalMultiplier);
             
+            multiplierDisplay.textContent = finalMultiplier.toFixed(2) + 'x';
             multiplierDisplay.className = 'multiplier-crashed'; 
-            // ... (Lost පෙන්වීමේ සහ බොත්තම් reset කිරීමේ තර්කනය මෙහි ඇතුළත් කරන්න) ...
+
+            // ඔට්ටු ඇල්ලූ නමුත් Cash Out නොකළ අය සඳහා Lost පෙන්වන්න
+            if (bet1Placed && !bet1CashedOut) {
+                // සල්ලි නැති වෙන්නේ Bet කරන විට නිසා Balance එක වෙනස් නොවේ
+                bet1Action.textContent = 'Lost';
+                bet1Action.style.backgroundColor = '#FF0000';
+            }
+            if (bet2Placed && !bet2CashedOut) {
+                bet2Action.textContent = 'Lost';
+                bet2Action.style.backgroundColor = '#FF0000';
+            }
             
-            setTimeout(resetGame, 4000); 
+            // සියලුම ඔට්ටු ක්‍රියා අවසන් වූ පසු ඊළඟ වටය
+            setTimeout(resetRound, 4000); 
         }
 
-        function resetGame() {
-             multiplierDisplay.className = '';
-             // ... (බොත්තම් යථා තත්ත්වයට පත් කිරීමේ තර්කනය මෙහි ඇතුළත් කරන්න) ...
-             setTimeout(startGame, 1000); 
+        function resetRound() {
+            // ඔට්ටු තත්ත්වයන් යළි සකසන්න
+            bet1Placed = false;
+            bet1CashedOut = false;
+            bet2Placed = false;
+            bet2CashedOut = false;
+            currentMultiplier = 1.00;
+            
+            multiplierDisplay.textContent = '1.00x';
+            multiplierDisplay.className = '';
+            
+            // බොත්තම් යළි සකසන්න
+            updateBetButton(1);
+            updateBetButton(2);
+            
+            // ඊළඟ වටය ආරම්භයට සූදානම්
+            setTimeout(startGame, 1000); 
         }
 
-        // ... (Event Listeners සහ අනෙක් ශ්‍රිතයන් මෙහිදී ඇතුළත් කරන්න) ...
+        // ===================================
+        // Event Listeners (ක්‍රියාත්මක කළ යුතුය)
+        // ===================================
+
+        // ඍණ/ධන බොත්තම්
+        document.querySelectorAll('.minus-btn, .plus-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const inputId = this.getAttribute('data-input-id');
+                const input = document.getElementById(inputId);
+                let currentValue = parseFloat(input.value);
+                const step = parseFloat(this.getAttribute('data-step'));
+                
+                if (this.classList.contains('plus-btn')) {
+                    currentValue += step;
+                } else {
+                    currentValue -= step;
+                }
+                
+                // අවම අගය පරීක්ෂා කිරීම
+                if (currentValue < 1.00) currentValue = 1.00;
+
+                input.value = currentValue.toFixed(2);
+                
+                // ඔට්ටු ඇල්ලීමට පෙර බොත්තම යාවත්කාලීන කරන්න
+                if (!bet1Placed && inputId === 'bet1-amount') updateBetButton(1);
+                if (!bet2Placed && inputId === 'bet2-amount') updateBetButton(2);
+            });
+        });
+
+        // ඉක්මන් ඔට්ටු බොත්තම්
+        document.querySelectorAll('.quick-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const amount = parseFloat(this.getAttribute('data-amount'));
+                const parentPanel = this.closest('.bet-panel');
+                const input = parentPanel.querySelector('input');
+                
+                input.value = amount.toFixed(2);
+                
+                if (input.id === 'bet1-amount') updateBetButton(1);
+                if (input.id === 'bet2-amount') updateBetButton(2);
+            });
+        });
+
+        // ඔට්ටු ක්‍රියා බොත්තම් (Bet / Cash Out)
+        bet1Action.addEventListener('click', function() {
+            if (bet1Action.textContent.includes('Bet')) {
+                const amount = parseFloat(bet1Input.value);
+                if (balance >= amount && amount > 0) {
+                    bet1Placed = true;
+                    updateBalance(-amount); // ශේෂයෙන් මුදල අඩු කරන්න
+                    if (!isPlaying) startGame();
+                    updateBetButton(1);
+                } else {
+                    alert("ශේෂය ප්‍රමාණවත් නොවේ හෝ ඔට්ටු මුදල අවම අගයට වඩා අඩුය.");
+                }
+            } else if (bet1Action.textContent.includes('Cash Out')) {
+                cashOut(1);
+            }
+        });
+
+        bet2Action.addEventListener('click', function() {
+            if (bet2Action.textContent.includes('Bet')) {
+                const amount = parseFloat(bet2Input.value);
+                if (balance >= amount && amount > 0) {
+                    bet2Placed = true;
+                    updateBalance(-amount); // ශේෂයෙන් මුදල අඩු කරන්න
+                    if (!isPlaying) startGame();
+                    updateBetButton(2);
+                } else {
+                    alert("ශේෂය ප්‍රමාණවත් නොවේ හෝ ඔට්ටු මුදල අවම අගයට වඩා අඩුය.");
+                }
+            } else if (bet2Action.textContent.includes('Cash Out')) {
+                cashOut(2);
+            }
+        });
         
-        // ආරම්භයේදී ගේම් එක පටන් ගන්න
-        // setTimeout(startGame, 1000); 
-        // මුලින්ම animate ලූප් එක පටන් ගෙන නැවත සැකසීම කරමු
+        // ආරම්භක සැකසුම්
+        addHistoryResult(1.23);
+        addHistoryResult(4.55);
+        addHistoryResult(18.08);
+        updateBalance(0); // මුල් ශේෂය පෙන්වීමට
+        
+        // සජීවීකරණය ආරම්භ කරන්න
         animate(performance.now());
-        resetGame(); // මෙය startGame වෙත යොමු කරයි
-
+        resetRound();
+        
     </script>
 </body>
 </html>
