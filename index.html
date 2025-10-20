@@ -3,22 +3,20 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Aviator Full UI Clone</title>
+    <title>Aviator Ultra Real Clone</title>
     <style>
         /* =================================
-           CSS: සම්පූර්ණ UI පෙනුම
+           CSS: සැබෑ Aviator UI
            ================================= */
         :root {
-            --dark-bg: #212529;
-            --main-bg: #1a1e21; /* ප්‍රධාන පසුබිම */
-            --bet-bg: #3C4146;
-            --green: #00B100;
+            --dark-bg: #1A1E21; /* තදම පසුබිම */
+            --main-bg: #212529; /* ප්‍රධාන පසුබිම */
+            --bet-bg: #3C4146; /* ඔට්ටු පැනල පසුබිම */
+            --green: #00B100; /* සාමාන්‍ය කොළ */
+            --red: #D10034; /* රතු පැහැය (Aviator logo/Lost) */
+            --purple: #6A1B9A; /* දම් පැහැය (Placed/History Low) */
             --multiplier-color: #ffffff;
-            --history-low: #6a1b9a;
-            --history-medium: #cc00cc;
-            --history-high: #ffc107;
             --text-color: #ffffff;
-            --bet-placed-color: #6A1B9A;
         }
 
         body {
@@ -37,7 +35,8 @@
         #app-container {
             width: 100%;
             max-width: 600px; 
-            background-color: var(--dark-bg);
+            background-color: var(--main-bg);
+            box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
         }
 
         /* ------------------ Header/History ------------------ */
@@ -46,15 +45,15 @@
             justify-content: space-between;
             align-items: center;
             padding: 10px 15px;
-            background-color: var(--main-bg);
+            background-color: var(--dark-bg);
             border-bottom: 1px solid #333;
         }
-        #logo { color: #d10034; font-size: 1.5em; font-weight: bold; }
+        #logo { color: var(--red); font-size: 1.5em; font-weight: bold; }
         #balance { color: var(--green); font-size: 1.1em; }
 
         #history-bar {
             padding: 8px 15px;
-            background-color: #1a1e21; 
+            background-color: var(--dark-bg); 
             display: flex;
             overflow-x: auto;
             white-space: nowrap;
@@ -69,37 +68,35 @@
             font-weight: bold;
             color: var(--text-color);
         }
-        .color-low { background-color: var(--history-low); } 
-        .color-medium { background-color: var(--history-medium); }
-        .color-high { background-color: var(--history-high); } 
+        .color-low { background-color: var(--purple); } 
+        .color-medium { background-color: #CC00CC; } /* දීප්තිමත් දම්/රෝස */
+        .color-high { background-color: #ffc107; } /* කහ */
         
-
         /* ------------------ ප්‍රධාන ක්‍රීඩා ප්‍රදේශය (Canvas/UI) ------------------ */
         #game-area {
             position: relative;
-            background-color: var(--main-bg); 
+            background-color: var(--dark-bg); 
             border-bottom: 1px solid #333;
         }
         #gameCanvas {
             display: block;
             width: 100%;
-            height: 300px;
+            height: 350px; /* උස වැඩි කිරීම */
         }
         #multiplier-display {
             position: absolute;
             top: 50%;
             left: 50%;
             transform: translate(-50%, -50%);
-            font-size: 5em;
+            font-size: 6em; /* විශාල කිරීම */
             font-weight: 900;
             color: var(--multiplier-color);
-            transition: color 0.3s;
             z-index: 10;
+            text-shadow: 0 0 15px rgba(255, 255, 255, 0.5); /* දිලිසෙන ආචරණය */
         }
         .multiplier-playing { color: #CCC !important; }
-        .multiplier-crashed { color: #FF0000 !important; }
+        .multiplier-crashed { color: var(--red) !important; }
         
-        /* ඊළඟ වටය සඳහා කාල ගණකය */
         #countdown-timer {
             position: absolute;
             top: 50%;
@@ -107,14 +104,14 @@
             transform: translate(-50%, -50%);
             font-size: 4em;
             font-weight: 900;
-            color: #d10034;
+            color: var(--red);
             background-color: rgba(0, 0, 0, 0.7);
             padding: 10px 20px;
             border-radius: 10px;
-            display: none; /* JS මගින් පෙන්වනු ඇත */
+            display: none;
             z-index: 15;
+            text-shadow: 0 0 10px var(--red);
         }
-        /* Place Bets Text */
         .place-bets-text {
             position: absolute;
             top: 50%;
@@ -124,7 +121,6 @@
             color: #ccc;
             z-index: 10;
         }
-
         /* ------------------ ඔට්ටු පැනල (Betting Panels) ------------------ */
         #control-panel-container {
             display: flex;
@@ -132,7 +128,6 @@
             padding: 10px;
             gap: 10px;
         }
-
         .bet-panel {
             flex: 1;
             background-color: var(--bet-bg);
@@ -140,36 +135,124 @@
             border-radius: 8px;
             text-align: center;
         }
-        /* Auto Cash Out ක්ෂේත්‍රය */
-        .auto-cashout-group {
+
+        /* Auto/Bet Toggle */
+        .bet-type-bar {
+            display: flex;
+            justify-content: space-around;
+            margin-bottom: 10px;
+            background-color: var(--main-bg);
+            border-radius: 5px;
+        }
+        .bet-type-bar button {
+            flex: 1;
+            padding: 8px;
+            background: none;
+            border: none;
+            color: #ccc;
+            font-size: 0.9em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .bet-type-bar button.active { 
+            background-color: #5A6268; 
+            color: white; 
+        }
+
+        /* Auto Cash Out & Auto Bet Settings */
+        .auto-settings-row {
             display: flex;
             justify-content: space-between;
-            align-items: center;
-            background-color: #495057;
-            border-radius: 5px;
+            gap: 5px;
             margin-bottom: 10px;
-            padding: 5px;
         }
-        .auto-cashout-group input {
+        .auto-setting-group {
+            flex: 1;
+            background-color: var(--main-bg);
+            border-radius: 5px;
+            padding: 5px;
+            display: flex;
+            align-items: center;
+        }
+        .auto-setting-group label {
+            font-size: 0.8em;
+            color: #ccc;
+            margin-right: 5px;
+        }
+        .auto-setting-group input {
             width: 40%;
             background: none;
             border: none;
-            color: white;
+            color: var(--green);
             text-align: right;
-            padding: 5px;
             font-size: 1em;
         }
-        .auto-cashout-group label {
-            font-size: 0.9em;
-            color: #ccc;
+
+        /* Bet Input Group */
+        .bet-input-group {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background-color: var(--main-bg);
+            border-radius: 5px;
+            overflow: hidden;
+            margin-bottom: 10px;
+        }
+        .bet-input-group button {
+            background-color: #555;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 1.2em;
+            cursor: pointer;
+        }
+        .bet-input-group input {
+            flex-grow: 1;
+            background: none;
+            border: none;
+            text-align: center;
+            color: white;
+            font-size: 1.2em;
+            padding: 10px 0;
+            width: 100%;
         }
 
-        /* පෙර තිබූ ඔට්ටු පාලක CSS මෙහි තබන්න */
-        .bet-type-bar { /* ... */ }
-        .bet-input-group { /* ... */ }
-        .quick-bets { /* ... */ }
-        .main-action-button { /* ... */ }
-        /* ... (ඉතිරි පාලක CSS) ... */
+        /* Quick Bets & Double/Half */
+        .quick-bets {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 15px;
+            gap: 5px;
+        }
+        .quick-bets button {
+            flex: 1;
+            background-color: #495057;
+            color: white;
+            border: none;
+            padding: 8px 0;
+            border-radius: 5px;
+            font-size: 0.8em;
+            cursor: pointer;
+        }
+
+        .main-action-button {
+            width: 100%;
+            padding: 20px;
+            font-size: 1.4em;
+            font-weight: bold;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            background-color: var(--green);
+            color: white;
+        }
+        .main-action-button:disabled {
+            background-color: #555;
+            cursor: not-allowed;
+            opacity: 0.7;
+        }
+        .bet-placed { background-color: var(--purple) !important; }
+        .lost { background-color: var(--red) !important; }
 
         /* ------------------ සජීවී ඔට්ටු සහ සංඛ්‍යාලේඛන පැනලය ------------------ */
         #side-stats-container {
@@ -190,10 +273,9 @@
             color: #aaa;
             cursor: pointer;
             font-weight: bold;
-            transition: background-color 0.2s;
         }
         .tab-button.active {
-            background-color: var(--main-bg);
+            background-color: var(--dark-bg);
             color: var(--green);
             border-bottom: 2px solid var(--green);
         }
@@ -213,12 +295,7 @@
             text-align: left;
             border-bottom: 1px solid #333;
         }
-        .stats-table th {
-            color: #ccc;
-        }
-        .stats-table tr:last-child td {
-            border-bottom: none;
-        }
+        .stats-table th { color: #ccc; }
         .cashout-x { color: var(--green); font-weight: bold; }
         
     </style>
@@ -239,35 +316,42 @@
         </div>
 
         <div id="game-area">
-            <canvas id="gameCanvas" width="600" height="300"></canvas> 
+            <canvas id="gameCanvas" width="600" height="350"></canvas> 
             <div id="multiplier-display">1.00x</div>
             <div id="countdown-timer">3</div>
+            <div class="place-bets-text" style="display:none;">Waiting for next round...</div>
         </div>
 
         <div id="control-panel-container">
             
             <div class="bet-panel">
                 <div class="bet-type-bar">
-                    <button>Bet</button>
-                    <button>Auto</button>
+                    <button class="bet-type-toggle active" data-type="bet">BET</button>
+                    <button class="bet-type-toggle" data-type="auto">AUTO</button>
                 </div>
                 
-                <div class="auto-cashout-group">
-                    <label>Auto Cash Out</label>
-                    <input type="number" id="auto-cashout-1" value="1.00" min="1.00" step="0.1">
+                <div class="auto-settings-row">
+                    <div class="auto-setting-group">
+                        <label>Auto Cash Out</label>
+                        <input type="number" class="auto-cashout" id="auto-cashout-1" value="1.00" min="1.00" step="0.1">
+                    </div>
+                    <div class="auto-setting-group auto-bet-setting" style="display:none;">
+                        <label>Auto Bet</label>
+                        <input type="checkbox" id="auto-bet-toggle-1">
+                    </div>
                 </div>
                 
                 <div class="bet-input-group">
-                    <button class="minus-btn" data-input-id="bet1-amount" data-step="1">-</button>
+                    <button class="adjust-btn" data-input-id="bet1-amount" data-action="half">1/2</button>
                     <input type="number" id="bet1-amount" value="20.00" min="1.00" step="1.00">
-                    <button class="plus-btn" data-input-id="bet1-amount" data-step="1">+</button>
+                    <button class="adjust-btn" data-input-id="bet1-amount" data-action="double">x2</button>
                 </div>
 
                 <div class="quick-bets">
-                    <button class="quick-btn" data-amount="100">100</button>
-                    <button class="quick-btn" data-amount="200">200</button>
-                    <button class="quick-btn" data-amount="500">500</button>
-                    <button class="quick-btn" data-amount="10000">10,000</button>
+                    <button class="quick-btn" data-input-id="bet1-amount" data-amount="100">100</button>
+                    <button class="quick-btn" data-input-id="bet1-amount" data-amount="200">200</button>
+                    <button class="quick-btn" data-input-id="bet1-amount" data-amount="500">500</button>
+                    <button class="quick-btn" data-input-id="bet1-amount" data-amount="10000">10,000</button>
                 </div>
 
                 <button id="bet1-action" class="main-action-button">Bet 20.00 LKR</button>
@@ -275,26 +359,32 @@
 
             <div class="bet-panel">
                 <div class="bet-type-bar">
-                    <button>Bet</button>
-                    <button>Auto</button>
+                    <button class="bet-type-toggle active" data-type="bet">BET</button>
+                    <button class="bet-type-toggle" data-type="auto">AUTO</button>
                 </div>
 
-                <div class="auto-cashout-group">
-                    <label>Auto Cash Out</label>
-                    <input type="number" id="auto-cashout-2" value="1.00" min="1.00" step="0.1">
+                <div class="auto-settings-row">
+                    <div class="auto-setting-group">
+                        <label>Auto Cash Out</label>
+                        <input type="number" class="auto-cashout" id="auto-cashout-2" value="1.00" min="1.00" step="0.1">
+                    </div>
+                     <div class="auto-setting-group auto-bet-setting" style="display:none;">
+                        <label>Auto Bet</label>
+                        <input type="checkbox" id="auto-bet-toggle-2">
+                    </div>
                 </div>
 
                 <div class="bet-input-group">
-                    <button class="minus-btn" data-input-id="bet2-amount" data-step="1">-</button>
+                    <button class="adjust-btn" data-input-id="bet2-amount" data-action="half">1/2</button>
                     <input type="number" id="bet2-amount" value="20.00" min="1.00" step="1.00">
-                    <button class="plus-btn" data-input-id="bet2-amount" data-step="1">+</button>
+                    <button class="adjust-btn" data-input-id="bet2-amount" data-action="double">x2</button>
                 </div>
 
                 <div class="quick-bets">
-                    <button class="quick-btn" data-amount="100">100</button>
-                    <button class="quick-btn" data-amount="200">200</button>
-                    <button class="quick-btn" data-amount="500">500</button>
-                    <button class="quick-btn" data-amount="10000">10,000</button>
+                    <button class="quick-btn" data-input-id="bet2-amount" data-amount="100">100</button>
+                    <button class="quick-btn" data-input-id="bet2-amount" data-amount="200">200</button>
+                    <button class="quick-btn" data-input-id="bet2-amount" data-amount="500">500</button>
+                    <button class="quick-btn" data-input-id="bet2-amount" data-amount="10000">10,000</button>
                 </div>
 
                 <button id="bet2-action" class="main-action-button">Bet 20.00 LKR</button>
@@ -315,8 +405,7 @@
                         <thead>
                             <tr><th>User</th><th>Bet</th><th>Cash Out</th><th>Profit</th></tr>
                         </thead>
-                        <tbody id="live-bets-body">
-                            </tbody>
+                        <tbody id="live-bets-body"></tbody>
                     </table>
                 </div>
                 <div id="my-bets-content" class="tab-pane" style="display:none;">
@@ -324,8 +413,7 @@
                         <thead>
                             <tr><th>Time</th><th>Bet</th><th>Multiplier</th><th>Profit</th></tr>
                         </thead>
-                        <tbody id="my-bets-body">
-                           </tbody>
+                        <tbody id="my-bets-body"></tbody>
                     </table>
                 </div>
                 <div id="top-bets-content" class="tab-pane" style="display:none;">
@@ -345,7 +433,7 @@
 
     <script>
         // ===================================
-        // JavaScript: සම්පූර්ණ තර්කනය
+        // JavaScript: Ultra Real Logic
         // ===================================
         
         const canvas = document.getElementById('gameCanvas');
@@ -353,31 +441,30 @@
         const multiplierDisplay = document.getElementById('multiplier-display');
         const historyBar = document.getElementById('history-bar');
         const countdownTimer = document.getElementById('countdown-timer');
-
+        const placeBetsText = document.querySelector('.place-bets-text');
+        const liveBetsBody = document.getElementById('live-bets-body');
+        const myBetsBody = document.getElementById('my-bets-body');
+        
         const bet1Action = document.getElementById('bet1-action');
         const bet2Action = document.getElementById('bet2-action');
         const bet1Input = document.getElementById('bet1-amount');
         const bet2Input = document.getElementById('bet2-amount');
         const autoCashout1 = document.getElementById('auto-cashout-1');
         const autoCashout2 = document.getElementById('auto-cashout-2');
-        const liveBetsBody = document.getElementById('live-bets-body');
-        const myBetsBody = document.getElementById('my-bets-body');
-        
-        // ඔට්ටු තත්ත්වයන්
+        const autoBetToggle1 = document.getElementById('auto-bet-toggle-1');
+        const autoBetToggle2 = document.getElementById('auto-bet-toggle-2');
+
         let currentMultiplier = 1.00;
         let isPlaying = false;
         let crashPoint = 0;
         let startTime;
-        let bet1Placed = false;
-        let bet1CashedOut = false;
-        let bet2Placed = false;
-        let bet2CashedOut = false;
+        let roundEndTime;
+        let bet1Placed = false, bet1CashedOut = false, bet2Placed = false, bet2CashedOut = false;
+        let bet1CashoutX = 0, bet2CashoutX = 0;
         let balance = 1000.00;
         const balanceDisplay = document.getElementById('balance');
-        let roundEndTime;
-        
-        // ව්‍යාජ සජීවී ඔට්ටු දත්ත
         let liveBetsData = [];
+        let isAuto1 = false, isAuto2 = false;
 
         // ===================================
         // UI & History Functions
@@ -386,7 +473,6 @@
             balance += amount;
             balanceDisplay.textContent = `${balance.toFixed(2)} LKR ☰`;
         }
-        // ... (getHistoryColorClass සහ addHistoryResult පෙර තිබූ පරිදිම) ...
         function getHistoryColorClass(multiplier) {
             if (multiplier < 2.00) return 'color-low';
             if (multiplier < 10.00) return 'color-medium';
@@ -403,7 +489,6 @@
             }
         }
         
-        // සජීවී ඔට්ටු ලැයිස්තුව යාවත්කාලීන කිරීම
         function updateLiveBetsUI() {
             liveBetsBody.innerHTML = '';
             liveBetsData.forEach(bet => {
@@ -417,7 +502,7 @@
                 if (isPlaying) {
                      if (bet.cashedOut) {
                         cashoutCell.innerHTML = `<span class="cashout-x">${bet.cashoutX.toFixed(2)}x</span>`;
-                        profitCell.textContent = (bet.amount * bet.cashoutX - bet.amount).toFixed(2);
+                        profitCell.textContent = (bet.amount * bet.cashoutX).toFixed(2); // Profit is total winnings in real UI
                         profitCell.style.color = 'var(--green)';
                      } else {
                         cashoutCell.textContent = '...';
@@ -430,98 +515,145 @@
                         profitCell.style.color = 'var(--green)';
                     } else {
                         cashoutCell.textContent = '-';
-                        profitCell.textContent = 'Lost';
-                        profitCell.style.color = '#FF0000';
+                        profitCell.textContent = `-${bet.amount.toFixed(2)}`;
+                        profitCell.style.color = 'var(--red)';
                     }
                 }
             });
         }
         
-        // මගේ ඔට්ටු ලැයිස්තුවට එකතු කිරීම
         function addMyBet(betAmount, multiplier, profit) {
-            const row = myBetsBody.insertRow(0); // මුලටම එකතු කරන්න
+            const row = myBetsBody.insertRow(0); 
             row.insertCell().textContent = new Date().toLocaleTimeString();
             row.insertCell().textContent = betAmount.toFixed(2);
             
             const multiplierCell = row.insertCell();
-            multiplierCell.textContent = multiplier ? multiplier.toFixed(2) + 'x' : 'Lost';
-            multiplierCell.style.color = multiplier ? 'var(--green)' : '#FF0000';
+            multiplierCell.textContent = multiplier ? multiplier.toFixed(2) + 'x' : '-';
+            multiplierCell.style.color = multiplier ? 'var(--green)' : 'var(--red)';
 
             const profitCell = row.insertCell();
             profitCell.textContent = profit ? profit.toFixed(2) : `-${betAmount.toFixed(2)}`;
-            profitCell.style.color = profit ? 'var(--green)' : '#FF0000';
+            profitCell.style.color = profit ? 'var(--green)' : 'var(--red)';
         }
 
         function updateBetButton(betNumber) {
-            // ... (පෙර තිබූ පරිදිම) ...
             const betAction = (betNumber === 1) ? bet1Action : bet2Action;
             const betInput = (betNumber === 1) ? bet1Input : bet2Input;
             const amount = parseFloat(betInput.value);
+            const isAuto = (betNumber === 1) ? isAuto1 : isAuto2;
+
+            betAction.classList.remove('bet-placed', 'lost');
 
             if (betNumber === 1 ? bet1Placed : bet2Placed) {
                 if (betNumber === 1 ? bet1CashedOut : bet2CashedOut) {
-                    betAction.textContent = `CASHOUTED ${betNumber === 1 ? bet1CashoutX : bet2CashoutX}x`;
-                    betAction.style.backgroundColor = 'var(--bet-placed-color)';
+                    betAction.textContent = `CASHOUTED ${(betNumber === 1 ? bet1CashoutX : bet2CashoutX).toFixed(2)}x`;
+                    betAction.classList.add('bet-placed');
                     betAction.disabled = true;
                 } else if (isPlaying) {
                     betAction.textContent = `Cash Out x${currentMultiplier.toFixed(2)}`;
                     betAction.style.backgroundColor = 'var(--green)';
                     betAction.disabled = false;
                 } else {
-                     betAction.textContent = `Bet Placed ${amount.toFixed(2)}`;
-                     betAction.style.backgroundColor = 'var(--bet-placed-color)';
+                     betAction.textContent = isAuto ? `Waiting for next round...` : `Bet Placed ${amount.toFixed(2)}`;
+                     betAction.classList.add('bet-placed');
                      betAction.disabled = true;
                 }
             } else {
-                betAction.textContent = `Bet ${amount.toFixed(2)} LKR`;
-                betAction.style.backgroundColor = 'var(--green)';
-                betAction.disabled = false;
+                if(isAuto) {
+                    betAction.textContent = `STOP AUTO ${amount.toFixed(2)} LKR`;
+                    betAction.style.backgroundColor = 'var(--red)';
+                    betAction.disabled = false;
+                } else {
+                    betAction.textContent = `Bet ${amount.toFixed(2)} LKR`;
+                    betAction.style.backgroundColor = 'var(--green)';
+                    betAction.disabled = false;
+                }
             }
         }
         
-        // ටැබ් වෙනස් කිරීම
-        document.querySelectorAll('.tab-button').forEach(button => {
-            button.addEventListener('click', function() {
-                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
-                this.classList.add('active');
-                
-                document.querySelectorAll('.tab-pane').forEach(pane => pane.style.display = 'none');
-                document.getElementById(this.getAttribute('data-tab') + '-bets-content').style.display = 'block';
-            });
-        });
-
         // ===================================
-        // Game Logic Functions
+        // Game & Canvas Logic Functions
         // ===================================
         function calculateMultiplier(timeElapsed) {
-            if (timeElapsed < 1000) return 1.00 + timeElapsed / 1000 * 0.1; 
-            return 1.1 + Math.pow(timeElapsed / 1000, 1.5) * 0.5;
+            const t = timeElapsed / 1000;
+            // වඩාත් යථාර්ථවාදී ඝාතීය වර්ධනයක් අනුකරණය
+            return 1.00 + Math.pow(t, 2) * 0.1 * Math.log(t + 1) * 3;
         }
-
-        // ... (drawGraph ශ්‍රිතය පෙර තිබූ පරිදිම - Canvas ඇඳීම) ...
 
         function drawGraph() {
             ctx.clearRect(0, 0, canvas.width, canvas.height);
+            const W = canvas.width;
+            const H = canvas.height;
             
-            // ... (Canvas ග්‍රිඩ් තර්කනය මෙහිදී ඇතුළත් වේ) ...
-            const MAX_MULTIPLIER_VISIBLE = 10;
-            const x_coord = (performance.now() - startTime) / 15000 * canvas.width; // x අක්ෂය
-            const y_norm = Math.log10(currentMultiplier) / Math.log10(MAX_MULTIPLIER_VISIBLE); 
-            const y_coord = canvas.height - (y_norm * canvas.height * 0.9 + canvas.height * 0.1); 
+            // ඛණ්ඩාංක සකස් කිරීම
+            const timeElapsed = isPlaying ? performance.now() - startTime : 0;
+            const m = currentMultiplier;
+            const MAX_TIME = 20000; // 20s for full width
+            const MAX_MULTIPLIER_VISIBLE = 100; // Max multiplier for y-axis scale
+            
+            // Logarithmic Y scale (Better visual spread)
+            const logM = Math.log(m + 1);
+            const logMax = Math.log(MAX_MULTIPLIER_VISIBLE + 1);
+            
+            const x = (timeElapsed / MAX_TIME) * W;
+            const y_norm = logM / logMax; 
+            const y = H - (y_norm * H * 0.9 + H * 0.1); 
 
-            // ග්‍රිඩ් ඇඳීම
+            // 1. ග්‍රිඩ් සහ ඛණ්ඩාංක ඇඳීම
             ctx.strokeStyle = '#333'; ctx.lineWidth = 1;
-            for (let i = 1; i < 10; i++) { ctx.beginPath(); ctx.moveTo(i * (canvas.width / 10), 0); ctx.lineTo(i * (canvas.width / 10), canvas.height); ctx.stroke(); }
-            for (let i = 1; i < 5; i++) { const y_grid_norm = Math.log10(i * 2) / Math.log10(MAX_MULTIPLIER_VISIBLE); const y_grid = canvas.height - (y_grid_norm * canvas.height * 0.9 + canvas.height * 0.1); ctx.beginPath(); ctx.moveTo(0, y_grid); ctx.lineTo(canvas.width, y_grid); ctx.stroke(); }
-            // වක්‍රය සහ ලක්ෂ්‍යය
-            if (currentMultiplier > 1.00 && isPlaying) {
-                ctx.strokeStyle = '#00FF00'; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(0, canvas.height); ctx.lineTo(x_coord, y_coord); ctx.stroke();
-                ctx.fillStyle = '#D10034'; ctx.beginPath(); ctx.arc(x_coord, y_coord, 5, 0, Math.PI * 2); ctx.fill();
+            // X-අක්ෂය (කාලය)
+            for (let i = 1; i < 10; i++) { ctx.beginPath(); ctx.moveTo(i * (W / 10), 0); ctx.lineTo(i * (W / 10), H); ctx.stroke(); }
+            // Y-අක්ෂය (ගුණකය) - Log scale
+            for (let mult = 2; mult <= 100; mult *= 2) {
+                const logMult = Math.log(mult + 1);
+                const y_grid_norm = logMult / logMax;
+                const y_grid = H - (y_grid_norm * H * 0.9 + H * 0.1);
+                ctx.beginPath(); ctx.moveTo(0, y_grid); ctx.lineTo(W, y_grid); ctx.stroke();
+                // ඛණ්ඩාංක ලේබල (වඩාත් යථාර්ථවාදී)
+                ctx.fillStyle = '#666'; ctx.font = '10px Arial';
+                ctx.fillText(`${mult}x`, 5, y_grid - 2);
+            }
+            ctx.fillText('0', 5, H - 5); // 0x ලේබලය
+
+            // 2. වක්‍රය සහ ලක්ෂ්‍යය ඇඳීම
+            if (m > 1.00 && isPlaying) {
+                // කොළ පැහැති වක්‍රය (Gradient effect for better look)
+                const gradient = ctx.createLinearGradient(0, H, W, 0);
+                gradient.addColorStop(0, '#00CC00');
+                gradient.addColorStop(1, '#66FF66');
+                ctx.strokeStyle = gradient;
+                ctx.lineWidth = 3; 
+                ctx.shadowBlur = 5; 
+                ctx.shadowColor = '#00FF00';
+                
+                ctx.beginPath(); 
+                ctx.moveTo(0, H); 
+                ctx.lineTo(x, y); 
+                ctx.stroke();
+                
+                // සෙවනැලි ඉවත් කර ගුවන් යානය නියෝජනය කරන රතු ලක්ෂ්‍යය ඇඳීම
+                ctx.shadowBlur = 0;
+                ctx.fillStyle = 'var(--red)'; 
+                ctx.beginPath(); 
+                ctx.arc(x, y, 7, 0, Math.PI * 2); 
+                ctx.fill();
+            } else if (m > 1.00 && !isPlaying) {
+                 // Crash වූ පසු රතු වක්‍රය
+                 ctx.strokeStyle = 'var(--red)';
+                 ctx.lineWidth = 3;
+                 ctx.shadowBlur = 5; 
+                 ctx.shadowColor = 'var(--red)';
+                 
+                 ctx.beginPath(); 
+                 ctx.moveTo(0, H); 
+                 ctx.lineTo(x, y); 
+                 ctx.stroke();
+                 ctx.shadowBlur = 0;
             }
 
             updateBetButton(1);
             updateBetButton(2);
-            updateLiveBetsUI(); // සෑම රාමුවකම Live Bets යාවත්කාලීන කිරීම
+            updateLiveBetsUI(); 
         }
 
         function checkAutoCashOut() {
@@ -534,7 +666,6 @@
                 cashOut(2);
             }
             
-            // Live Bets හිදී ද ඔටෝ Cash Out අනුකරණය
             liveBetsData.forEach(bet => {
                 if (!bet.cashedOut && m >= bet.autoX) {
                     bet.cashedOut = true;
@@ -550,27 +681,33 @@
                 const timeElapsed = timestamp - startTime;
                 currentMultiplier = calculateMultiplier(timeElapsed);
                 
-                checkAutoCashOut(); // ඔටෝ Cash Out පරීක්ෂා කරන්න
+                checkAutoCashOut();
                 
                 if (currentMultiplier >= crashPoint) {
                     crashGame();
                 }
                 
-                multiplierDisplay.textContent = currentMultiplier.toFixed(2) + 'x';
-            } else if (timestamp < roundEndTime) {
+                // Countdown/Place Bets UI සඟවන්න
+                countdownTimer.style.display = 'none';
+                placeBetsText.style.display = 'none';
+                
+            } else if (roundEndTime && timestamp < roundEndTime) {
                 // Countdown Timer පෙන්වන්න
                 const remaining = Math.ceil((roundEndTime - timestamp) / 1000);
                 countdownTimer.textContent = remaining;
                 countdownTimer.style.display = 'block';
+                multiplierDisplay.style.display = 'none';
                 
                 // ඔට්ටු ඇල්ලීමේ කාලය අවසන් වූ විට
                 if (remaining <= 0) {
                      countdownTimer.style.display = 'none';
+                     multiplierDisplay.style.display = 'block';
                      startGame();
                 }
             } else {
-                 countdownTimer.style.display = 'none';
-                 multiplierDisplay.textContent = '1.00x'; // තවමත් වටය ආරම්භ වී නැත
+                 // ඔට්ටු ඇල්ලීමට සූදානම්
+                 multiplierDisplay.style.display = 'none';
+                 placeBetsText.style.display = 'block';
             }
             
             drawGraph();
@@ -582,16 +719,31 @@
             currentMultiplier = 1.00;
             crashPoint = 1.01 + Math.random() * 8.99; 
             startTime = performance.now();
-            roundEndTime = 0; // වටය ආරම්භ වූ පසු ටයිමරය නවත්වන්න
+            roundEndTime = 0; 
             
             multiplierDisplay.className = 'multiplier-playing'; 
             
-            // ව්‍යාජ Live Bets උත්පාදනය (සෑම වටයකටම නව)
+            // Auto Bet ඇත්නම්, ඔට්ටු අල්ලන්න
+            if (autoBetToggle1.checked) placeBet(1);
+            if (autoBetToggle2.checked) placeBet(2);
+
             liveBetsData = generateDummyLiveBets();
             
             updateBetButton(1); updateBetButton(2);
         }
 
+        function placeBet(betNumber) {
+            const betInput = (betNumber === 1) ? bet1Input : bet2Input;
+            const amount = parseFloat(betInput.value);
+
+            if (balance >= amount && amount > 0) {
+                if (betNumber === 1) { bet1Placed = true; } else { bet2Placed = true; }
+                updateBalance(-amount);
+            } else {
+                 alert("ශේෂය ප්‍රමාණවත් නොවේ හෝ ඔට්ටු මුදල අවම අගයට වඩා අඩුය.");
+            }
+        }
+        
         function cashOut(betNumber) {
             if (!isPlaying || (betNumber === 1 ? bet1CashedOut : bet2CashedOut)) return;
 
@@ -622,18 +774,18 @@
             
             multiplierDisplay.textContent = finalMultiplier.toFixed(2) + 'x';
             multiplierDisplay.className = 'multiplier-crashed'; 
+            multiplierDisplay.style.display = 'block';
 
             if (bet1Placed && !bet1CashedOut) {
-                bet1Action.textContent = 'Lost'; bet1Action.style.backgroundColor = '#FF0000';
+                bet1Action.textContent = 'Lost'; bet1Action.classList.add('lost');
                 addMyBet(parseFloat(bet1Input.value), null, null);
             }
             if (bet2Placed && !bet2CashedOut) {
-                bet2Action.textContent = 'Lost'; bet2Action.style.backgroundColor = '#FF0000';
+                bet2Action.textContent = 'Lost'; bet2Action.classList.add('lost');
                 addMyBet(parseFloat(bet2Input.value), null, null);
             }
             
-            // ඊළඟ වටය සඳහා කවුන්ට් ඩවුන් ආරම්භ කරන්න
-            roundEndTime = performance.now() + 5000; // තත්පර 5 ක කවුන්ට් ඩවුන්
+            roundEndTime = performance.now() + 5000; 
             setTimeout(resetRound, 5000); 
         }
 
@@ -642,42 +794,131 @@
             bet1CashoutX = 0; bet2CashoutX = 0;
             currentMultiplier = 1.00;
             
-            multiplierDisplay.textContent = 'Place Your Bets';
+            multiplierDisplay.textContent = '1.00x';
             multiplierDisplay.className = '';
             
             updateBetButton(1); updateBetButton(2);
+            // ඊළඟ වටය animate loop මගින් පටන් ගනී.
         }
 
-        // ව්‍යාජ දත්ත උත්පාදනය
         function generateDummyLiveBets() {
+            // ... (පෙර තිබූ පරිදිම) ...
             const bets = [];
             for (let i = 0; i < 10 + Math.floor(Math.random() * 10); i++) {
                 bets.push({
                     user: `User${i + 1}`,
                     amount: 100 + Math.floor(Math.random() * 1000),
-                    cashedOut: Math.random() < 0.3, // 30% දැනටමත් cashed out
+                    cashedOut: Math.random() < 0.3,
                     cashoutX: 1.01 + Math.random() * 5,
                     autoX: 1.01 + Math.random() * 10 
                 });
             }
-            return bets.sort((a, b) => b.amount - a.amount); // මුදල අනුව වර්ග කරන්න
+            return bets.sort((a, b) => b.amount - a.amount);
         }
 
         // ===================================
-        // Event Listeners (Betting)
+        // Event Listeners
         // ===================================
-        
-        // ... (Quick Bets, +/-, සහ Bet Actions කලින් කේතයේ තිබූ පරිදිම) ...
 
+        // Bet/Auto Toggle
+        document.querySelectorAll('.bet-type-toggle').forEach(button => {
+            button.addEventListener('click', function() {
+                const type = this.getAttribute('data-type');
+                const panel = this.closest('.bet-panel');
+                const betNumber = panel === document.querySelector('#control-panel-container .bet-panel:first-child') ? 1 : 2;
+                
+                panel.querySelectorAll('.bet-type-toggle').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+
+                const autoSettings = panel.querySelector('.auto-bet-setting');
+                
+                if (type === 'auto') {
+                    if (betNumber === 1) isAuto1 = true; else isAuto2 = true;
+                    autoSettings.style.display = 'flex';
+                } else {
+                    if (betNumber === 1) isAuto1 = false; else isAuto2 = false;
+                    autoSettings.style.display = 'none';
+                }
+                updateBetButton(betNumber);
+            });
+        });
+
+        // Half/Double
+        document.querySelectorAll('.adjust-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const inputId = this.getAttribute('data-input-id');
+                const input = document.getElementById(inputId);
+                const action = this.getAttribute('data-action');
+                let currentValue = parseFloat(input.value);
+                
+                if (action === 'double') {
+                    currentValue *= 2;
+                } else if (action === 'half') {
+                    currentValue /= 2;
+                }
+                
+                if (currentValue < 1.00) currentValue = 1.00;
+                input.value = currentValue.toFixed(2);
+
+                const betNumber = inputId === 'bet1-amount' ? 1 : 2;
+                if (!(betNumber === 1 ? bet1Placed : bet2Placed)) updateBetButton(betNumber);
+            });
+        });
+        
+        // Quick Bets
+        document.querySelectorAll('.quick-btn').forEach(button => {
+            button.addEventListener('click', function() {
+                const amount = parseFloat(this.getAttribute('data-amount'));
+                const inputId = this.getAttribute('data-input-id');
+                const input = document.getElementById(inputId);
+                input.value = amount.toFixed(2);
+                
+                const betNumber = inputId === 'bet1-amount' ? 1 : 2;
+                if (!(betNumber === 1 ? bet1Placed : bet2Placed)) updateBetButton(betNumber);
+            });
+        });
+
+        // ඔට්ටු ක්‍රියා බොත්තම් (Bet / Cash Out / Stop Auto)
+        bet1Action.addEventListener('click', function() {
+            if (bet1Action.textContent.includes('Bet')) {
+                placeBet(1);
+            } else if (bet1Action.textContent.includes('Cash Out')) {
+                cashOut(1);
+            } else if (bet1Action.textContent.includes('STOP AUTO')) {
+                isAuto1 = false;
+                document.querySelector('#bet1-action').closest('.bet-panel').querySelector('.bet-type-toggle[data-type="bet"]').click();
+            }
+        });
+
+        bet2Action.addEventListener('click', function() {
+            if (bet2Action.textContent.includes('Bet')) {
+                placeBet(2);
+            } else if (bet2Action.textContent.includes('Cash Out')) {
+                cashOut(2);
+            } else if (bet2Action.textContent.includes('STOP AUTO')) {
+                isAuto2 = false;
+                document.querySelector('#bet2-action').closest('.bet-panel').querySelector('.bet-type-toggle[data-type="bet"]').click();
+            }
+        });
+
+        // ටැබ් වෙනස් කිරීම (පෙර තිබූ පරිදිම)
+        document.querySelectorAll('.tab-button').forEach(button => {
+            button.addEventListener('click', function() {
+                document.querySelectorAll('.tab-button').forEach(btn => btn.classList.remove('active'));
+                this.classList.add('active');
+                document.querySelectorAll('#stats-content .tab-pane').forEach(pane => pane.style.display = 'none');
+                document.getElementById(this.getAttribute('data-tab') + '-bets-content').style.display = 'block';
+            });
+        });
+        
         // ආරම්භක සැකසුම්
         addHistoryResult(1.23); addHistoryResult(4.55); addHistoryResult(18.08);
         updateBalance(0);
         
-        // සජීවීකරණය ආරම්භ කරන්න (කවුන්ට් ඩවුන් පටන් ගනියි)
+        // සජීවීකරණය ආරම්භ කරන්න
         animate(performance.now());
-        roundEndTime = performance.now() + 5000; // ආරම්භයේදී තත්පර 5ක ටයිමරය
-        resetRound(); // ටයිමරය ආරම්භ කිරීමට
-
+        resetRound();
+        
     </script>
 </body>
 </html>
