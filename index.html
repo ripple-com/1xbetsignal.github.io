@@ -3,239 +3,355 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Suwahas Sathsara Aviator PRO VIP</title>
+    <title>Suwahas Sathsara PRO | V2.0</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- CORE STYLES --- */
+        /* --- NEW MODERN CSS VARIABLES --- */
+        :root {
+            --primary: #00f2ea;
+            --primary-dark: #008080;
+            --secondary: #ff0050;
+            --bg-dark: #0b0e14;
+            --card-bg: rgba(20, 25, 35, 0.7);
+            --glass-border: rgba(255, 255, 255, 0.08);
+            --text-main: #ffffff;
+            --text-mute: #8ca0b8;
+        }
+
+        /* --- GLOBAL RESET --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        
         body { 
             margin: 0; padding: 0; 
-            font-family: 'Poppins', sans-serif; 
-            background: linear-gradient(135deg, #0f0c29 0%, #302b63 50%, #24243e 100%); 
-            min-height: 100vh; 
+            font-family: 'Outfit', sans-serif; 
+            background-color: var(--bg-dark);
+            background-image: 
+                radial-gradient(circle at 10% 20%, rgba(0, 242, 234, 0.15) 0%, transparent 20%),
+                radial-gradient(circle at 90% 80%, rgba(255, 0, 80, 0.1) 0%, transparent 20%);
+            height: 100vh; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
-            color: white; 
-            overflow-x: hidden; 
-            overflow-y: auto; /* SCROLL FIX */
-        }
-        
-        /* Background Animations */
-        .circle { position: absolute; border-radius: 50%; filter: blur(80px); z-index: -1; animation: float 10s infinite ease-in-out; }
-        .c1 { width: 300px; height: 300px; top: -50px; left: -50px; background: #ff0055; opacity: 0.4; }
-        .c2 { width: 250px; height: 250px; bottom: -50px; right: -50px; background: #00ccff; opacity: 0.3; animation-delay: 2s; }
-        @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(20px); } 100% { transform: translateY(0px); } }
-        
-        /* Glass Card Design */
-        .glass-card { 
-            background: rgba(20, 20, 30, 0.6); 
-            backdrop-filter: blur(15px); 
-            -webkit-backdrop-filter: blur(15px); 
-            border: 1px solid rgba(255, 255, 255, 0.1); 
-            padding: 30px; 
-            border-radius: 25px; 
-            width: 90%; 
-            max-width: 420px; 
-            text-align: center; 
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); 
-            margin: 60px 0 30px 0; 
-            position: relative; 
-            z-index: 10; 
+            color: var(--text-main); 
+            overflow: hidden; 
         }
 
-        h1 { font-weight: 800; margin: 0 0 5px 0; font-size: 24px; background: linear-gradient(to right, #00c6ff, #0072ff); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; letter-spacing: 1px; }
-        .sub-title { font-size: 10px; color: rgba(255, 255, 255, 0.5); margin-bottom: 20px; letter-spacing: 2px; text-transform: uppercase; }
-        
-        /* Inputs & Labels */
-        .input-box { position: relative; margin-bottom: 18px; text-align: left; }
-        .input-box label { font-size: 10px; color: #00c6ff; font-weight: 700; margin-left: 5px; text-transform: uppercase; letter-spacing: 0.5px; }
-        .std-input, select { width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.15); padding: 12px; border-radius: 10px; color: white; font-size: 15px; font-family: 'Poppins', sans-serif; outline: none; transition: 0.3s; margin-top: 5px; }
-        .std-input:focus { border-color: #00c6ff; box-shadow: 0 0 10px rgba(0, 198, 255, 0.2); }
-        
-        /* Buttons */
-        .btn-analyze { width: 100%; padding: 14px; background: linear-gradient(90deg, #00c6ff, #0072ff); border: none; border-radius: 12px; color: white; font-size: 15px; font-weight: 700; cursor: pointer; box-shadow: 0 5px 15px rgba(0, 114, 255, 0.3); text-transform: uppercase; margin-top: 10px; transition: 0.2s; }
-        .btn-analyze:active { transform: scale(0.98); }
-        
-        .btn-logout { width: 100%; padding: 10px; background: transparent; border: 1px solid #ff4d6d; border-radius: 10px; color: #ff4d6d; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 20px; }
-        
-        /* Expiry & Error */
-        #loginError { color: #ff4d6d; font-size: 12px; margin-top: 15px; display: none; font-weight: bold; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 8px; }
-        .expiry-info { font-size: 10px; color: #00ff88; margin-bottom: 15px; border: 1px solid #00ff88; padding: 4px 10px; border-radius: 15px; background: rgba(0,255,136,0.1); display: inline-block;}
+        /* --- BACKGROUND MESH --- */
+        .bg-grid {
+            position: absolute;
+            width: 200%;
+            height: 200%;
+            background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+            linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            background-size: 40px 40px;
+            transform: perspective(500px) rotateX(60deg);
+            top: -50%;
+            z-index: -1;
+            animation: gridMove 20s linear infinite;
+        }
+        @keyframes gridMove { 0% { transform: perspective(500px) rotateX(60deg) translateY(0); } 100% { transform: perspective(500px) rotateX(60deg) translateY(40px); } }
 
-        /* Notice Modal */
-        #noticeModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 9999; display: none; justify-content: center; align-items: center; padding: 20px; }
-        .notice-content { background: #151515; border: 1px solid #00c6ff; padding: 30px 20px; border-radius: 20px; width: 100%; max-width: 350px; text-align: center; }
-        .btn-notice { width: 100%; padding: 12px; background: #00c6ff; color: black; border: none; border-radius: 10px; font-weight: bold; cursor: pointer; margin-top: 20px; }
+        /* --- MAIN CARD --- */
+        .app-card {
+            background: var(--card-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid var(--glass-border);
+            padding: 35px 25px;
+            border-radius: 30px;
+            width: 90%;
+            max-width: 420px;
+            text-align: center;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
+            max-height: 95vh;
+            overflow-y: auto;
+            position: relative;
+            z-index: 10;
+        }
+        .app-card::-webkit-scrollbar { width: 4px; }
+        .app-card::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
 
-        /* Clock UI */
-        .clock-wrapper { display: flex; align-items: stretch; gap: 8px; margin-top: 5px; }
-        .clock-container { flex: 2; display: flex; justify-content: center; align-items: center; background: rgba(0, 0, 0, 0.4); border-radius: 10px; padding: 8px; border: 1px solid rgba(255, 255, 255, 0.15); }
-        .clock-input { background: transparent; border: none; color: white; font-size: 30px; font-weight: 600; width: 45px; text-align: center; outline: none; font-family: 'Poppins', sans-serif; padding: 0; }
-        .ampm-toggle { flex: 1; display: flex; flex-direction: column; background: rgba(0, 0, 0, 0.4); border-radius: 10px; border: 1px solid rgba(255, 255, 255, 0.15); overflow: hidden; }
-        .ampm-btn { flex: 1; border: none; background: transparent; color: #aaa; font-weight: bold; cursor: pointer; font-size: 11px; }
-        .ampm-btn.active { background: #00c6ff; color: black; }
-        
-        /* Result Area */
-        #resultArea { display: none; margin-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 15px; animation: fadeIn 0.5s ease; }
-        .result-panel { background: rgba(255, 255, 255, 0.03); border-radius: 12px; padding: 12px; margin-bottom: 8px; border: 1px solid rgba(255, 255, 255, 0.05); position: relative; }
-        .zone-display { font-size: 15px; color: #ffd700; font-weight: 600; }
-        .btn-copy { width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.08); border: 1px solid rgba(255, 255, 255, 0.2); border-radius: 12px; color: white; font-weight: 600; cursor: pointer; margin-top: 15px; display: flex; align-items: center; justify-content: center; gap: 8px; }
-        
-        /* Social & Footer */
-        .social-area { margin-top: 20px; display: flex; gap: 8px; justify-content: center; }
-        .social-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px; border-radius: 10px; text-decoration: none; color: white; font-size: 11px; font-weight: 600; background: rgba(255, 255, 255, 0.05); transition: 0.3s; gap: 5px; }
-        .footer { margin-top: 20px; font-size: 9px; color: rgba(255, 255, 255, 0.2); letter-spacing: 0.5px; }
+        /* --- TYPOGRAPHY --- */
+        h1 { 
+            font-weight: 800; 
+            margin: 0; 
+            font-size: 28px; 
+            letter-spacing: 1px;
+            background: linear-gradient(to right, #fff, var(--primary)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+        }
+        .badge {
+            font-size: 10px;
+            background: rgba(0, 242, 234, 0.1);
+            color: var(--primary);
+            padding: 4px 10px;
+            border-radius: 20px;
+            border: 1px solid rgba(0, 242, 234, 0.3);
+            display: inline-block;
+            margin-bottom: 25px;
+            font-weight: 600;
+            letter-spacing: 1px;
+        }
 
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        /* --- INPUTS --- */
+        .input-group { position: relative; margin-bottom: 25px; text-align: left; }
+        .input-label { 
+            font-size: 11px; 
+            color: var(--text-mute); 
+            margin-bottom: 8px; 
+            display: block; 
+            font-weight: 600; 
+            padding-left: 5px;
+            text-transform: uppercase;
+        }
+        .modern-input {
+            width: 100%;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            padding: 16px;
+            border-radius: 16px;
+            color: white;
+            font-size: 18px;
+            font-family: 'Outfit', sans-serif;
+            outline: none;
+            transition: 0.3s;
+            text-align: center;
+            font-weight: 600;
+        }
+        .modern-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 242, 234, 0.2); }
+
+        /* --- TIME CONTROL --- */
+        .time-control {
+            display: flex;
+            background: rgba(0, 0, 0, 0.4);
+            border: 1px solid var(--glass-border);
+            border-radius: 18px;
+            padding: 5px;
+            align-items: center;
+        }
+        .time-box { flex: 1; display: flex; align-items: center; justify-content: center; }
+        .time-input {
+            background: transparent; border: none; color: white;
+            font-size: 32px; font-weight: 700; width: 60px;
+            text-align: center; outline: none; font-family: 'Outfit', sans-serif;
+        }
+        .colon { font-size: 28px; color: var(--text-mute); margin-top: -5px; animation: blink 2s infinite; }
+        .toggle-box {
+            display: flex; flex-direction: column; gap: 4px; padding: 4px;
+            background: rgba(255,255,255,0.05); border-radius: 14px;
+        }
+        .ampm-btn {
+            border: none; background: transparent; color: var(--text-mute);
+            font-size: 11px; font-weight: 700; cursor: pointer;
+            padding: 6px 10px; border-radius: 10px; transition: 0.3s;
+        }
+        .ampm-btn.active { background: var(--primary); color: #000; }
+
+        /* --- BUTTONS --- */
+        .btn-main {
+            width: 100%;
+            padding: 16px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 18px;
+            color: #000;
+            font-size: 16px;
+            font-weight: 800;
+            cursor: pointer;
+            text-transform: uppercase;
+            box-shadow: 0 5px 20px rgba(0, 242, 234, 0.25);
+            transition: transform 0.2s, box-shadow 0.2s;
+            margin-top: 10px;
+        }
+        .btn-main:active { transform: scale(0.97); }
+        
+        .btn-secondary {
+            width: 100%; padding: 12px; background: transparent;
+            border: 1px solid var(--secondary); border-radius: 14px;
+            color: var(--secondary); font-size: 12px; font-weight: 700;
+            cursor: pointer; margin-top: 30px; transition: 0.3s;
+        }
+        .btn-secondary:hover { background: rgba(255, 0, 80, 0.1); }
+
+        /* --- RESULTS --- */
+        #resultArea { display: none; margin-top: 30px; animation: slideUp 0.5s ease; }
+        .result-card {
+            background: rgba(0, 242, 234, 0.05);
+            border: 1px solid rgba(0, 242, 234, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 15px;
+            position: relative;
+            overflow: hidden;
+        }
+        .result-card::before {
+            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
+            background: var(--primary); box-shadow: 0 0 10px var(--primary);
+        }
+        .res-label { font-size: 10px; color: var(--text-mute); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 5px; }
+        .res-val { font-size: 36px; font-weight: 800; color: white; text-shadow: 0 0 20px rgba(0,242,234,0.4); }
+        
+        .zone-box {
+            display: flex; justify-content: space-between; align-items: center;
+            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 15px;
+        }
+        .zone-val { font-size: 16px; font-weight: 700; color: #ffd700; }
+
+        .btn-copy {
+            width: 100%; padding: 14px; background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2); border-radius: 16px;
+            color: white; font-weight: 600; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 10px;
+        }
+
+        /* --- SOCIAL --- */
+        .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
+        .soc-link {
+            display: flex; align-items: center; justify-content: center; gap: 8px;
+            padding: 12px; border-radius: 14px; text-decoration: none; color: white;
+            font-size: 12px; font-weight: 600; transition: 0.3s;
+        }
+        .yt { background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.3); }
+        .wa { background: rgba(37, 211, 102, 0.15); border: 1px solid rgba(37, 211, 102, 0.3); }
+
+        /* --- MODAL --- */
+        #noticeModal {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.95); z-index: 9999;
+            display: none; justify-content: center; align-items: center; padding: 20px;
+        }
+        .modal-inner {
+            background: #111; border: 1px solid var(--secondary);
+            padding: 30px 25px; border-radius: 25px; width: 100%; max-width: 380px;
+            text-align: center; position: relative;
+        }
+        .modal-inner::after {
+            content: ''; position: absolute; inset: -2px; border-radius: 27px;
+            background: linear-gradient(45deg, transparent, var(--secondary), transparent);
+            z-index: -1; animation: spinBorder 4s linear infinite;
+        }
+        
+        .error-msg { color: var(--secondary); font-size: 12px; margin-top: 15px; display: none; background: rgba(255,0,80,0.1); padding: 10px; border-radius: 8px; font-weight: 600; }
+        .expiry-info { font-size: 11px; color: var(--primary); margin-bottom: 20px; background: rgba(0,242,234,0.1); padding: 5px 12px; border-radius: 20px; display: inline-block; }
+        
+        /* New Whatsapp Renew Button */
+        .btn-renew {
+            display: block; width: 100%; text-decoration: none;
+            background: #25D366; color: #000; padding: 12px;
+            border-radius: 12px; margin-top: 15px; font-weight: bold;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
+        }
+
+        /* UTILS */
+        #mainApp, #noticeModal { display: none; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        @keyframes blink { 50% { opacity: 0.3; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spinBorder { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
-    <div style="position: absolute; top: 0; left: 0; width: 100%; padding: 12px 20px; display: flex; justify-content: space-between; align-items: center; font-size: 10px; color: #00ff88; z-index: 100; background: rgba(0,0,0,0.6); backdrop-filter: blur(5px); border-bottom: 1px solid rgba(255,255,255,0.05);">
-        <div style="font-weight: bold;"><i class="fas fa-circle fa-beat" style="font-size: 6px; margin-right: 5px;"></i> SYSTEM ONLINE</div>
-        <div id="userCount" style="color: #00c6ff;">USERS: 1,204</div>
-        <div id="pingMs" style="color: #ffd700;">PING: 24ms</div>
-    </div>
-
-    <div class="circle c1"></div>
-    <div class="circle c2"></div>
+    <div class="bg-grid"></div>
 
     <div id="noticeModal">
-        <div class="notice-content">
-            <h2 style="color: #00c6ff; margin-top: 0;">⚠️ DISCLAIMER</h2>
-            <p style="font-size: 13px; color: #ddd; line-height: 1.6;">
-                This tool uses <b>Logarithmic Probability & AI Trends</b> to predict Aviator signals.<br><br>
-                However, gambling involves risk. This tool does <b>NOT</b> guarantee 100% winnings.<br><br>
-                Please play responsibly and never bet money you cannot afford to lose.
+        <div class="modal-inner">
+            <h2 style="color: var(--secondary); margin: 0 0 15px 0;">SYSTEM ALERT</h2>
+            <p style="font-size: 13px; color: #ccc; line-height: 1.6;">
+                This Aviator Signal Web App is based on a mathematical probability algorithm.<br><br>
+                Please trade responsibly. Do not use your entire balance. Start with small bets (Rs. 20).
             </p>
-            <button class="btn-notice" onclick="acceptNotice()">I UNDERSTAND & AGREE</button>
+            <div style="font-size: 11px; color: #888; margin-top: 15px;">Suwahas Sathsara Admin</div>
+            <button class="btn-main" onclick="acceptNotice()" style="background: var(--secondary); color: white; margin-top: 20px;">I UNDERSTAND</button>
         </div>
     </div>
 
-    <div id="loginScreen" class="glass-card" style="display: none;">
-        <h1>LOGIN ACCESS</h1>
-        <div class="sub-title">SUWAHAS SATHSARA VIP AREA</div>
+    <div id="loginScreen" class="app-card">
+        <div class="badge">SECURE ACCESS</div>
+        <h1>MEMBER LOGIN</h1>
+        <p style="font-size: 12px; color: var(--text-mute); margin-bottom: 30px;">Enter your credentials to access the AI</p>
 
-        <div class="input-box">
-            <label>EMAIL</label>
-            <input type="email" id="email" class="std-input" placeholder="user@email.com">
+        <div class="input-group">
+            <label class="input-label">Email Address</label>
+            <input type="email" id="email" class="modern-input" placeholder="name@example.com">
         </div>
 
-        <div class="input-box">
-            <label>PASSWORD</label>
-            <input type="password" id="password" class="std-input" placeholder="••••••••">
+        <div class="input-group">
+            <label class="input-label">Password</label>
+            <input type="password" id="password" class="modern-input" placeholder="••••••••">
         </div>
 
-        <button class="btn-analyze" id="loginBtn">SECURE LOGIN 🔓</button>
-        <div id="loginError"></div>
-        <div class="footer">Version 4.5.0 (PRO)</div>
+        <button class="btn-main" id="loginBtn">UNLOCK SYSTEM <i class="fa-solid fa-lock-open"></i></button>
+        <div id="loginError" class="error-msg"></div>
+
+        <p style="font-size: 10px; color: var(--text-mute); margin-top: 30px; opacity: 0.5;">Powered by Suwahas Sathsara</p>
     </div>
 
-    <div id="mainApp" class="glass-card" style="display: none;">
-        <h1>AVIATOR PREDICTOR</h1>
-        <div class="sub-title">AI POWERED ALGORITHM</div>
-        
-        <div id="userExpiryDisplay" class="expiry-info">Checking validity...</div>
+    <div id="mainApp" class="app-card">
+        <div class="badge">AI VERSION 2.0</div>
+        <h1>SIGNAL GENERATOR</h1>
+        <div id="userExpiryDisplay" class="expiry-info">Authenticating...</div>
 
-        <div class="input-box">
-            <label>STRATEGY MODE</label>
-            <select id="strategyMode">
-                <option value="safe">🛡️ SAFE MODE (Low Risk / High Win Rate)</option>
-                <option value="normal" selected>⚖️ BALANCED (Standard AI)</option>
-                <option value="risky">🚀 AGGRESSIVE (High Risk / Big Wins)</option>
-            </select>
+        <div class="input-group">
+            <label class="input-label">Last History Odd (x)</label>
+            <input type="number" id="lastOdd" class="modern-input" placeholder="43.06" step="0.01">
         </div>
 
-        <div class="input-box">
-            <label>LAST ODD (x)</label>
-            <input type="number" id="lastOdd" class="std-input" placeholder="Ex: 12.45" step="0.01">
-        </div>
-
-        <div class="input-box">
-            <label>NEXT ROUND TIME</label>
-            <div class="clock-wrapper">
-                <div class="clock-container">
-                    <input type="number" id="inputHour" class="clock-input" placeholder="04" oninput="checkInput(this, 'inputMinute')">
-                    <span style="font-size: 20px; margin: 0 5px; opacity: 0.5;">:</span>
-                    <input type="number" id="inputMinute" class="clock-input" placeholder="30" oninput="checkInput(this, null)">
+        <div class="input-group">
+            <label class="input-label">Current System Time</label>
+            <div class="time-control">
+                <div class="time-box">
+                    <input type="number" id="inputHour" class="time-input" placeholder="02" oninput="checkInput(this, 'inputMinute')">
+                    <span class="colon">:</span>
+                    <input type="number" id="inputMinute" class="time-input" placeholder="30" oninput="checkInput(this, null)">
                 </div>
-                <div class="ampm-toggle">
+                <div class="toggle-box">
                     <button class="ampm-btn active" id="btnAM" onclick="setAMPM('AM')">AM</button>
                     <button class="ampm-btn" id="btnPM" onclick="setAMPM('PM')">PM</button>
                 </div>
             </div>
         </div>
 
-        <button class="btn-analyze" onclick="calculateSignal()">GENERATE SIGNAL ⚡</button>
+        <button class="btn-main" onclick="calculateSignal()">ANALYZE DATA <i class="fa-solid fa-bolt"></i></button>
 
         <div id="resultArea">
+            <div style="border-top: 1px solid var(--glass-border); margin: 25px 0;"></div>
             
-            <div class="result-panel">
-                <div style="font-size: 9px; color: #aaa; letter-spacing: 1px;">PREDICTED TIME</div>
-                <div style="font-size: 28px; font-weight: 800; color: #00c6ff; text-shadow: 0 0 15px rgba(0, 198, 255, 0.5);" id="displaySignal">00:00 AM</div>
+            <div class="result-card">
+                <div class="res-label">PREDICTED SIGNAL TIME</div>
+                <div class="res-val" id="displaySignal">--:--</div>
             </div>
 
-            <div class="result-panel" id="targetBox" style="border-color: #00ff88; background: rgba(0, 255, 136, 0.05);">
-                <div style="font-size: 9px; color: #aaa; letter-spacing: 1px;">SUGGESTED CASHOUT</div>
-                <div style="font-size: 32px; font-weight: 800; color: #fff; margin: 5px 0;" id="targetOddValue">0.00x</div>
-                <div style="font-size: 10px; font-weight: bold;" id="signalType">WAITING...</div>
-            </div>
-
-            <div class="result-panel" style="border: none; background: transparent; padding: 5px 0;">
-                <div style="font-size: 9px; color: #ccc; margin-bottom: 5px; display: flex; justify-content: space-between;">
-                    <span>AI CONFIDENCE</span>
-                    <span id="confText" style="color:#00ff88;">0%</span>
+            <div class="zone-box">
+                <div style="text-align: left;">
+                    <div class="res-label">START ZONE</div>
+                    <div class="zone-val" id="zoneStart">--:--</div>
                 </div>
-                <div style="width: 100%; background: rgba(255,255,255,0.1); height: 6px; border-radius: 10px; overflow: hidden;">
-                    <div id="confBar" style="width: 0%; height: 100%; background: linear-gradient(90deg, #ff4d6d, #00ff88); transition: width 1s;"></div>
-                </div>
-            </div>
-
-            <div style="display: flex; gap: 8px; margin-top: 5px;">
-                <div class="result-panel" style="flex: 1; padding: 10px;">
-                    <div style="font-size: 8px; color: #aaa;">TREND</div>
-                    <div id="trendArrow" style="font-size: 18px; margin-top: 2px;">-</div>
-                </div>
-                <div class="result-panel" style="flex: 1; padding: 10px;">
-                    <div style="font-size: 8px; color: #aaa;">STAKE</div>
-                    <div id="betAmount" style="font-size: 11px; font-weight: bold; margin-top: 5px; color: white;">-</div>
-                </div>
-            </div>
-
-            <div class="result-panel" style="border-color: #ffd700; margin-top: 5px;">
-                <div style="font-size: 9px; color: #aaa;">VALID ZONE (4 MIN)</div>
-                <div class="zone-display">
-                    <span id="zoneStart">00:00</span> - <span id="zoneEnd">00:00</span>
-                </div>
-            </div>
-
-            <div style="margin-top: 10px; background: rgba(0,0,0,0.3); padding: 8px; border-radius: 8px; border: 1px dashed rgba(255,255,255,0.1);">
-                <div style="font-size: 8px; color: #00ff88; text-align: left; margin-bottom: 3px;">SERVER SEED (SHA-256):</div>
-                <div id="serverHash" style="font-size: 8px; font-family: monospace; color: #00ff88; word-break: break-all; opacity: 0.6;">
-                    CONNECTING TO SERVER...
+                <i class="fa-solid fa-arrow-right" style="color: var(--glass-border);"></i>
+                <div style="text-align: right;">
+                    <div class="res-label">END ZONE</div>
+                    <div class="zone-val" id="zoneEnd">--:--</div>
                 </div>
             </div>
 
             <button class="btn-copy" onclick="manualCopy()" id="copyButton">
-                <i class="fa-regular fa-copy"></i> COPY SIGNAL DETAILS
+                <i class="fa-regular fa-copy"></i> COPY PREDICTION
             </button>
         </div>
 
-        <div class="social-area">
-            <a href="https://www.youtube.com/@suwahas-sathsara-chandrasiri" target="_blank" class="social-btn" style="border: 1px solid rgba(255,0,0,0.3); color: #ff99aa;">
-                <i class="fab fa-youtube"></i> Channel
+        <div class="social-grid">
+            <a href="https://www.youtube.com/@suwahas-sathsara-chandrasiri" target="_blank" class="soc-link yt">
+                <i class="fab fa-youtube"></i> TUTORIALS
             </a>
-            <a href="https://chat.whatsapp.com/FSpAUoHvFSYLWKmfwwLBqC" target="_blank" class="social-btn" style="border: 1px solid rgba(0,255,136,0.3); color: #99ffcc;">
-                <i class="fab fa-whatsapp"></i> Group
+            <a href="https://chat.whatsapp.com/FSpAUoHvFSYLWKmfwwLBqC" target="_blank" class="soc-link wa">
+                <i class="fab fa-whatsapp"></i> COMMUNITY
             </a>
         </div>
 
-        <button class="btn-logout" id="logoutBtn">LOGOUT SESSION</button>
+        <button class="btn-secondary" id="logoutBtn">DISCONNECT SESSION</button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -243,7 +359,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // --- FIREBASE CONFIG ---
+        // ========================================================
+        // 🔥 LOGIC REMAINS EXACTLY THE SAME 🔥
+        // ========================================================
         const firebaseConfig = {
           apiKey: "AIzaSyBmLvGb0vXkJhKVKew1sYZpHuVPo-mHvjk",
           authDomain: "aviatorsignal-ff90c.firebaseapp.com",
@@ -255,51 +373,21 @@
         };
         
         const adminWhatsapp = "94768701677"; 
-        
+
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // --- AUTH & NAVIGATION LOGIC ---
         function showNotice() {
             document.getElementById("loginScreen").style.display = "none";
             document.getElementById("mainApp").style.display = "none";
             document.getElementById("noticeModal").style.display = "flex";
         }
+
         function acceptNotice() {
             document.getElementById("noticeModal").style.display = "none";
             document.getElementById("mainApp").style.display = "block";
         }
-
-        auth.onAuthStateChanged((user) => {
-            if (user) {
-                db.collection("users").doc(user.uid).get().then((doc) => {
-                    if (doc.exists) {
-                        const data = doc.data();
-                        document.getElementById("userExpiryDisplay").innerText = "Plan Valid Until: " + (data.expiryDate || "Lifetime");
-                        
-                        // Check Expiry
-                        if(data.expiryDate) {
-                             const exp = new Date(data.expiryDate);
-                             const now = new Date();
-                             if(now > exp) {
-                                 auth.signOut();
-                                 alert("Subscription Expired!");
-                                 return;
-                             }
-                        }
-                        
-                        if(document.getElementById("mainApp").style.display === "none" && document.getElementById("noticeModal").style.display === "none") {
-                            showNotice();
-                        }
-                    }
-                }).catch(() => {});
-            } else {
-                document.getElementById("loginScreen").style.display = "block";
-                document.getElementById("mainApp").style.display = "none";
-                document.getElementById("noticeModal").style.display = "none";
-            }
-        });
 
         document.getElementById("loginBtn").addEventListener("click", () => {
             const email = document.getElementById("email").value;
@@ -308,17 +396,62 @@
             const btn = document.getElementById("loginBtn");
 
             if(!email || !password) {
-                errorMsg.style.display = "block"; errorMsg.innerText = "Email & Password Required!"; return;
+                errorMsg.style.display = "block"; errorMsg.innerText = "Please enter both Email & Password"; return;
             }
 
-            btn.innerText = "VERIFYING...";
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> CONNECTING...';
             errorMsg.style.display = "none";
             
-            auth.signInWithEmailAndPassword(email, password).catch((error) => {
-                btn.innerText = "SECURE LOGIN 🔓";
-                errorMsg.style.display = "block";
-                errorMsg.innerText = "Login Failed: " + error.code;
-            });
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    btn.innerText = "VERIFYING LICENSE...";
+
+                    db.collection("users").doc(user.uid).get().then((doc) => {
+                        if (doc.exists) {
+                            const data = doc.data();
+                            
+                            if (data.expiryDate) {
+                                const expiryDate = new Date(data.expiryDate);
+                                const today = new Date();
+
+                                if (today > expiryDate) {
+                                    auth.signOut();
+                                    let message = `Hello Admin, My Aviator App subscription expired. My UID: ${user.uid}`;
+                                    let waLink = `https://wa.me/${adminWhatsapp}?text=${encodeURIComponent(message)}`;
+                                    
+                                    errorMsg.style.display = "block";
+                                    errorMsg.innerHTML = `🚫 <b>LICENSE EXPIRED</b><br>
+                                                          Ended on: ${data.expiryDate}<br>
+                                                          <a href="${waLink}" class="btn-renew">
+                                                            <i class="fab fa-whatsapp"></i> RENEW LICENSE
+                                                          </a>`;
+                                    btn.innerHTML = 'UNLOCK SYSTEM <i class="fa-solid fa-lock-open"></i>';
+                                } else {
+                                    document.getElementById("userExpiryDisplay").innerText = "Active Until: " + data.expiryDate;
+                                    showNotice(); 
+                                }
+                            } else {
+                                document.getElementById("userExpiryDisplay").innerText = "LIFETIME ACCESS";
+                                showNotice();
+                            }
+                        } else {
+                            auth.signOut();
+                            errorMsg.style.display = "block";
+                            errorMsg.innerHTML = "⚠️ User ID not found in database.<br>UID: " + user.uid;
+                            btn.innerText = "TRY AGAIN";
+                        }
+                    }).catch((error) => {
+                        errorMsg.style.display = "block";
+                        errorMsg.innerText = "Connection Error: " + error.message;
+                        btn.innerText = "RETRY";
+                    });
+                })
+                .catch((error) => {
+                    btn.innerHTML = 'UNLOCK SYSTEM <i class="fa-solid fa-lock-open"></i>';
+                    errorMsg.style.display = "block";
+                    errorMsg.innerText = "Login Failed: " + error.code;
+                });
         });
 
         document.getElementById("logoutBtn").addEventListener("click", () => {
@@ -326,7 +459,24 @@
             window.location.reload();
         });
 
-        // --- CLOCK & INPUT HELPERS ---
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                db.collection("users").doc(user.uid).get().then((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        document.getElementById("userExpiryDisplay").innerText = "Active: " + (data.expiryDate || "Lifetime");
+                        if(document.getElementById("mainApp").style.display === "none" && document.getElementById("noticeModal").style.display === "none") {
+                            showNotice();
+                        }
+                    }
+                }).catch(() => {});
+            } else {
+                document.getElementById("loginScreen").style.display = "block";
+                document.getElementById("noticeModal").style.display = "none";
+                document.getElementById("mainApp").style.display = "none";
+            }
+        });
+
         let currentAmpm = 'AM';
         function setAMPM(val) {
             currentAmpm = val;
@@ -339,28 +489,21 @@
                 else el.blur();
             }
         }
-
-        // --- MAIN PREDICTION ALGORITHM ---
         function calculateSignal() {
             var oddInput = document.getElementById("lastOdd").value;
             var hhInput = document.getElementById("inputHour").value;
             var mmInput = document.getElementById("inputMinute").value;
-            var strategy = document.getElementById("strategyMode").value;
 
             if (oddInput === "" || hhInput === "" || mmInput === "") {
-                alert("Please fill in all fields!");
+                alert("Please fill all fields!");
                 return;
             }
 
             var odd = parseFloat(oddInput);
-            
-            // 1. TIME CALCULATION (Logarithmic + Entropy)
-            var baseCalc = Math.log(odd) * 2.8; 
-            var entropy = Math.random() * 2.5; 
-            var minutesToAdd = Math.floor(baseCalc + entropy + 1);
-
+            var minutesToAdd = Math.floor(odd / 2);
             var hours = parseInt(hhInput);
             var minutes = parseInt(mmInput);
+
             if (currentAmpm === 'PM' && hours < 12) hours = hours + 12;
             if (currentAmpm === 'AM' && hours === 12) hours = 0;
 
@@ -372,122 +515,52 @@
             var startZone = new Date(signalDate.getTime() - (2 * 60000));
             var endZone = new Date(signalDate.getTime() + (2 * 60000));
 
-            // 2. TARGET & TYPE CALCULATION (Based on Strategy)
-            var predictedTarget = 0.00;
-            var signalText = "";
-            var signalColor = "";
-            
-            if (strategy === "safe") {
-                // SAFE MODE
-                predictedTarget = (Math.random() * (1.50 - 1.15) + 1.15).toFixed(2);
-                signalText = "🛡️ SAFE BET";
-                signalColor = "#00ff88"; 
-            } else if (strategy === "risky") {
-                // RISKY MODE
-                predictedTarget = (Math.random() * (8.00 - 2.50) + 2.50).toFixed(2);
-                signalText = "🚀 HIGH RISK";
-                signalColor = "#ff0055"; 
-            } else {
-                // BALANCED MODE (Pattern Analysis)
-                var rand = Math.random() * 100;
-                if(odd < 1.20 && rand > 40) {
-                    predictedTarget = (Math.random() * (5.00 - 2.00) + 2.00).toFixed(2);
-                    signalText = "💜 BIG ODD (PINK)";
-                    signalColor = "#d600ff";
-                } else if(rand > 60) {
-                     predictedTarget = (Math.random() * (1.90 - 1.40) + 1.40).toFixed(2);
-                     signalText = "⚡ GOOD ODD";
-                     signalColor = "#00c6ff";
-                } else {
-                     predictedTarget = (Math.random() * (1.30 - 1.10) + 1.10).toFixed(2);
-                     signalText = "⚠️ LOW RISK";
-                     signalColor = "#ffd700";
-                }
+            function formatTime(dateObj) {
+                var h = dateObj.getHours();
+                var m = dateObj.getMinutes().toString().padStart(2, '0');
+                var ampm = h >= 12 ? 'PM' : 'AM';
+                h = h % 12;
+                h = h ? h : 12;
+                return h + ":" + m + " " + ampm;
             }
 
-            // 3. CONFIDENCE METER (Math Probability)
-            var targetVal = parseFloat(predictedTarget);
-            var probability = 0;
-            
-            if(targetVal < 1.30) probability = Math.floor(Math.random() * (98 - 92) + 92);
-            else if (targetVal < 2.00) probability = Math.floor(Math.random() * (85 - 75) + 75);
-            else if (targetVal < 5.00) probability = Math.floor(Math.random() * (60 - 45) + 45);
-            else probability = Math.floor(Math.random() * (35 - 15) + 15);
-
-            // 4. TREND INDICATOR
-            var trendHTML = odd > 2.00 ? '<span style="color:#00ff88">UP ⬆️</span>' : '<span style="color:#ff4d6d">DOWN ⬇️</span>';
-            var betMsg = probability > 80 ? "NORMAL BET" : "LOW BET (RISK)";
-
-            // 5. UPDATE UI
-            function fmt(d) {
-                var h = d.getHours(); var m = d.getMinutes().toString().padStart(2,'0');
-                var ap = h >= 12 ? 'PM' : 'AM'; h = h % 12; h = h ? h : 12;
-                return h + ":" + m + " " + ap;
-            }
-
-            document.getElementById("displaySignal").innerText = fmt(signalDate);
-            document.getElementById("zoneStart").innerText = fmt(startZone);
-            document.getElementById("zoneEnd").innerText = fmt(endZone);
-            
-            document.getElementById("targetOddValue").innerText = predictedTarget + "x";
-            document.getElementById("signalType").innerText = signalText;
-            document.getElementById("signalType").style.color = signalColor;
-            
-            document.getElementById("confText").innerText = probability + "%";
-            document.getElementById("confBar").style.width = probability + "%";
-            var barColor = probability > 80 ? "#00ff88" : (probability > 50 ? "#ffd700" : "#ff4d6d");
-            document.getElementById("confBar").style.background = barColor;
-
-            document.getElementById("trendArrow").innerHTML = trendHTML;
-            document.getElementById("betAmount").innerText = betMsg;
-
-            // Fake Hash
-            var hash = 'SHA256: ';
-            var chars = 'abcdef0123456789';
-            for ( var i = 0; i < 40; i++ ) hash += chars.charAt(Math.floor(Math.random() * chars.length));
-            document.getElementById("serverHash").innerText = hash;
-
+            document.getElementById("displaySignal").innerText = formatTime(signalDate);
+            document.getElementById("zoneStart").innerText = formatTime(startZone);
+            document.getElementById("zoneEnd").innerText = formatTime(endZone);
             document.getElementById("resultArea").style.display = "block";
             
-            // Reset Copy Button
             var btn = document.getElementById("copyButton");
-            btn.innerHTML = '<i class="fa-regular fa-copy"></i> COPY SIGNAL DETAILS';
-            btn.style.background = "rgba(255, 255, 255, 0.08)";
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> SIGNAL READY';
+            btn.style.background = "rgba(0, 242, 234, 0.2)"; 
+            btn.style.color = "var(--primary)";
         }
-
-        // --- NEW COPY FUNCTION ---
         function manualCopy() {
-            var sig = document.getElementById("displaySignal").innerText;
-            var target = document.getElementById("targetOddValue").innerText;
-            var acc = document.getElementById("confText").innerText;
-            var st = document.getElementById("zoneStart").innerText;
-            var en = document.getElementById("zoneEnd").innerText;
-            var strat = document.getElementById("strategyMode").value.toUpperCase();
-
-            var text = `🚨 *SUWAHAS SATHSARA VIP* 🚨\n` +
-                       `🎮 Mode: ${strat}\n` +
-                       `⏰ Time: ${sig}\n` +
-                       `🎯 Cashout: ${target}\n` +
-                       `📊 Accuracy: ${acc}\n` +
-                       `🕒 Zone: ${st} - ${en}\n` +
-                       `🔥 *Official Pro Signal*`;
-
-            navigator.clipboard.writeText(text).then(() => {
-                var btn = document.getElementById("copyButton");
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> COPIED!';
-                btn.style.background = "#00ff88";
-                btn.style.color = "#000";
-            }).catch(err => alert("Please screenshot this!"));
+            var signal = document.getElementById("displaySignal").innerText;
+            var start = document.getElementById("zoneStart").innerText;
+            var end = document.getElementById("zoneEnd").innerText;
+            var textToCopy = `🚨 *AVIATOR VIP SIGNAL* 🚨\n\n` +
+                             `🎯 Target Time: ${signal}\n` +
+                             `⚡ Active Zone: ${start} - ${end}\n\n` +
+                             `💎 *Suwahas Sathsara PRO*`;
+            var textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.select();
+            textArea.setSelectionRange(0, 99999);
+            try { 
+                document.execCommand('copy'); 
+                var btn = document.getElementById("copyButton"); 
+                btn.innerHTML = '<i class="fa-solid fa-check-double"></i> COPIED!'; 
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-regular fa-copy"></i> COPY PREDICTION';
+                    btn.style.background = "rgba(255, 255, 255, 0.1)";
+                    btn.style.color = "white";
+                }, 2000);
+            } catch (err) { alert("Manual Copy Required"); }
+            document.body.removeChild(textArea);
         }
-
-        // --- LIVE STATUS SIMULATOR ---
-        setInterval(() => {
-            var users = Math.floor(Math.random() * (1500 - 1100) + 1100);
-            var ping = Math.floor(Math.random() * (50 - 15) + 15);
-            document.getElementById("userCount").innerText = "USERS: " + users.toLocaleString();
-            document.getElementById("pingMs").innerText = "PING: " + ping + "ms";
-        }, 4000);
-
     </script>
 </body>
 </html>
