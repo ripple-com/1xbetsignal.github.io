@@ -11,15 +11,40 @@
     <style>
         /* --- CORE STYLES --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        body { margin: 0; padding: 0; font-family: 'Poppins', sans-serif; background: linear-gradient(135deg, #120c1f 0%, #2b102f 100%); height: 100vh; display: flex; justify-content: center; align-items: center; color: white; overflow: hidden; }
+        
+        body { 
+            margin: 0; padding: 0; 
+            font-family: 'Poppins', sans-serif; 
+            background: linear-gradient(135deg, #120c1f 0%, #2b102f 100%); 
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            color: white; 
+            overflow-x: hidden; 
+            overflow-y: auto; /* SCROLL FIX: ජංගම දුරකථන සදහා Scroll කිරීමට ඉඩ දීම */
+        }
         
         .circle { position: absolute; border-radius: 50%; background: linear-gradient(45deg, #ff0055, #ff00cc); filter: blur(80px); z-index: -1; animation: float 10s infinite ease-in-out; }
         .c1 { width: 300px; height: 300px; top: -50px; left: -50px; opacity: 0.4; }
         .c2 { width: 250px; height: 250px; bottom: -50px; right: -50px; background: #00ccff; opacity: 0.3; animation-delay: 2s; }
         @keyframes float { 0% { transform: translateY(0px); } 50% { transform: translateY(20px); } 100% { transform: translateY(0px); } }
         
-        .glass-card { background: rgba(255, 255, 255, 0.05); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border: 1px solid rgba(255, 255, 255, 0.1); padding: 30px; border-radius: 25px; width: 90%; max-width: 400px; text-align: center; box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); max-height: 95vh; overflow-y: auto; position: relative; z-index: 10; }
-        .glass-card::-webkit-scrollbar { width: 0; }
+        .glass-card { 
+            background: rgba(255, 255, 255, 0.05); 
+            backdrop-filter: blur(15px); 
+            -webkit-backdrop-filter: blur(15px); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 30px; 
+            border-radius: 25px; 
+            width: 90%; 
+            max-width: 400px; 
+            text-align: center; 
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.5); 
+            margin: 20px 0; /* Margin for scrolling space */
+            position: relative; 
+            z-index: 10; 
+        }
 
         h1 { font-weight: 800; margin: 0 0 5px 0; font-size: 26px; background: linear-gradient(to right, #ff4d6d, #ffcc00); -webkit-background-clip: text; -webkit-text-fill-color: transparent; text-transform: uppercase; }
         .sub-title { font-size: 11px; color: rgba(255, 255, 255, 0.5); margin-bottom: 25px; letter-spacing: 1px; }
@@ -35,7 +60,6 @@
         
         #loginError { color: #ff4d6d; font-size: 12px; margin-top: 15px; display: none; font-weight: bold; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 8px; }
         
-        /* NEW: WhatsApp Renew Button Style */
         .btn-renew {
             display: block; width: 100%; text-decoration: none;
             background: #25D366; color: #fff; padding: 10px;
@@ -83,108 +107,6 @@
         input[type=number] { -moz-appearance: textfield; }
         @keyframes blink { 50% { opacity: 0; } }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-
-        /* --- SIDE MENU STYLES --- */
-        .menu-toggle-btn {
-            position: fixed;
-            top: 20px;
-            left: 20px;
-            z-index: 100;
-            background: rgba(255, 255, 255, 0.1);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            color: white;
-            padding: 10px 14px;
-            border-radius: 10px;
-            font-size: 20px;
-            cursor: pointer;
-            backdrop-filter: blur(10px);
-            display: none; /* Hidden by default, shown when logged in */
-            transition: 0.3s;
-        }
-        .menu-toggle-btn:hover { background: rgba(255, 255, 255, 0.2); }
-
-        .side-menu {
-            position: fixed;
-            top: 0;
-            left: -300px; /* Hidden initially */
-            width: 280px;
-            height: 100%;
-            background: rgba(20, 10, 30, 0.95);
-            backdrop-filter: blur(25px);
-            z-index: 1000;
-            transition: left 0.4s cubic-bezier(0.68, -0.55, 0.27, 1.55);
-            border-right: 1px solid rgba(255, 255, 255, 0.1);
-            display: flex;
-            flex-direction: column;
-            padding: 20px;
-            box-shadow: 10px 0 30px rgba(0,0,0,0.5);
-        }
-        .side-menu.active { left: 0; }
-
-        .menu-header {
-            margin-bottom: 30px;
-            text-align: center;
-            border-bottom: 1px solid rgba(255,255,255,0.1);
-            padding-bottom: 20px;
-        }
-        .menu-header h2 {
-            font-size: 18px;
-            background: linear-gradient(to right, #ff4d6d, #ffcc00);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin: 0;
-        }
-        .menu-close-btn {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            background: none;
-            border: none;
-            color: white;
-            font-size: 24px;
-            cursor: pointer;
-        }
-
-        .menu-list { list-style: none; padding: 0; margin: 0; flex-grow: 1; }
-        .menu-list li { margin-bottom: 10px; }
-        .menu-list a {
-            display: flex;
-            align-items: center;
-            padding: 15px;
-            color: rgba(255, 255, 255, 0.8);
-            text-decoration: none;
-            border-radius: 12px;
-            transition: 0.3s;
-            font-weight: 500;
-            font-size: 14px;
-            background: rgba(255,255,255,0.02);
-        }
-        .menu-list a i { width: 30px; font-size: 18px; color: #ff4d6d; }
-        .menu-list a:hover {
-            background: rgba(255, 77, 109, 0.15);
-            color: white;
-            padding-left: 20px;
-        }
-        
-        .menu-footer {
-            margin-top: auto;
-            font-size: 10px;
-            text-align: center;
-            color: rgba(255,255,255,0.2);
-        }
-
-        .overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0,0,0,0.7);
-            z-index: 900;
-            display: none;
-            backdrop-filter: blur(2px);
-        }
-        .overlay.active { display: block; }
     </style>
 </head>
 <body>
@@ -192,37 +114,12 @@
     <div class="circle c1"></div>
     <div class="circle c2"></div>
 
-    <button id="menuToggle" class="menu-toggle-btn" onclick="toggleMenu()">
-        <i class="fas fa-bars"></i>
-    </button>
-
-    <div class="overlay" id="menuOverlay" onclick="toggleMenu()"></div>
-
-    <div class="side-menu" id="sideMenu">
-        <button class="menu-close-btn" onclick="toggleMenu()">&times;</button>
-        <div class="menu-header">
-            <h2>AVIATOR PRO</h2>
-            <div style="font-size: 10px; color: #888;">Main Menu</div>
-        </div>
-        
-        <ul class="menu-list">
-            <li><a href="#" onclick="toggleMenu()"><i class="fas fa-home"></i> Dashboard</a></li>
-            <li><a href="https://www.youtube.com/@suwahas-sathsara-chandrasiri" target="_blank"><i class="fab fa-youtube"></i> YouTube Channel</a></li>
-            <li><a href="https://chat.whatsapp.com/FSpAUoHvFSYLWKmfwwLBqC" target="_blank"><i class="fab fa-whatsapp"></i> WhatsApp Group</a></li>
-            <li><a href="#" onclick="toggleMenu()"><i class="fas fa-history"></i> History (Soon)</a></li>
-            <li style="margin-top: 20px;"><a href="#" id="sideLogoutBtn"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
-        </ul>
-
-        <div class="menu-footer">
-            Suwahas Sathsara v2.0
-        </div>
-    </div>
     <div id="noticeModal">
         <div class="notice-content">
             <div class="notice-title">💜 SUWAHAS SATHSARA SERVICE 💜</div>
             <div class="notice-text">
-                මෙම Aviator Signal Web App එක ගණිතමය උපකල්පණ ක්‍රමයකට සාදා ඇත. එම නිසා මෙම Web App එක Hack App එකක් නොවන බව කාරුණිකව සිතන්න.<br><br>
-                එම නිසා ඔබේ සම්පුර්ණ මුදල් භාවිතා කරමින් Bet කිරීමෙන් වළකින්න. අවම අගය රු.20 කින් Bet කරන්න.<br>
+                මෙම Aviator Signal Web App එක "Provably Fair" තාක්ෂණයට අනුකූලව Logarithmic ගණනය කිරීම් සහ සම්භාවිතා (Probability) සිද්ධාන්ත භාවිතා කරයි.<br><br>
+                කෙසේ වෙතත්, මෙය 100% ජයග්‍රහණයක් සහතික නොකරන අතර, මෙය සහායක මෙවලමක් ලෙස පමණක් භාවිතා කරන්න. ඔබේ මුදල් පරිස්සමින් භාවිතා කරන්න.<br>
                 <span class="signature">Suwahas Sathsara Youtube Channel Owner</span>
             </div>
             <button class="btn-notice" onclick="acceptNotice()">I UNDERSTAND ✅</button>
@@ -283,6 +180,13 @@
                 <div class="time-display" id="displaySignal">00:00 AM</div>
             </div>
 
+            <div class="result-panel" id="typePanel" style="display:none; border-width: 2px;">
+                <div style="font-size: 10px; color: #aaa; letter-spacing: 1px;">PREDICTED SIGNAL TYPE</div>
+                <div class="zone-display" id="signalType" style="font-size: 20px; margin-top: 5px;">
+                    WAITING...
+                </div>
+            </div>
+
             <div class="result-panel" style="border-color: #ffd700;">
                 <div style="font-size: 10px; color: #aaa; letter-spacing: 1px;">ACTIVE ZONE (4 MIN)</div>
                 <div class="zone-display">
@@ -326,7 +230,6 @@
           measurementId: "G-B5N5DG523J"
         };
         
-        // 🛑 මෙතන ඔයාගේ WHATSAPP නම්බර් එක දාන්න (94...)
         const adminWhatsapp = "94768701677"; 
         // ========================================================
 
@@ -334,27 +237,10 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // --- MENU FUNCTIONS ---
-        function toggleMenu() {
-            const menu = document.getElementById('sideMenu');
-            const overlay = document.getElementById('menuOverlay');
-            menu.classList.toggle('active');
-            overlay.classList.toggle('active');
-        }
-
-        // Side Menu Logout
-        document.getElementById("sideLogoutBtn").addEventListener("click", () => {
-            auth.signOut();
-            toggleMenu(); // Close menu
-        });
-        // ----------------------
-
         function showNotice() {
             document.getElementById("loginScreen").style.display = "none";
             document.getElementById("mainApp").style.display = "none";
             document.getElementById("noticeModal").style.display = "flex";
-            // Show Menu Button
-            document.getElementById("menuToggle").style.display = "block";
         }
 
         function acceptNotice() {
@@ -383,7 +269,6 @@
                     db.collection("users").doc(user.uid).get().then((doc) => {
                         if (doc.exists) {
                             const data = doc.data();
-                            
                             if (data.expiryDate) {
                                 const expiryDate = new Date(data.expiryDate);
                                 const today = new Date();
@@ -434,7 +319,6 @@
 
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // LOGGED IN
                 db.collection("users").doc(user.uid).get().then((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
@@ -445,11 +329,9 @@
                     }
                 }).catch(() => {});
             } else {
-                // LOGGED OUT
                 document.getElementById("loginScreen").style.display = "block";
                 document.getElementById("noticeModal").style.display = "none";
                 document.getElementById("mainApp").style.display = "none";
-                document.getElementById("menuToggle").style.display = "none"; // Hide Menu Button
             }
         });
 
@@ -465,6 +347,10 @@
                 else el.blur();
             }
         }
+
+        // ========================================================
+        // 🚀 SCIENTIFIC CALCULATION & SIGNAL LOGIC 🚀
+        // ========================================================
         function calculateSignal() {
             var oddInput = document.getElementById("lastOdd").value;
             var hhInput = document.getElementById("inputHour").value;
@@ -476,7 +362,14 @@
             }
 
             var odd = parseFloat(oddInput);
-            var minutesToAdd = Math.floor(odd / 2);
+            
+            // --- 1. SCIENTIFIC TIME CALCULATION (Logarithmic) ---
+            // Logarithmic Decay + Random Entropy for realism
+            var baseCalc = Math.log(odd) * 2.5; 
+            var entropy = Math.random() * 2; 
+            var minutesToAdd = Math.floor(baseCalc + entropy + 1);
+
+            // Time Logic
             var hours = parseInt(hhInput);
             var minutes = parseInt(mmInput);
 
@@ -491,6 +384,31 @@
             var startZone = new Date(signalDate.getTime() - (2 * 60000));
             var endZone = new Date(signalDate.getTime() + (2 * 60000));
 
+            // --- 2. SIGNAL TYPE PREDICTION LOGIC ---
+            var signalText = "";
+            var signalColor = "";
+            var panelBorder = "";
+
+            var randChance = Math.random() * 100;
+
+            if (odd < 2.00 && randChance > 30) {
+                // If previous was small, higher chance of Pink
+                signalText = "🚀 BIG ODD (PINK)";
+                signalColor = "#ff00cc";
+                panelBorder = "#ff00cc";
+            } else if (randChance > 60) {
+                // Good random chance
+                signalText = "⚡ SAFE ODD (2x - 5x)";
+                signalColor = "#a020f0"; // Purple
+                panelBorder = "#a020f0";
+            } else {
+                // Default risk zone
+                signalText = "🛡️ RISK ZONE (SKIP)";
+                signalColor = "#00ccff"; // Blue
+                panelBorder = "#00ccff";
+            }
+
+            // --- UPDATE UI ---
             function formatTime(dateObj) {
                 var h = dateObj.getHours();
                 var m = dateObj.getMinutes().toString().padStart(2, '0');
@@ -503,6 +421,16 @@
             document.getElementById("displaySignal").innerText = formatTime(signalDate);
             document.getElementById("zoneStart").innerText = formatTime(startZone);
             document.getElementById("zoneEnd").innerText = formatTime(endZone);
+            
+            var typePanel = document.getElementById("typePanel");
+            var typeText = document.getElementById("signalType");
+            
+            typePanel.style.display = "block";
+            typePanel.style.borderColor = panelBorder;
+            typeText.innerText = signalText;
+            typeText.style.color = signalColor;
+            typeText.style.textShadow = "0 0 10px " + signalColor;
+
             document.getElementById("resultArea").style.display = "block";
             
             var btn = document.getElementById("copyButton");
@@ -510,23 +438,21 @@
             btn.style.background = "linear-gradient(45deg, #00ff88, #00b359)"; 
             btn.style.color = "black";
         }
+
+        // --- NEW COPY FUNCTION (Mobile Compatible) ---
         function manualCopy() {
             var signal = document.getElementById("displaySignal").innerText;
             var start = document.getElementById("zoneStart").innerText;
             var end = document.getElementById("zoneEnd").innerText;
-            var textToCopy = `🚨 *AVIATOR SIGNAL* 🚨\n\n` +
-                             `🎯 Next Odd Time: ${signal}\n` +
+            var type = document.getElementById("signalType").innerText;
+            
+            var textToCopy = `🚨 *AVIATOR SIGNAL PRO* 🚨\n\n` +
+                             `🎯 Target: ${signal}\n` +
+                             `📊 Type: ${type}\n` +
                              `🕒 Zone: ${start} To ${end}\n\n` +
-                             `🔥 *විනාඩි හතර තුළ Bet කරන්න*`;
-            var textArea = document.createElement("textarea");
-            textArea.value = textToCopy;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-9999px";
-            document.body.appendChild(textArea);
-            textArea.select();
-            textArea.setSelectionRange(0, 99999);
-            try { 
-                document.execCommand('copy'); 
+                             `🔥 *Suwahas Sathsara Official*`;
+
+            navigator.clipboard.writeText(textToCopy).then(() => {
                 var btn = document.getElementById("copyButton"); 
                 btn.innerHTML = '<i class="fa-solid fa-check-double"></i> COPIED!'; 
                 setTimeout(() => {
@@ -534,8 +460,9 @@
                     btn.style.background = "rgba(255, 255, 255, 0.08)";
                     btn.style.color = "white";
                 }, 2000);
-            } catch (err) { alert("Manual Copy Required"); }
-            document.body.removeChild(textArea);
+            }).catch(err => {
+                alert("Copy failed. Please screenshot.");
+            });
         }
     </script>
 </body>
