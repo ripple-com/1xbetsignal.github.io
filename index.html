@@ -3,280 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Suwahas Sathsara PRO | V2.0</title>
+    <title>Suwahas Sathsara PRO | AI V3.0</title>
     
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- NEW MODERN CSS VARIABLES --- */
+        /* --- CORE VARIABLES --- */
         :root {
             --primary: #00f2ea;
             --primary-dark: #008080;
             --secondary: #ff0050;
             --bg-dark: #0b0e14;
-            --card-bg: rgba(20, 25, 35, 0.7);
+            --card-bg: rgba(16, 20, 30, 0.75);
             --glass-border: rgba(255, 255, 255, 0.08);
             --text-main: #ffffff;
             --text-mute: #8ca0b8;
         }
 
-        /* --- GLOBAL RESET --- */
+        /* --- GLOBAL SETUP --- */
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
         body { 
             margin: 0; padding: 0; 
             font-family: 'Outfit', sans-serif; 
             background-color: var(--bg-dark);
-            background-image: 
-                radial-gradient(circle at 10% 20%, rgba(0, 242, 234, 0.15) 0%, transparent 20%),
-                radial-gradient(circle at 90% 80%, rgba(255, 0, 80, 0.1) 0%, transparent 20%);
             height: 100vh; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             color: var(--text-main); 
             overflow: hidden; 
+            position: relative;
         }
 
-        /* --- BACKGROUND MESH --- */
+        /* --- ANIMATED BACKGROUND & PLANE --- */
         .bg-grid {
-            position: absolute;
-            width: 200%;
-            height: 200%;
+            position: absolute; width: 200%; height: 200%;
             background-image: linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
             linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
             background-size: 40px 40px;
             transform: perspective(500px) rotateX(60deg);
-            top: -50%;
-            z-index: -1;
+            top: -50%; z-index: -2;
             animation: gridMove 20s linear infinite;
         }
+        
+        .plane-container {
+            position: absolute; top: 50%; left: -20%;
+            width: 100px; height: 100px;
+            z-index: -1;
+            opacity: 0.6;
+            animation: flyPlane 15s linear infinite;
+        }
+        .plane-icon { font-size: 80px; color: var(--secondary); transform: rotate(45deg); filter: drop-shadow(0 0 20px var(--secondary)); }
+
         @keyframes gridMove { 0% { transform: perspective(500px) rotateX(60deg) translateY(0); } 100% { transform: perspective(500px) rotateX(60deg) translateY(40px); } }
+        @keyframes flyPlane { 
+            0% { left: -20%; top: 80%; transform: scale(0.5); } 
+            50% { top: 40%; transform: scale(1); }
+            100% { left: 120%; top: 10%; transform: scale(0.5); } 
+        }
 
         /* --- MAIN CARD --- */
         .app-card {
             background: var(--card-bg);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
             border: 1px solid var(--glass-border);
-            padding: 35px 25px;
-            border-radius: 30px;
-            width: 90%;
-            max-width: 420px;
+            padding: 30px 20px;
+            border-radius: 25px;
+            width: 90%; max-width: 400px;
             text-align: center;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.6);
-            max-height: 95vh;
-            overflow-y: auto;
-            position: relative;
-            z-index: 10;
+            box-shadow: 0 20px 50px rgba(0,0,0,0.7);
+            max-height: 95vh; overflow-y: auto;
+            position: relative; z-index: 10;
         }
-        .app-card::-webkit-scrollbar { width: 4px; }
-        .app-card::-webkit-scrollbar-thumb { background: var(--glass-border); border-radius: 4px; }
+        .app-card::-webkit-scrollbar { width: 0; }
 
-        /* --- TYPOGRAPHY --- */
-        h1 { 
-            font-weight: 800; 
-            margin: 0; 
-            font-size: 28px; 
-            letter-spacing: 1px;
-            background: linear-gradient(to right, #fff, var(--primary)); 
-            -webkit-background-clip: text; 
-            -webkit-text-fill-color: transparent; 
-        }
-        .badge {
-            font-size: 10px;
-            background: rgba(0, 242, 234, 0.1);
-            color: var(--primary);
-            padding: 4px 10px;
-            border-radius: 20px;
-            border: 1px solid rgba(0, 242, 234, 0.3);
-            display: inline-block;
-            margin-bottom: 25px;
-            font-weight: 600;
-            letter-spacing: 1px;
-        }
+        /* --- UI ELEMENTS --- */
+        h1 { margin: 0; font-size: 26px; font-weight: 800; background: linear-gradient(to right, #fff, var(--primary)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .badge { font-size: 9px; background: rgba(0, 242, 234, 0.1); color: var(--primary); padding: 4px 10px; border-radius: 20px; border: 1px solid rgba(0, 242, 234, 0.3); display: inline-block; margin-bottom: 20px; font-weight: 600; letter-spacing: 1px; }
 
-        /* --- INPUTS --- */
-        .input-group { position: relative; margin-bottom: 25px; text-align: left; }
-        .input-label { 
-            font-size: 11px; 
-            color: var(--text-mute); 
-            margin-bottom: 8px; 
-            display: block; 
-            font-weight: 600; 
-            padding-left: 5px;
-            text-transform: uppercase;
-        }
-        .modern-input {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            padding: 16px;
-            border-radius: 16px;
-            color: white;
-            font-size: 18px;
-            font-family: 'Outfit', sans-serif;
-            outline: none;
-            transition: 0.3s;
-            text-align: center;
-            font-weight: 600;
-        }
-        .modern-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 242, 234, 0.2); }
+        .input-group { position: relative; margin-bottom: 20px; text-align: left; }
+        .input-label { font-size: 10px; color: var(--text-mute); margin-bottom: 5px; display: block; font-weight: 600; padding-left: 5px; text-transform: uppercase; }
+        .modern-input { width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); padding: 14px; border-radius: 14px; color: white; font-size: 16px; font-family: 'Outfit', sans-serif; outline: none; text-align: center; font-weight: 600; transition: 0.3s; }
+        .modern-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 242, 234, 0.1); }
 
-        /* --- TIME CONTROL --- */
-        .time-control {
-            display: flex;
-            background: rgba(0, 0, 0, 0.4);
-            border: 1px solid var(--glass-border);
-            border-radius: 18px;
-            padding: 5px;
-            align-items: center;
-        }
+        /* Time Control */
+        .time-control { display: flex; background: rgba(0, 0, 0, 0.4); border: 1px solid var(--glass-border); border-radius: 14px; padding: 5px; align-items: center; }
         .time-box { flex: 1; display: flex; align-items: center; justify-content: center; }
-        .time-input {
-            background: transparent; border: none; color: white;
-            font-size: 32px; font-weight: 700; width: 60px;
-            text-align: center; outline: none; font-family: 'Outfit', sans-serif;
-        }
-        .colon { font-size: 28px; color: var(--text-mute); margin-top: -5px; animation: blink 2s infinite; }
-        .toggle-box {
-            display: flex; flex-direction: column; gap: 4px; padding: 4px;
-            background: rgba(255,255,255,0.05); border-radius: 14px;
-        }
-        .ampm-btn {
-            border: none; background: transparent; color: var(--text-mute);
-            font-size: 11px; font-weight: 700; cursor: pointer;
-            padding: 6px 10px; border-radius: 10px; transition: 0.3s;
-        }
+        .time-input { background: transparent; border: none; color: white; font-size: 28px; font-weight: 700; width: 50px; text-align: center; outline: none; font-family: 'Outfit', sans-serif; }
+        .colon { font-size: 24px; color: var(--text-mute); margin-top: -4px; animation: blink 2s infinite; }
+        .toggle-box { display: flex; flex-direction: column; gap: 4px; padding: 4px; background: rgba(255,255,255,0.05); border-radius: 10px; }
+        .ampm-btn { border: none; background: transparent; color: var(--text-mute); font-size: 10px; font-weight: 700; cursor: pointer; padding: 5px 8px; border-radius: 8px; transition: 0.3s; }
         .ampm-btn.active { background: var(--primary); color: #000; }
 
-        /* --- BUTTONS --- */
-        .btn-main {
-            width: 100%;
-            padding: 16px;
-            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
-            border: none;
-            border-radius: 18px;
-            color: #000;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            text-transform: uppercase;
-            box-shadow: 0 5px 20px rgba(0, 242, 234, 0.25);
-            transition: transform 0.2s, box-shadow 0.2s;
-            margin-top: 10px;
-        }
+        /* Buttons */
+        .btn-main { width: 100%; padding: 15px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); border: none; border-radius: 14px; color: #000; font-size: 15px; font-weight: 800; cursor: pointer; text-transform: uppercase; box-shadow: 0 5px 20px rgba(0, 242, 234, 0.2); transition: transform 0.2s; margin-top: 10px; }
         .btn-main:active { transform: scale(0.97); }
-        
-        .btn-secondary {
-            width: 100%; padding: 12px; background: transparent;
-            border: 1px solid var(--secondary); border-radius: 14px;
-            color: var(--secondary); font-size: 12px; font-weight: 700;
-            cursor: pointer; margin-top: 30px; transition: 0.3s;
-        }
-        .btn-secondary:hover { background: rgba(255, 0, 80, 0.1); }
+        .btn-mini { padding: 8px 15px; background: rgba(255,255,255,0.05); border: 1px solid var(--glass-border); border-radius: 8px; color: #ccc; font-size: 11px; cursor: pointer; margin-top: 10px; transition: 0.3s; }
+        .btn-mini:hover { background: rgba(255,255,255,0.1); }
+
+        /* --- LOADING BAR --- */
+        #loadingBarContainer { display: none; margin-top: 25px; text-align: left; }
+        .loading-text { font-size: 11px; color: var(--primary); margin-bottom: 6px; font-family: monospace; }
+        .progress-track { width: 100%; background: rgba(255,255,255,0.05); border-radius: 6px; height: 6px; overflow: hidden; }
+        .progress-fill { width: 0%; height: 100%; background: var(--primary); transition: width 0.2s; box-shadow: 0 0 10px var(--primary); }
 
         /* --- RESULTS --- */
-        #resultArea { display: none; margin-top: 30px; animation: slideUp 0.5s ease; }
-        .result-card {
-            background: rgba(0, 242, 234, 0.05);
-            border: 1px solid rgba(0, 242, 234, 0.2);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-            position: relative;
-            overflow: hidden;
-        }
-        .result-card::before {
-            content: ''; position: absolute; top: 0; left: 0; width: 4px; height: 100%;
-            background: var(--primary); box-shadow: 0 0 10px var(--primary);
-        }
-        .res-label { font-size: 10px; color: var(--text-mute); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 5px; }
-        .res-val { font-size: 36px; font-weight: 800; color: white; text-shadow: 0 0 20px rgba(0,242,234,0.4); }
-        
-        .zone-box {
-            display: flex; justify-content: space-between; align-items: center;
-            background: rgba(255,255,255,0.05); padding: 15px; border-radius: 15px; margin-bottom: 15px;
-        }
-        .zone-val { font-size: 16px; font-weight: 700; color: #ffd700; }
+        #resultArea { display: none; margin-top: 25px; animation: slideUp 0.5s ease; }
+        .result-card { background: rgba(0, 242, 234, 0.05); border: 1px solid rgba(0, 242, 234, 0.2); border-radius: 16px; padding: 15px; margin-bottom: 12px; position: relative; overflow: hidden; }
+        .result-card::before { content: ''; position: absolute; top: 0; left: 0; width: 3px; height: 100%; background: var(--primary); box-shadow: 0 0 8px var(--primary); }
+        .res-label { font-size: 9px; color: var(--text-mute); letter-spacing: 1.5px; text-transform: uppercase; margin-bottom: 5px; }
+        .res-val { font-size: 32px; font-weight: 800; color: white; text-shadow: 0 0 15px rgba(0,242,234,0.3); }
+        .zone-box { display: flex; justify-content: space-between; align-items: center; background: rgba(255,255,255,0.05); padding: 12px; border-radius: 12px; margin-bottom: 12px; }
+        .zone-val { font-size: 14px; font-weight: 700; color: #ffd700; }
 
-        .btn-copy {
-            width: 100%; padding: 14px; background: rgba(255,255,255,0.1);
-            border: 1px solid rgba(255,255,255,0.2); border-radius: 16px;
-            color: white; font-weight: 600; cursor: pointer;
-            display: flex; align-items: center; justify-content: center; gap: 10px;
-        }
+        /* --- HISTORY & CALCULATOR --- */
+        .tools-area { margin-top: 20px; border-top: 1px solid var(--glass-border); padding-top: 10px; }
+        .history-list { max-height: 100px; overflow-y: auto; margin-top: 10px; text-align: left; }
+        .history-item { font-size: 11px; padding: 6px; border-bottom: 1px solid rgba(255,255,255,0.05); display: flex; justify-content: space-between; color: #aaa; }
+        .history-item span { color: var(--primary); font-weight: bold; }
 
-        /* --- SOCIAL --- */
-        .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 30px; padding-top: 20px; border-top: 1px solid rgba(255,255,255,0.05); }
-        .soc-link {
-            display: flex; align-items: center; justify-content: center; gap: 8px;
-            padding: 12px; border-radius: 14px; text-decoration: none; color: white;
-            font-size: 12px; font-weight: 600; transition: 0.3s;
-        }
-        .yt { background: rgba(255, 0, 0, 0.15); border: 1px solid rgba(255, 0, 0, 0.3); }
-        .wa { background: rgba(37, 211, 102, 0.15); border: 1px solid rgba(37, 211, 102, 0.3); }
+        .martingale-box { display: none; background: rgba(0,0,0,0.3); padding: 10px; border-radius: 10px; margin-top: 10px; border: 1px solid var(--glass-border); }
+        .martingale-row { display: flex; justify-content: space-between; font-size: 11px; padding: 4px 0; border-bottom: 1px solid rgba(255,255,255,0.05); }
 
         /* --- MODAL --- */
-        #noticeModal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.95); z-index: 9999;
-            display: none; justify-content: center; align-items: center; padding: 20px;
-        }
-        .modal-inner {
-            background: #111; border: 1px solid var(--secondary);
-            padding: 30px 25px; border-radius: 25px; width: 100%; max-width: 380px;
-            text-align: center; position: relative;
-        }
-        .modal-inner::after {
-            content: ''; position: absolute; inset: -2px; border-radius: 27px;
-            background: linear-gradient(45deg, transparent, var(--secondary), transparent);
-            z-index: -1; animation: spinBorder 4s linear infinite;
-        }
-        
+        #noticeModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 9999; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .modal-inner { background: #111; border: 1px solid var(--secondary); padding: 30px 25px; border-radius: 20px; width: 100%; max-width: 350px; text-align: center; position: relative; box-shadow: 0 0 30px rgba(255,0,80,0.2); }
         .error-msg { color: var(--secondary); font-size: 12px; margin-top: 15px; display: none; background: rgba(255,0,80,0.1); padding: 10px; border-radius: 8px; font-weight: 600; }
-        .expiry-info { font-size: 11px; color: var(--primary); margin-bottom: 20px; background: rgba(0,242,234,0.1); padding: 5px 12px; border-radius: 20px; display: inline-block; }
         
-        /* New Whatsapp Renew Button */
-        .btn-renew {
-            display: block; width: 100%; text-decoration: none;
-            background: #25D366; color: #000; padding: 12px;
-            border-radius: 12px; margin-top: 15px; font-weight: bold;
-            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.2);
-        }
-
-        /* UTILS */
-        #mainApp, #noticeModal { display: none; }
-        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 20px; }
+        .soc-link { display: flex; align-items: center; justify-content: center; gap: 5px; padding: 10px; border-radius: 10px; text-decoration: none; color: white; font-size: 11px; font-weight: 600; border: 1px solid rgba(255,255,255,0.1); transition: 0.3s; }
+        
         @keyframes blink { 50% { opacity: 0.3; } }
         @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
-        @keyframes spinBorder { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
     </style>
 </head>
 <body>
 
+    <audio id="audioClick" src="https://assets.mixkit.co/active_storage/sfx/2568/2568-preview.m4a"></audio>
+    <audio id="audioSuccess" src="https://assets.mixkit.co/active_storage/sfx/1435/1435-preview.m4a"></audio>
+
     <div class="bg-grid"></div>
+    <div class="plane-container">
+        <i class="fa-solid fa-plane plane-icon"></i>
+    </div>
 
     <div id="noticeModal">
         <div class="modal-inner">
-            <h2 style="color: var(--secondary); margin: 0 0 15px 0;">SYSTEM ALERT</h2>
-            <p style="font-size: 13px; color: #ccc; line-height: 1.6;">
-                This Aviator Signal Web App is based on a mathematical probability algorithm.<br><br>
-                Please trade responsibly. Do not use your entire balance. Start with small bets (Rs. 20).
+            <h2 style="color: var(--secondary); margin: 0 0 10px 0; font-size: 18px;">⚠️ SYSTEM ALERT</h2>
+            <p style="font-size: 12px; color: #ccc; line-height: 1.6;">
+                This AI uses probability math. It is NOT a hack.<br>
+                <b>Do not gamble with money you cannot afford to lose.</b><br>
+                Start with small bets (Rs. 20).
             </p>
-            <div style="font-size: 11px; color: #888; margin-top: 15px;">Suwahas Sathsara Admin</div>
-            <button class="btn-main" onclick="acceptNotice()" style="background: var(--secondary); color: white; margin-top: 20px;">I UNDERSTAND</button>
+            <button class="btn-main" onclick="acceptNotice()" style="background: var(--secondary); color: white; margin-top: 15px; font-size: 12px; padding: 12px;">I UNDERSTAND</button>
         </div>
     </div>
 
     <div id="loginScreen" class="app-card">
-        <div class="badge">SECURE ACCESS</div>
+        <div class="badge">SECURE GATEWAY</div>
         <h1>MEMBER LOGIN</h1>
-        <p style="font-size: 12px; color: var(--text-mute); margin-bottom: 30px;">Enter your credentials to access the AI</p>
+        <p style="font-size: 11px; color: var(--text-mute); margin-bottom: 25px;">Verify your identity to access AI</p>
 
         <div class="input-group">
-            <label class="input-label">Email Address</label>
-            <input type="email" id="email" class="modern-input" placeholder="name@example.com">
+            <label class="input-label">Email</label>
+            <input type="email" id="email" class="modern-input" placeholder="Enter Email">
         </div>
 
         <div class="input-group">
@@ -286,22 +177,21 @@
 
         <button class="btn-main" id="loginBtn">UNLOCK SYSTEM <i class="fa-solid fa-lock-open"></i></button>
         <div id="loginError" class="error-msg"></div>
-
-        <p style="font-size: 10px; color: var(--text-mute); margin-top: 30px; opacity: 0.5;">Powered by Suwahas Sathsara</p>
+        <p style="font-size: 9px; color: var(--text-mute); margin-top: 20px; opacity: 0.5;">Suwahas Sathsara PRO V3.0</p>
     </div>
 
     <div id="mainApp" class="app-card">
-        <div class="badge">AI VERSION 2.0</div>
+        <div class="badge">AI PREDICTOR V3.0</div>
         <h1>SIGNAL GENERATOR</h1>
-        <div id="userExpiryDisplay" class="expiry-info">Authenticating...</div>
+        <div id="userExpiryDisplay" style="font-size: 10px; color: var(--primary); margin-bottom: 15px;">...</div>
 
         <div class="input-group">
-            <label class="input-label">Last History Odd (x)</label>
-            <input type="number" id="lastOdd" class="modern-input" placeholder="43.06" step="0.01">
+            <label class="input-label">Last Odd (x)</label>
+            <input type="number" id="lastOdd" class="modern-input" placeholder="Ex: 2.50" step="0.01">
         </div>
 
         <div class="input-group">
-            <label class="input-label">Current System Time</label>
+            <label class="input-label">Time</label>
             <div class="time-control">
                 <div class="time-box">
                     <input type="number" id="inputHour" class="time-input" placeholder="02" oninput="checkInput(this, 'inputMinute')">
@@ -315,43 +205,58 @@
             </div>
         </div>
 
-        <button class="btn-main" onclick="calculateSignal()">ANALYZE DATA <i class="fa-solid fa-bolt"></i></button>
+        <button class="btn-main" onclick="startAnalysis()">ANALYZE DATA <i class="fa-solid fa-microchip"></i></button>
+
+        <div id="loadingBarContainer">
+            <div id="loadingText" class="loading-text">Connecting to server...</div>
+            <div class="progress-track">
+                <div id="progressBar" class="progress-fill"></div>
+            </div>
+        </div>
 
         <div id="resultArea">
-            <div style="border-top: 1px solid var(--glass-border); margin: 25px 0;"></div>
+            <div style="border-top: 1px solid var(--glass-border); margin: 20px 0;"></div>
             
             <div class="result-card">
-                <div class="res-label">PREDICTED SIGNAL TIME</div>
+                <div class="res-label">TARGET SIGNAL</div>
                 <div class="res-val" id="displaySignal">--:--</div>
             </div>
 
             <div class="zone-box">
-                <div style="text-align: left;">
-                    <div class="res-label">START ZONE</div>
-                    <div class="zone-val" id="zoneStart">--:--</div>
+                <div><div class="res-label">START</div><div class="zone-val" id="zoneStart">--:--</div></div>
+                <i class="fa-solid fa-bolt" style="color: var(--primary);"></i>
+                <div style="text-align: right;"><div class="res-label">END</div><div class="zone-val" id="zoneEnd">--:--</div></div>
+            </div>
+        </div>
+
+        <div class="tools-area">
+            <button class="btn-mini" onclick="toggleMartingale()">💰 Money Management</button>
+            
+            <div id="martingaleCalc" class="martingale-box">
+                <div style="display:flex; gap:10px; align-items:center; margin-bottom:10px;">
+                    <input type="number" id="baseBet" value="20" class="modern-input" style="padding:8px; font-size:14px;" placeholder="Bet">
+                    <button class="btn-mini" style="margin:0; background:var(--primary); color:black;" onclick="calcMartingale()">CALC</button>
                 </div>
-                <i class="fa-solid fa-arrow-right" style="color: var(--glass-border);"></i>
-                <div style="text-align: right;">
-                    <div class="res-label">END ZONE</div>
-                    <div class="zone-val" id="zoneEnd">--:--</div>
-                </div>
+                <div id="martingaleSteps"></div>
             </div>
 
-            <button class="btn-copy" onclick="manualCopy()" id="copyButton">
-                <i class="fa-regular fa-copy"></i> COPY PREDICTION
-            </button>
+            <div style="margin-top: 15px; text-align: left;">
+                <span class="res-label"><i class="fa-solid fa-clock-rotate-left"></i> HISTORY</span>
+                <div id="historyList" class="history-list">
+                    </div>
+            </div>
         </div>
 
         <div class="social-grid">
-            <a href="https://www.youtube.com/@suwahas-sathsara-chandrasiri" target="_blank" class="soc-link yt">
-                <i class="fab fa-youtube"></i> TUTORIALS
+            <a href="https://www.youtube.com/@suwahas-sathsara-chandrasiri" target="_blank" class="soc-link" style="background: rgba(255,0,0,0.1); border-color: rgba(255,0,0,0.3);">
+                <i class="fab fa-youtube"></i> Channel
             </a>
-            <a href="https://chat.whatsapp.com/FSpAUoHvFSYLWKmfwwLBqC" target="_blank" class="soc-link wa">
-                <i class="fab fa-whatsapp"></i> COMMUNITY
+            <a href="https://chat.whatsapp.com/FSpAUoHvFSYLWKmfwwLBqC" target="_blank" class="soc-link" style="background: rgba(37,211,102,0.1); border-color: rgba(37,211,102,0.3);">
+                <i class="fab fa-whatsapp"></i> Group
             </a>
         </div>
-
-        <button class="btn-secondary" id="logoutBtn">DISCONNECT SESSION</button>
+        
+        <button onclick="auth.signOut(); window.location.reload();" class="btn-mini" style="width:100%; margin-top:15px; border-color:var(--secondary); color:var(--secondary);">LOGOUT</button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -359,9 +264,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // ========================================================
-        // 🔥 LOGIC REMAINS EXACTLY THE SAME 🔥
-        // ========================================================
+        // CONFIG
         const firebaseConfig = {
           apiKey: "AIzaSyBmLvGb0vXkJhKVKew1sYZpHuVPo-mHvjk",
           authDomain: "aviatorsignal-ff90c.firebaseapp.com",
@@ -371,32 +274,38 @@
           appId: "1:656549146292:web:f35944e4ae7b6db943f1e1",
           measurementId: "G-B5N5DG523J"
         };
-        
         const adminWhatsapp = "94768701677"; 
 
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        // SOUNDS
+        const sfxClick = document.getElementById("audioClick");
+        const sfxSuccess = document.getElementById("audioSuccess");
+
+        // UI HANDLERS
         function showNotice() {
             document.getElementById("loginScreen").style.display = "none";
             document.getElementById("mainApp").style.display = "none";
             document.getElementById("noticeModal").style.display = "flex";
         }
-
         function acceptNotice() {
+            sfxClick.play();
             document.getElementById("noticeModal").style.display = "none";
             document.getElementById("mainApp").style.display = "block";
         }
 
+        // LOGIN LOGIC
         document.getElementById("loginBtn").addEventListener("click", () => {
+            sfxClick.play();
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
             const errorMsg = document.getElementById("loginError");
             const btn = document.getElementById("loginBtn");
 
             if(!email || !password) {
-                errorMsg.style.display = "block"; errorMsg.innerText = "Please enter both Email & Password"; return;
+                errorMsg.style.display = "block"; errorMsg.innerText = "Email & Password Required"; return;
             }
 
             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> CONNECTING...';
@@ -410,25 +319,15 @@
                     db.collection("users").doc(user.uid).get().then((doc) => {
                         if (doc.exists) {
                             const data = doc.data();
-                            
                             if (data.expiryDate) {
                                 const expiryDate = new Date(data.expiryDate);
-                                const today = new Date();
-
-                                if (today > expiryDate) {
+                                if (new Date() > expiryDate) {
                                     auth.signOut();
-                                    let message = `Hello Admin, My Aviator App subscription expired. My UID: ${user.uid}`;
-                                    let waLink = `https://wa.me/${adminWhatsapp}?text=${encodeURIComponent(message)}`;
-                                    
                                     errorMsg.style.display = "block";
-                                    errorMsg.innerHTML = `🚫 <b>LICENSE EXPIRED</b><br>
-                                                          Ended on: ${data.expiryDate}<br>
-                                                          <a href="${waLink}" class="btn-renew">
-                                                            <i class="fab fa-whatsapp"></i> RENEW LICENSE
-                                                          </a>`;
-                                    btn.innerHTML = 'UNLOCK SYSTEM <i class="fa-solid fa-lock-open"></i>';
+                                    errorMsg.innerHTML = `EXPIRED! <a href="https://wa.me/${adminWhatsapp}" style="color:var(--primary)">Contact Admin</a>`;
+                                    btn.innerText = "LOGIN FAILED";
                                 } else {
-                                    document.getElementById("userExpiryDisplay").innerText = "Active Until: " + data.expiryDate;
+                                    document.getElementById("userExpiryDisplay").innerText = "VALID UNTIL: " + data.expiryDate;
                                     showNotice(); 
                                 }
                             } else {
@@ -437,26 +336,12 @@
                             }
                         } else {
                             auth.signOut();
-                            errorMsg.style.display = "block";
-                            errorMsg.innerHTML = "⚠️ User ID not found in database.<br>UID: " + user.uid;
-                            btn.innerText = "TRY AGAIN";
+                            errorMsg.style.display = "block"; errorMsg.innerText = "User not found in DB";
+                            btn.innerText = "RETRY";
                         }
-                    }).catch((error) => {
-                        errorMsg.style.display = "block";
-                        errorMsg.innerText = "Connection Error: " + error.message;
-                        btn.innerText = "RETRY";
-                    });
+                    }).catch((e) => { errorMsg.style.display = "block"; errorMsg.innerText = "DB Error"; btn.innerText = "RETRY"; });
                 })
-                .catch((error) => {
-                    btn.innerHTML = 'UNLOCK SYSTEM <i class="fa-solid fa-lock-open"></i>';
-                    errorMsg.style.display = "block";
-                    errorMsg.innerText = "Login Failed: " + error.code;
-                });
-        });
-
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-            auth.signOut();
-            window.location.reload();
+                .catch((e) => { btn.innerText = "UNLOCK SYSTEM"; errorMsg.style.display = "block"; errorMsg.innerText = "Wrong Details"; });
         });
 
         auth.onAuthStateChanged((user) => {
@@ -464,41 +349,71 @@
                 db.collection("users").doc(user.uid).get().then((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
-                        document.getElementById("userExpiryDisplay").innerText = "Active: " + (data.expiryDate || "Lifetime");
-                        if(document.getElementById("mainApp").style.display === "none" && document.getElementById("noticeModal").style.display === "none") {
-                            showNotice();
-                        }
+                        document.getElementById("userExpiryDisplay").innerText = "Valid: " + (data.expiryDate || "Lifetime");
+                        if(document.getElementById("mainApp").style.display === "none" && document.getElementById("noticeModal").style.display === "none") showNotice();
                     }
                 }).catch(() => {});
             } else {
                 document.getElementById("loginScreen").style.display = "block";
-                document.getElementById("noticeModal").style.display = "none";
                 document.getElementById("mainApp").style.display = "none";
             }
         });
 
+        // APP LOGIC
         let currentAmpm = 'AM';
         function setAMPM(val) {
+            sfxClick.play();
             currentAmpm = val;
             document.getElementById('btnAM').className = val === 'AM' ? 'ampm-btn active' : 'ampm-btn';
             document.getElementById('btnPM').className = val === 'PM' ? 'ampm-btn active' : 'ampm-btn';
         }
         function checkInput(el, nextId) {
-            if (el.value.length >= 2) {
-                if(nextId) document.getElementById(nextId).focus();
-                else el.blur();
-            }
+            if (el.value.length >= 2) { if(nextId) document.getElementById(nextId).focus(); else el.blur(); }
         }
-        function calculateSignal() {
+
+        // --- NEW LOADING & CALCULATION LOGIC ---
+        function startAnalysis() {
+            sfxClick.play();
             var oddInput = document.getElementById("lastOdd").value;
             var hhInput = document.getElementById("inputHour").value;
             var mmInput = document.getElementById("inputMinute").value;
 
             if (oddInput === "" || hhInput === "" || mmInput === "") {
-                alert("Please fill all fields!");
-                return;
+                alert("Please fill all fields!"); return;
             }
 
+            // UI Reset
+            document.getElementById("resultArea").style.display = "none";
+            document.getElementById("loadingBarContainer").style.display = "block";
+            document.getElementById("progressBar").style.width = "0%";
+            
+            let progress = 0;
+            let texts = ["Connecting Server...", "Analyzing History...", "Calculating Pattern...", "Decrypting...", "Finalizing..."];
+            let textIndex = 0;
+            
+            let interval = setInterval(() => {
+                progress += Math.floor(Math.random() * 15) + 5;
+                if(progress > 100) progress = 100;
+                
+                document.getElementById("progressBar").style.width = progress + "%";
+                
+                if(progress % 20 === 0 && textIndex < texts.length) {
+                    document.getElementById("loadingText").innerText = texts[textIndex];
+                    textIndex++;
+                }
+
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    setTimeout(() => {
+                        performCalculation(oddInput, hhInput, mmInput);
+                        document.getElementById("loadingBarContainer").style.display = "none";
+                        sfxSuccess.play();
+                    }, 600);
+                }
+            }, 200);
+        }
+
+        function performCalculation(oddInput, hhInput, mmInput) {
             var odd = parseFloat(oddInput);
             var minutesToAdd = Math.floor(odd / 2);
             var hours = parseInt(hhInput);
@@ -508,8 +423,7 @@
             if (currentAmpm === 'AM' && hours === 12) hours = 0;
 
             var date = new Date();
-            date.setHours(hours);
-            date.setMinutes(minutes);
+            date.setHours(hours); date.setMinutes(minutes);
             
             var signalDate = new Date(date.getTime() + (minutesToAdd * 60000));
             var startZone = new Date(signalDate.getTime() - (2 * 60000));
@@ -519,48 +433,46 @@
                 var h = dateObj.getHours();
                 var m = dateObj.getMinutes().toString().padStart(2, '0');
                 var ampm = h >= 12 ? 'PM' : 'AM';
-                h = h % 12;
-                h = h ? h : 12;
+                h = h % 12; h = h ? h : 12;
                 return h + ":" + m + " " + ampm;
             }
 
-            document.getElementById("displaySignal").innerText = formatTime(signalDate);
+            const finalSignal = formatTime(signalDate);
+            document.getElementById("displaySignal").innerText = finalSignal;
             document.getElementById("zoneStart").innerText = formatTime(startZone);
             document.getElementById("zoneEnd").innerText = formatTime(endZone);
             document.getElementById("resultArea").style.display = "block";
-            
-            var btn = document.getElementById("copyButton");
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> SIGNAL READY';
-            btn.style.background = "rgba(0, 242, 234, 0.2)"; 
-            btn.style.color = "var(--primary)";
+
+            // Add to History
+            addToHistory(oddInput, finalSignal);
         }
-        function manualCopy() {
-            var signal = document.getElementById("displaySignal").innerText;
-            var start = document.getElementById("zoneStart").innerText;
-            var end = document.getElementById("zoneEnd").innerText;
-            var textToCopy = `🚨 *AVIATOR VIP SIGNAL* 🚨\n\n` +
-                             `🎯 Target Time: ${signal}\n` +
-                             `⚡ Active Zone: ${start} - ${end}\n\n` +
-                             `💎 *Suwahas Sathsara PRO*`;
-            var textArea = document.createElement("textarea");
-            textArea.value = textToCopy;
-            textArea.style.position = "fixed";
-            textArea.style.left = "-9999px";
-            document.body.appendChild(textArea);
-            textArea.select();
-            textArea.setSelectionRange(0, 99999);
-            try { 
-                document.execCommand('copy'); 
-                var btn = document.getElementById("copyButton"); 
-                btn.innerHTML = '<i class="fa-solid fa-check-double"></i> COPIED!'; 
-                setTimeout(() => {
-                    btn.innerHTML = '<i class="fa-regular fa-copy"></i> COPY PREDICTION';
-                    btn.style.background = "rgba(255, 255, 255, 0.1)";
-                    btn.style.color = "white";
-                }, 2000);
-            } catch (err) { alert("Manual Copy Required"); }
-            document.body.removeChild(textArea);
+
+        function addToHistory(odd, time) {
+            const list = document.getElementById("historyList");
+            const div = document.createElement("div");
+            div.className = "history-item";
+            div.innerHTML = `Odd: ${odd}x <span>${time}</span>`;
+            list.prepend(div); // Add to top
         }
+
+        // --- MARTINGALE CALCULATOR ---
+        function toggleMartingale() {
+            sfxClick.play();
+            const box = document.getElementById("martingaleCalc");
+            box.style.display = box.style.display === "block" ? "none" : "block";
+        }
+        function calcMartingale() {
+            sfxClick.play();
+            const startBet = parseInt(document.getElementById("baseBet").value) || 20;
+            let html = "";
+            let current = startBet;
+            for(let i=1; i<=5; i++) {
+                html += `<div class="martingale-row"><div>Level ${i}</div><div style="color:#00f2ea">${current} LKR</div></div>`;
+                current = current * 2;
+            }
+            document.getElementById("martingaleSteps").innerHTML = html;
+        }
+
     </script>
 </body>
 </html>
