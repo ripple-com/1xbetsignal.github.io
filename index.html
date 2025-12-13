@@ -3,404 +3,337 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Suwahas Sathsara | AI Signal PRO</title>
+    <title>Suwahas Sathsara Aviator Signal PRO</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;600;800&family=Space+Grotesk:wght@500;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- 2025 PREMIUM GLASSMORPHISM THEME --- */
+        /* --- NEW CYBER-TECH STYLES --- */
         :root {
-            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            --accent-color: #00d2ff;
-            --glass-bg: rgba(255, 255, 255, 0.03);
-            --glass-border: rgba(255, 255, 255, 0.08);
+            --primary: #00f2ff;
+            --secondary: #0051ff;
+            --bg-dark: #050b14;
+            --card-bg: rgba(10, 20, 35, 0.85);
+            --border: rgba(0, 242, 255, 0.3);
             --text-main: #ffffff;
-            --text-sec: #94a3b8;
+            --text-muted: #8b9bb4;
         }
 
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-
-        body {
-            margin: 0; padding: 0;
-            font-family: 'Outfit', sans-serif;
-            background-color: #0f172a;
-            color: white;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-            position: relative;
+        
+        body { 
+            margin: 0; padding: 0; 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-dark);
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            color: var(--text-main); 
+            overflow: hidden; 
         }
 
-        /* Moving Aurora Background */
-        .aurora-blob {
+        /* Animated Glow Background */
+        .glow-bg {
             position: absolute;
-            border-radius: 50%;
-            filter: blur(80px);
-            opacity: 0.6;
-            animation: floatBlob 10s infinite alternate;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 81, 255, 0.15) 0%, transparent 70%);
             z-index: -1;
+            animation: pulseBg 5s infinite ease-in-out;
         }
-        .b1 { top: -10%; left: -10%; width: 500px; height: 500px; background: #764ba2; }
-        .b2 { bottom: -10%; right: -10%; width: 400px; height: 400px; background: #4338ca; animation-delay: -5s; }
-        .b3 { top: 40%; left: 40%; width: 300px; height: 300px; background: #00d2ff; opacity: 0.2; animation-duration: 15s; }
+        @keyframes pulseBg { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
-        @keyframes floatBlob {
-            0% { transform: translate(0, 0) scale(1); }
-            100% { transform: translate(30px, 50px) scale(1.1); }
+        /* Card Style */
+        .tech-card { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+            border: 1px solid var(--border); 
+            padding: 30px; 
+            border-radius: 15px; 
+            width: 90%; 
+            max-width: 400px; 
+            text-align: center; 
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 242, 255, 0.05); 
+            max-height: 95vh; 
+            overflow-y: auto; 
+            position: relative; 
+            z-index: 10; 
         }
+        .tech-card::-webkit-scrollbar { width: 0; }
 
-        /* Ultra Glass Card */
-        .main-card {
-            background: rgba(15, 23, 42, 0.6);
-            backdrop-filter: blur(24px);
-            -webkit-backdrop-filter: blur(24px);
-            border: 1px solid var(--glass-border);
-            padding: 40px 30px;
-            border-radius: 32px;
-            width: 92%;
-            max-width: 420px;
-            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
-            text-align: center;
-            position: relative;
-            overflow: hidden;
+        /* Typography */
+        h1 { 
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 700; 
+            margin: 0; 
+            font-size: 28px; 
+            background: linear-gradient(to right, #fff, var(--primary)); 
+            -webkit-background-clip: text; 
+            -webkit-text-fill-color: transparent; 
+            text-transform: uppercase; 
+            letter-spacing: 1px;
+            text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
         }
-
-        /* Shine Effect on Card */
-        .main-card::before {
-            content: ''; position: absolute; top: 0; left: 0; right: 0; height: 1px;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+        
+        .sub-title { 
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 12px; 
+            color: var(--primary); 
+            margin-bottom: 25px; 
+            letter-spacing: 3px; 
+            text-transform: uppercase;
         }
-
-        h1 {
-            font-family: 'Space Grotesk', sans-serif;
-            font-size: 24px;
-            font-weight: 700;
-            margin: 0;
-            background: linear-gradient(to right, #fff, #94a3b8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            letter-spacing: -0.5px;
+        
+        /* Inputs */
+        .input-box { position: relative; margin-bottom: 25px; }
+        .input-box label { 
+            position: absolute; 
+            top: -10px; 
+            left: 15px; 
+            background: #0d1624; 
+            padding: 0 8px; 
+            font-size: 11px; 
+            color: var(--primary); 
+            border: 1px solid var(--border);
+            border-radius: 4px; 
+            z-index: 10; 
+            font-weight: 600; 
+            text-transform: uppercase;
         }
-
-        .badge {
-            display: inline-block;
-            padding: 4px 12px;
-            background: rgba(118, 75, 162, 0.2);
-            border: 1px solid rgba(118, 75, 162, 0.4);
-            border-radius: 20px;
-            font-size: 10px;
-            color: #d8b4fe;
+        .std-input { 
+            width: 100%; 
+            background: rgba(0, 0, 0, 0.4); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            padding: 15px; 
+            border-radius: 8px; 
+            color: white; 
+            font-size: 18px; 
+            font-family: 'Rajdhani', sans-serif; 
             font-weight: 600;
-            margin-bottom: 25px;
-            margin-top: 5px;
+            outline: none; 
+            transition: 0.3s; 
+            text-align: center; 
             letter-spacing: 1px;
         }
-
-        /* Modern Inputs */
-        .input-group { position: relative; margin-bottom: 24px; text-align: left; }
-        .input-label {
-            display: block;
-            font-size: 11px;
-            color: var(--text-sec);
-            margin-bottom: 8px;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-left: 5px;
+        .std-input:focus { 
+            border-color: var(--primary); 
+            box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); 
         }
         
-        .modern-input {
-            width: 100%;
-            background: rgba(0, 0, 0, 0.2);
-            border: 1px solid var(--glass-border);
-            padding: 16px;
-            border-radius: 16px;
-            color: white;
-            font-size: 18px;
-            font-family: 'Space Grotesk', sans-serif;
-            outline: none;
-            transition: 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        /* Buttons */
+        .btn-analyze { 
+            width: 100%; 
+            padding: 15px; 
+            background: linear-gradient(90deg, var(--secondary), #00c3ff); 
+            border: none; 
+            border-radius: 8px; 
+            color: white; 
+            font-size: 16px; 
+            font-weight: 700; 
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 1px;
+            cursor: pointer; 
+            box-shadow: 0 5px 20px rgba(0, 81, 255, 0.4); 
+            text-transform: uppercase; 
+            margin-top: 10px; 
+            transition: all 0.2s; 
+            position: relative;
+            overflow: hidden;
         }
-        .modern-input:focus {
-            background: rgba(0, 0, 0, 0.4);
-            border-color: var(--accent-color);
-            box-shadow: 0 0 0 4px rgba(0, 210, 255, 0.1);
+        .btn-analyze::after {
+            content: '';
+            position: absolute;
+            top: 0; left: -100%;
+            width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: 0.5s;
         }
+        .btn-analyze:hover::after { left: 100%; }
+        .btn-analyze:active { transform: scale(0.98); }
 
-        /* Clock Area */
-        .time-selector {
-            display: flex;
-            gap: 12px;
-            background: rgba(0, 0, 0, 0.2);
-            padding: 8px;
-            border-radius: 20px;
-            border: 1px solid var(--glass-border);
-        }
-        .time-inputs {
-            flex: 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 5px;
-        }
-        .time-field {
-            background: transparent;
-            border: none;
-            color: white;
-            font-size: 32px;
-            font-weight: 700;
-            width: 50px;
-            text-align: center;
-            font-family: 'Space Grotesk', sans-serif;
-            outline: none;
-        }
-        .ampm-switch {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 4px;
-        }
-        .switch-btn {
-            flex: 1;
-            background: rgba(255, 255, 255, 0.05);
-            border: none;
-            border-radius: 12px;
-            color: var(--text-sec);
-            font-size: 11px;
-            font-weight: 700;
-            cursor: pointer;
+        .btn-logout { 
+            width: 100%; 
+            padding: 12px; 
+            background: rgba(255, 0, 0, 0.1); 
+            border: 1px solid #ff4d4d; 
+            border-radius: 8px; 
+            color: #ff4d4d; 
+            font-size: 12px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            margin-top: 25px; 
             transition: 0.3s;
         }
-        .switch-btn.active {
-            background: var(--primary-gradient);
-            color: white;
-            box-shadow: 0 4px 12px rgba(118, 75, 162, 0.3);
-        }
-
-        /* Action Buttons */
-        .btn-main {
-            width: 100%;
-            padding: 18px;
-            border: none;
-            border-radius: 18px;
-            background: white;
-            color: black;
-            font-size: 16px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: 0.3s;
-            margin-top: 10px;
-            font-family: 'Outfit', sans-serif;
-        }
-        .btn-main:active { transform: scale(0.97); }
+        .btn-logout:hover { background: rgba(255, 0, 0, 0.2); }
         
-        .btn-gradient {
-            background: var(--primary-gradient);
-            color: white;
-            box-shadow: 0 10px 30px -5px rgba(118, 75, 162, 0.4);
-        }
-        .btn-gradient:hover {
-            box-shadow: 0 15px 35px -5px rgba(118, 75, 162, 0.6);
-            transform: translateY(-2px);
-        }
-
-        /* Results Display */
-        #resultArea {
-            display: none;
-            margin-top: 30px;
-            padding-top: 25px;
-            border-top: 1px solid var(--glass-border);
-            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
-        }
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
-
-        .result-box {
-            background: linear-gradient(180deg, rgba(255,255,255,0.05) 0%, rgba(255,255,255,0.02) 100%);
-            border: 1px solid rgba(255,255,255,0.1);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 15px;
-        }
+        #loginError { color: #ff4d4d; font-size: 13px; margin-top: 15px; display: none; font-weight: bold; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,0,0,0.3); }
         
-        .big-time {
-            font-size: 42px;
-            font-weight: 800;
-            background: linear-gradient(to bottom, #fff, #a5f3fc);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            font-family: 'Space Grotesk', sans-serif;
-            margin: 5px 0;
-            filter: drop-shadow(0 0 20px rgba(165, 243, 252, 0.3));
-        }
-
-        /* Footer & Social */
-        .social-row { display: flex; gap: 12px; margin-top: 30px; }
-        .social-link {
-            flex: 1;
-            padding: 14px;
-            background: rgba(255, 255, 255, 0.03);
-            border: 1px solid var(--glass-border);
-            border-radius: 14px;
-            color: var(--text-sec);
-            text-decoration: none;
-            font-size: 13px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 8px;
-            transition: 0.3s;
-        }
-        .social-link:hover { background: rgba(255, 255, 255, 0.08); color: white; }
-        .yt i { color: #ff0000; }
-        .wa i { color: #25D366; }
-
-        .logout-link {
-            display: block;
-            margin-top: 20px;
-            font-size: 12px;
-            color: var(--text-sec);
-            text-decoration: none;
-            cursor: pointer;
-        }
-        .logout-link:hover { text-decoration: underline; color: #ff4d6d; }
-
-        /* Login & Notice Styles */
-        .error-msg {
-            background: rgba(255, 77, 109, 0.15);
-            color: #ff4d6d;
-            padding: 12px;
-            border-radius: 12px;
-            font-size: 13px;
-            margin-top: 15px;
-            display: none;
-        }
-
         /* Renew Button */
-        .renew-btn {
-            background: #25D366; color: white; padding: 10px; display: block;
-            text-decoration: none; border-radius: 10px; font-weight: bold; margin-top: 10px;
+        .btn-renew {
+            display: block; width: 100%; text-decoration: none;
+            background: #25D366; color: #fff; padding: 10px;
+            border-radius: 8px; margin-top: 10px; font-weight: bold;
+            box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
+            text-transform: uppercase;
+            font-family: 'Rajdhani', sans-serif;
         }
 
-        #noticeModal {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(15, 23, 42, 0.9);
-            z-index: 999;
-            display: none;
-            justify-content: center; align-items: center;
-            padding: 20px;
-        }
-        .notice-card {
-            background: #1e293b;
-            padding: 30px;
-            border-radius: 24px;
-            max-width: 350px;
-            text-align: center;
-            border: 1px solid rgba(255,255,255,0.1);
+        .expiry-info { 
+            font-size: 12px; 
+            color: var(--primary); 
+            margin-bottom: 20px; 
+            border: 1px solid var(--primary); 
+            padding: 5px 15px; 
+            border-radius: 50px; 
+            background: rgba(0, 242, 255, 0.1); 
+            display: inline-block;
+            font-family: 'Rajdhani', sans-serif;
+            font-weight: 600;
         }
 
-        #loginScreen, #mainApp { display: none; }
+        /* Modal */
+        #noticeModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 9999; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .notice-content { background: #0b111a; border: 1px solid var(--primary); padding: 30px 20px; border-radius: 15px; width: 100%; max-width: 380px; text-align: center; box-shadow: 0 0 50px rgba(0, 242, 255, 0.2); animation: slideUp 0.4s ease-out; position: relative; }
+        .notice-title { color: var(--primary); font-weight: 800; font-size: 18px; margin-bottom: 20px; text-transform: uppercase; letter-spacing: 1px; border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; font-family: 'Rajdhani', sans-serif; }
+        .notice-text { font-size: 14px; color: #ccc; line-height: 1.7; margin-bottom: 25px; text-align: center; font-weight: 400; }
+        .signature { color: #ffcc00; font-weight: 700; margin-top: 15px; display: block; font-size: 12px; letter-spacing: 0.5px; }
+        .btn-notice { width: 100%; padding: 14px; background: var(--secondary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; font-size: 14px; box-shadow: 0 5px 15px rgba(0,0,0,0.5); font-family: 'Rajdhani', sans-serif; text-transform: uppercase;}
+
+        /* Clock UI */
+        .clock-wrapper { display: flex; align-items: stretch; gap: 10px; }
+        .clock-container { flex: 2; display: flex; justify-content: center; align-items: center; background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 10px; border: 1px solid rgba(255, 255, 255, 0.1); }
+        .clock-input { background: transparent; border: none; color: white; font-size: 38px; font-weight: 600; width: 55px; text-align: center; outline: none; font-family: 'Rajdhani', sans-serif; padding: 0; margin: 0; }
+        .clock-colon { font-size: 30px; margin: 0 2px; color: var(--primary); animation: blink 1s infinite; }
+        .ampm-toggle { flex: 1; display: flex; flex-direction: column; background: rgba(0, 0, 0, 0.3); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); overflow: hidden; }
+        .ampm-btn { flex: 1; border: none; background: transparent; color: #555; font-weight: bold; cursor: pointer; transition: 0.3s; font-size: 14px; font-family: 'Rajdhani', sans-serif; }
+        .ampm-btn.active { background: var(--primary); color: #000; box-shadow: 0 0 15px rgba(0, 242, 255, 0.4); }
+        
+        /* Results */
+        #resultArea { display: none; margin-top: 25px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 20px; animation: fadeIn 0.5s ease; }
+        .result-panel { background: rgba(0, 242, 255, 0.05); border-radius: 10px; padding: 15px; margin-bottom: 10px; border: 1px solid var(--border); }
+        .time-display { font-size: 36px; font-weight: 800; color: var(--primary); text-shadow: 0 0 20px rgba(0, 242, 255, 0.4); margin: 5px 0; font-family: 'Rajdhani', sans-serif; }
+        .zone-display { font-size: 20px; color: #ffd700; font-weight: 600; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px;}
+        .btn-copy { width: 100%; padding: 12px; background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1); border-radius: 8px; color: white; font-weight: 600; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; transition: 0.3s;}
+        .btn-copy:hover { border-color: var(--primary); color: var(--primary); }
+        
+        /* Footer/Social */
+        .social-area { margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; gap: 10px; justify-content: center; }
+        .social-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 12px; border-radius: 8px; text-decoration: none; color: white; font-size: 13px; font-weight: 600; transition: 0.3s; border: 1px solid transparent; gap: 8px; font-family: 'Poppins', sans-serif; }
+        .yt { background: rgba(255, 0, 0, 0.1); border-color: rgba(255, 0, 0, 0.4); }
+        .yt:hover { background: rgba(255, 0, 0, 0.3); }
+        .wa { background: rgba(0, 255, 136, 0.1); border-color: rgba(0, 255, 136, 0.4); }
+        .wa:hover { background: rgba(0, 255, 136, 0.3); }
+        
+        .footer { margin-top: 25px; font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; }
+        
+        #mainApp, #noticeModal { display: none; }
+        input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+        input[type=number] { -moz-appearance: textfield; }
+        @keyframes blink { 50% { opacity: 0; } }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes slideUp { from { transform: translateY(50px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
     </style>
 </head>
 <body>
 
-    <div class="aurora-blob b1"></div>
-    <div class="aurora-blob b2"></div>
-    <div class="aurora-blob b3"></div>
+    <div class="glow-bg"></div>
 
     <div id="noticeModal">
-        <div class="notice-card">
-            <h2 style="margin: 0 0 15px; color: #a5f3fc;">⚠️ Disclaimer</h2>
-            <p style="font-size: 14px; color: #94a3b8; line-height: 1.6;">
-                This tool uses a mathematical algorithm for estimation. It is not a hacking tool.<br><br>
-                Please play responsibly with small amounts (Rs. 20).
-            </p>
-            <button class="btn-main btn-gradient" onclick="acceptNotice()">I Understand</button>
+        <div class="notice-content">
+            <div class="notice-title"><i class="fa-solid fa-shield-halved"></i> SYSTEM NOTICE</div>
+            <div class="notice-text">
+                මෙම Aviator Signal Web App එක ගණිතමය උපකල්පණ ක්‍රමයකට සාදා ඇත. එම නිසා මෙම Web App එක Hack App එකක් නොවන බව කාරුණිකව සිතන්න.<br><br>
+                එම නිසා ඔබේ සම්පුර්ණ මුදල් භාවිතා කරමින් Bet කිරීමෙන් වළකින්න. අවම අගය රු.20 කින් Bet කරන්න.<br>
+                <span class="signature">Suwahas Sathsara Youtube Channel Owner</span>
+            </div>
+            <button class="btn-notice" onclick="acceptNotice()">I UNDERSTAND & ACCESS</button>
         </div>
     </div>
 
-    <div id="loginScreen" class="main-card">
-        <div class="badge">SECURE ACCESS v3.0</div>
-        <h1>Welcome Back</h1>
-        <p style="color: var(--text-sec); font-size: 14px; margin-bottom: 30px;">Enter credentials to access the AI Signal Bot.</p>
+    <div id="loginScreen" class="tech-card">
+        <h1>LOGIN</h1>
+        <div class="sub-title">SECURE TERMINAL ACCESS</div>
 
-        <div class="input-group">
-            <span class="input-label">Email Address</span>
-            <input type="email" id="email" class="modern-input" placeholder="user@example.com">
+        <div class="input-box">
+            <label>EMAIL ADDRESS</label>
+            <input type="email" id="email" class="std-input" placeholder="user@email.com">
         </div>
 
-        <div class="input-group">
-            <span class="input-label">Password</span>
-            <input type="password" id="password" class="modern-input" placeholder="••••••••">
+        <div class="input-box">
+            <label>PASSWORD</label>
+            <input type="password" id="password" class="std-input" placeholder="••••••••">
         </div>
 
-        <button class="btn-main btn-gradient" id="loginBtn">Authenticate <i class="fa-solid fa-arrow-right"></i></button>
-        <div id="loginError" class="error-msg"></div>
+        <button class="btn-analyze" id="loginBtn">INITIALIZE SESSION <i class="fa-solid fa-arrow-right"></i></button>
+        <div id="loginError"></div>
 
-        <div style="margin-top: 30px; font-size: 10px; color: rgba(255,255,255,0.2);">POWERED BY SUWAHAS SATHSARA</div>
+        <div class="footer">SYSTEM ID: 2.0.4 | POWERED BY SUWAHAS SATHSARA</div>
     </div>
 
-    <div id="mainApp" class="main-card">
-        <div class="badge">AI PREDICTOR PRO</div>
-        <h1>Signal Generator</h1>
-        <div id="userExpiryDisplay" style="font-size: 11px; color: var(--accent-color); margin-bottom: 25px; margin-top: 5px;">
-            <i class="fa-solid fa-circle-check"></i> System Active
+    <div id="mainApp" class="tech-card">
+        <h1>SUWAHAS SATHSARA</h1>
+        <div class="sub-title">SIGNAL PREDICTION PRO</div>
+        
+        <div id="userExpiryDisplay" class="expiry-info"><i class="fa-solid fa-spinner fa-spin"></i> Checking...</div>
+
+        <div class="input-box">
+            <label>LAST BIG ODD (x)</label>
+            <input type="number" id="lastOdd" class="std-input" placeholder="43.06" step="0.01">
         </div>
 
-        <div class="input-group">
-            <span class="input-label">Last Big Odd (x)</span>
-            <input type="number" id="lastOdd" class="modern-input" placeholder="43.06" step="0.01">
-        </div>
-
-        <div class="input-group">
-            <span class="input-label">Current Time</span>
-            <div class="time-selector">
-                <div class="time-inputs">
-                    <input type="number" id="inputHour" class="time-field" placeholder="00" oninput="checkInput(this, 'inputMinute')">
-                    <span style="font-size: 24px; color: rgba(255,255,255,0.3); padding-bottom: 5px;">:</span>
-                    <input type="number" id="inputMinute" class="time-field" placeholder="00" oninput="checkInput(this, null)">
+        <div class="input-box">
+            <label>SYSTEM TIME INPUT</label>
+            <div class="clock-wrapper">
+                <div class="clock-container">
+                    <input type="number" id="inputHour" class="clock-input" placeholder="00" oninput="checkInput(this, 'inputMinute')">
+                    <span class="clock-colon">:</span>
+                    <input type="number" id="inputMinute" class="clock-input" placeholder="00" oninput="checkInput(this, null)">
                 </div>
-                <div class="ampm-switch">
-                    <button class="switch-btn active" id="btnAM" onclick="setAMPM('AM')">AM</button>
-                    <button class="switch-btn" id="btnPM" onclick="setAMPM('PM')">PM</button>
+                <div class="ampm-toggle">
+                    <button class="ampm-btn active" id="btnAM" onclick="setAMPM('AM')">AM</button>
+                    <button class="ampm-btn" id="btnPM" onclick="setAMPM('PM')">PM</button>
                 </div>
             </div>
         </div>
 
-        <button class="btn-main btn-gradient" onclick="calculateSignal()">
-            <i class="fa-solid fa-wand-magic-sparkles"></i> GENERATE SIGNAL
-        </button>
+        <button class="btn-analyze" onclick="calculateSignal()">CALCULATE SIGNAL <i class="fa-solid fa-bolt"></i></button>
 
         <div id="resultArea">
-            <div class="result-box">
-                <div style="font-size: 11px; color: var(--text-sec); text-transform: uppercase; letter-spacing: 1px;">Target Time</div>
-                <div class="big-time" id="displaySignal">00:00 AM</div>
+            <div class="result-panel">
+                <div style="font-size: 10px; color: #8b9bb4; letter-spacing: 2px; text-transform: uppercase;">Predicted Signal Time</div>
+                <div class="time-display" id="displaySignal">00:00 AM</div>
             </div>
 
-            <div class="result-box" style="border-color: rgba(255, 215, 0, 0.2); background: rgba(255, 215, 0, 0.03);">
-                <div style="font-size: 11px; color: #ffd700; text-transform: uppercase; letter-spacing: 1px;">Safety Zone (4 Min)</div>
-                <div style="font-size: 20px; font-weight: 600; color: #ffd700; margin-top: 5px;">
+            <div class="result-panel" style="border-color: #ffd700; background: rgba(255, 215, 0, 0.05);">
+                <div style="font-size: 10px; color: #ffd700; letter-spacing: 2px; text-transform: uppercase;">Active Zone (4 MIN)</div>
+                <div class="zone-display">
                     <span id="zoneStart">00:00</span> - <span id="zoneEnd">00:00</span>
                 </div>
             </div>
 
-            <button class="btn-main" id="copyButton" onclick="manualCopy()" style="background: rgba(255,255,255,0.1); color: white; border: 1px solid var(--glass-border);">
-                <i class="fa-regular fa-copy"></i> Copy Signal
+            <button class="btn-copy" onclick="manualCopy()" id="copyButton">
+                <i class="fa-regular fa-copy"></i> COPY SIGNAL DATA
             </button>
         </div>
 
-        <div class="social-row">
-            <a href="https://www.youtube.com/@suwahas-sathsara-chandrasiri" target="_blank" class="social-link yt">
+        <div class="social-area">
+            <a href="https://www.youtube.com/@suwahas-sathsara-chandrasiri" target="_blank" class="social-btn yt">
                 <i class="fab fa-youtube"></i> Channel
             </a>
-            <a href="https://chat.whatsapp.com/FSpAUoHvFSYLWKmfwwLBqC" target="_blank" class="social-link wa">
+            <a href="https://chat.whatsapp.com/FSpAUoHvFSYLWKmfwwLBqC" target="_blank" class="social-btn wa">
                 <i class="fab fa-whatsapp"></i> Group
             </a>
         </div>
 
-        <div class="logout-link" id="logoutBtn">End Session <i class="fa-solid fa-power-off"></i></div>
+        <button class="btn-logout" id="logoutBtn">TERMINATE SESSION <i class="fa-solid fa-power-off"></i></button>
+        <div class="footer">VERSION 2.5 | SUWAHAS SATHSARA</div>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -408,6 +341,9 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <script>
+        // ========================================================
+        // 🔥 FIREBASE CONFIGURATION (UNCHANGED) 🔥
+        // ========================================================
         const firebaseConfig = {
           apiKey: "AIzaSyBmLvGb0vXkJhKVKew1sYZpHuVPo-mHvjk",
           authDomain: "aviatorsignal-ff90c.firebaseapp.com",
@@ -417,7 +353,9 @@
           appId: "1:656549146292:web:f35944e4ae7b6db943f1e1",
           measurementId: "G-B5N5DG523J"
         };
+        
         const adminWhatsapp = "94768701677"; 
+        // ========================================================
 
         firebase.initializeApp(firebaseConfig);
         const auth = firebase.auth();
@@ -428,6 +366,7 @@
             document.getElementById("mainApp").style.display = "none";
             document.getElementById("noticeModal").style.display = "flex";
         }
+
         function acceptNotice() {
             document.getElementById("noticeModal").style.display = "none";
             document.getElementById("mainApp").style.display = "block";
@@ -440,83 +379,131 @@
             const btn = document.getElementById("loginBtn");
 
             if(!email || !password) {
-                errorMsg.style.display = "block"; errorMsg.innerText = "Please enter email and password."; return;
+                errorMsg.style.display = "block"; errorMsg.innerText = "⚠️ ENTER CREDENTIALS"; return;
             }
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Processing...';
+
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> CONNECTING...';
             errorMsg.style.display = "none";
             
-            auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
-                const user = userCredential.user;
+            auth.signInWithEmailAndPassword(email, password)
+                .then((userCredential) => {
+                    const user = userCredential.user;
+                    btn.innerHTML = '<i class="fa-solid fa-database"></i> CHECKING DB...';
+
+                    db.collection("users").doc(user.uid).get().then((doc) => {
+                        if (doc.exists) {
+                            const data = doc.data();
+                            
+                            if (data.expiryDate) {
+                                const expiryDate = new Date(data.expiryDate);
+                                const today = new Date();
+
+                                if (today > expiryDate) {
+                                    auth.signOut();
+                                    let message = `Hello Admin, My Aviator App subscription expired. My UID: ${user.uid}`;
+                                    let waLink = `https://wa.me/${adminWhatsapp}?text=${encodeURIComponent(message)}`;
+                                    
+                                    errorMsg.style.display = "block";
+                                    errorMsg.innerHTML = `🚫 <b>ACCESS DENIED (EXPIRED)</b><br>
+                                                          Valid until: ${data.expiryDate}<br>
+                                                          <a href="${waLink}" class="btn-renew">
+                                                            <i class="fab fa-whatsapp"></i> RENEW LICENSE
+                                                          </a>`;
+                                    btn.innerHTML = 'INITIALIZE SESSION <i class="fa-solid fa-arrow-right"></i>';
+                                } else {
+                                    document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-clock"></i> Valid: ' + data.expiryDate;
+                                    showNotice(); 
+                                }
+                            } else {
+                                document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-infinity"></i> Unlimited Access';
+                                showNotice();
+                            }
+                        } else {
+                            auth.signOut();
+                            errorMsg.style.display = "block";
+                            errorMsg.innerHTML = "⚠️ <b>DB ERROR:</b><br>User ID Missing.<br>UID: " + user.uid;
+                            btn.innerHTML = "SETUP REQUIRED";
+                        }
+                    }).catch((error) => {
+                        errorMsg.style.display = "block";
+                        errorMsg.innerText = "❌ DB Error: " + error.message;
+                        btn.innerHTML = "TRY AGAIN";
+                    });
+                })
+                .catch((error) => {
+                    btn.innerHTML = 'INITIALIZE SESSION <i class="fa-solid fa-arrow-right"></i>';
+                    errorMsg.style.display = "block";
+                    errorMsg.innerText = "❌ LOGIN FAILED: " + error.code;
+                });
+        });
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            auth.signOut();
+            window.location.reload();
+        });
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
                 db.collection("users").doc(user.uid).get().then((doc) => {
                     if (doc.exists) {
                         const data = doc.data();
-                        if (data.expiryDate) {
-                            const expiryDate = new Date(data.expiryDate);
-                            if (new Date() > expiryDate) {
-                                auth.signOut();
-                                let waLink = `https://wa.me/${adminWhatsapp}?text=My Aviator App expired. UID: ${user.uid}`;
-                                errorMsg.style.display = "block";
-                                errorMsg.innerHTML = `🚫 Account Expired.<br><a href="${waLink}" class="renew-btn">Renew Now</a>`;
-                                btn.innerHTML = 'Authenticate';
-                            } else {
-                                document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-check-circle"></i> Valid: ' + data.expiryDate;
-                                showNotice(); 
-                            }
-                        } else {
-                            document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-infinity"></i> Unlimited Access';
+                        document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-clock"></i> Valid: ' + (data.expiryDate || "Unlimited");
+                        if(document.getElementById("mainApp").style.display === "none" && document.getElementById("noticeModal").style.display === "none") {
                             showNotice();
                         }
-                    } else {
-                        auth.signOut(); errorMsg.style.display = "block"; errorMsg.innerText = "User Data Not Found."; btn.innerHTML = 'Authenticate';
                     }
-                });
-            }).catch((error) => {
-                btn.innerHTML = 'Authenticate'; errorMsg.style.display = "block"; errorMsg.innerText = "Login Failed: " + error.message;
-            });
-        });
-
-        document.getElementById("logoutBtn").addEventListener("click", () => { auth.signOut(); window.location.reload(); });
-        auth.onAuthStateChanged((user) => {
-            if (!user) {
+                }).catch(() => {});
+            } else {
                 document.getElementById("loginScreen").style.display = "block";
-                document.getElementById("mainApp").style.display = "none";
                 document.getElementById("noticeModal").style.display = "none";
+                document.getElementById("mainApp").style.display = "none";
             }
         });
 
         let currentAmpm = 'AM';
         function setAMPM(val) {
             currentAmpm = val;
-            document.getElementById('btnAM').className = val === 'AM' ? 'switch-btn active' : 'switch-btn';
-            document.getElementById('btnPM').className = val === 'PM' ? 'switch-btn active' : 'switch-btn';
+            document.getElementById('btnAM').className = val === 'AM' ? 'ampm-btn active' : 'ampm-btn';
+            document.getElementById('btnPM').className = val === 'PM' ? 'ampm-btn active' : 'ampm-btn';
         }
         function checkInput(el, nextId) {
-            if (el.value.length >= 2) { if(nextId) document.getElementById(nextId).focus(); else el.blur(); }
+            if (el.value.length >= 2) {
+                if(nextId) document.getElementById(nextId).focus();
+                else el.blur();
+            }
         }
-
         function calculateSignal() {
             var oddInput = document.getElementById("lastOdd").value;
             var hhInput = document.getElementById("inputHour").value;
             var mmInput = document.getElementById("inputMinute").value;
 
-            if (oddInput === "" || hhInput === "" || mmInput === "") { alert("Fill all fields!"); return; }
+            if (oddInput === "" || hhInput === "" || mmInput === "") {
+                alert("Please enter all details!");
+                return;
+            }
 
             var odd = parseFloat(oddInput);
             var minutesToAdd = Math.floor(odd / 2);
             var hours = parseInt(hhInput);
             var minutes = parseInt(mmInput);
 
-            if (currentAmpm === 'PM' && hours < 12) hours += 12;
+            if (currentAmpm === 'PM' && hours < 12) hours = hours + 12;
             if (currentAmpm === 'AM' && hours === 12) hours = 0;
 
-            var date = new Date(); date.setHours(hours); date.setMinutes(minutes);
+            var date = new Date();
+            date.setHours(hours);
+            date.setMinutes(minutes);
+            
             var signalDate = new Date(date.getTime() + (minutesToAdd * 60000));
             var startZone = new Date(signalDate.getTime() - (2 * 60000));
             var endZone = new Date(signalDate.getTime() + (2 * 60000));
 
             function formatTime(dateObj) {
-                var h = dateObj.getHours(); var m = dateObj.getMinutes().toString().padStart(2, '0');
-                var ampm = h >= 12 ? 'PM' : 'AM'; h = h % 12; h = h ? h : 12;
+                var h = dateObj.getHours();
+                var m = dateObj.getMinutes().toString().padStart(2, '0');
+                var ampm = h >= 12 ? 'PM' : 'AM';
+                h = h % 12;
+                h = h ? h : 12;
                 return h + ":" + m + " " + ampm;
             }
 
@@ -524,18 +511,40 @@
             document.getElementById("zoneStart").innerText = formatTime(startZone);
             document.getElementById("zoneEnd").innerText = formatTime(endZone);
             document.getElementById("resultArea").style.display = "block";
+            
+            var btn = document.getElementById("copyButton");
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> SIGNAL READY';
+            btn.style.background = "rgba(0, 242, 255, 0.2)"; 
+            btn.style.color = "#00f2ff";
+            btn.style.borderColor = "#00f2ff";
         }
-
         function manualCopy() {
             var signal = document.getElementById("displaySignal").innerText;
             var start = document.getElementById("zoneStart").innerText;
             var end = document.getElementById("zoneEnd").innerText;
-            var text = `⚡ *AVIATOR PREMIUM SIGNAL* ⚡\n🎯 Target: ${signal}\n🛡 Zone: ${start} - ${end}\n✅ Valid for 4 Minutes`;
-            navigator.clipboard.writeText(text).then(() => {
-                var btn = document.getElementById("copyButton");
-                btn.innerHTML = '<i class="fa-solid fa-check"></i> Copied';
-                setTimeout(() => { btn.innerHTML = '<i class="fa-regular fa-copy"></i> Copy Signal'; }, 2000);
-            });
+            var textToCopy = `🚨 *AVIATOR SIGNAL PRO* 🚨\n\n` +
+                             `🎯 Next Odd Time: ${signal}\n` +
+                             `🕒 Zone: ${start} To ${end}\n\n` +
+                             `🔥 *විනාඩි හතර තුළ Bet කරන්න*`;
+            var textArea = document.createElement("textarea");
+            textArea.value = textToCopy;
+            textArea.style.position = "fixed";
+            textArea.style.left = "-9999px";
+            document.body.appendChild(textArea);
+            textArea.select();
+            textArea.setSelectionRange(0, 99999);
+            try { 
+                document.execCommand('copy'); 
+                var btn = document.getElementById("copyButton"); 
+                btn.innerHTML = '<i class="fa-solid fa-check-double"></i> COPIED TO CLIPBOARD'; 
+                setTimeout(() => {
+                    btn.innerHTML = '<i class="fa-regular fa-copy"></i> COPY SIGNAL DATA';
+                    btn.style.background = "rgba(255, 255, 255, 0.05)";
+                    btn.style.color = "white";
+                    btn.style.borderColor = "rgba(255,255,255,0.1)";
+                }, 2000);
+            } catch (err) { alert("Manual Copy Required"); }
+            document.body.removeChild(textArea);
         }
     </script>
 </body>
