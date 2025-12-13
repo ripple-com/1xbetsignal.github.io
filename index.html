@@ -9,15 +9,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- CYBER-TECH STYLES --- */
+        /* --- CYBER-TECH THEME --- */
         :root {
             --primary: #00f2ff;
             --secondary: #0051ff;
             --bg-dark: #050b14;
             --card-bg: rgba(10, 20, 35, 0.9);
+            --sidebar-bg: rgba(5, 11, 20, 0.95);
             --border: rgba(0, 242, 255, 0.3);
             --text-main: #ffffff;
-            --text-muted: #8b9bb4;
             --gold: #ffd700;
         }
 
@@ -40,130 +40,198 @@
         }
 
         .glow-bg {
-            position: absolute;
-            width: 100%; height: 100%;
+            position: absolute; width: 100%; height: 100%;
             background: radial-gradient(circle at 50% 50%, rgba(0, 81, 255, 0.15) 0%, transparent 70%);
-            z-index: -1;
-            animation: pulseBg 5s infinite ease-in-out;
+            z-index: -1; animation: pulseBg 5s infinite ease-in-out;
         }
         @keyframes pulseBg { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
 
-        .tech-card { 
-            background: var(--card-bg); 
-            backdrop-filter: blur(20px); 
-            -webkit-backdrop-filter: blur(20px); 
-            border: 1px solid var(--border); 
-            padding: 25px; 
-            border-radius: 15px; 
-            width: 95%; 
-            max-width: 400px; 
-            text-align: center; 
-            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6), inset 0 0 20px rgba(0, 242, 255, 0.05); 
-            max-height: 98vh; 
-            overflow-y: auto; 
-            position: relative; 
-            z-index: 10; 
+        /* --- SIDE MENU STYLES --- */
+        .menu-btn {
+            position: absolute; top: 20px; left: 20px;
+            background: rgba(0, 242, 255, 0.1); border: 1px solid var(--primary);
+            color: var(--primary); font-size: 20px; padding: 10px 15px;
+            border-radius: 8px; cursor: pointer; z-index: 200;
+            transition: 0.3s;
         }
-        .tech-card::-webkit-scrollbar { width: 0; }
+        .menu-btn:hover { background: var(--primary); color: #000; }
+
+        .side-menu {
+            position: fixed; top: 0; left: -300px; width: 280px; height: 100%;
+            background: var(--sidebar-bg); backdrop-filter: blur(15px);
+            border-right: 1px solid var(--border);
+            z-index: 1000; transition: 0.4s ease-in-out;
+            padding: 20px; overflow-y: auto;
+            box-shadow: 5px 0 30px rgba(0,0,0,0.8);
+        }
+        .side-menu.active { left: 0; }
+
+        .menu-header {
+            display: flex; justify-content: space-between; align-items: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1); padding-bottom: 15px; margin-bottom: 20px;
+        }
+        .menu-title { font-family: 'Rajdhani', sans-serif; color: var(--gold); font-weight: bold; font-size: 18px; letter-spacing: 1px; }
+        .close-btn { background: none; border: none; color: white; font-size: 20px; cursor: pointer; }
+
+        /* PROMO ITEMS IN SIDEBAR */
+        .promo-item {
+            background: rgba(255, 255, 255, 0.05); border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 10px; padding: 12px; margin-bottom: 15px;
+            display: flex; flex-direction: column; align-items: center;
+        }
+        .promo-logo { height: 25px; object-fit: contain; margin-bottom: 8px; }
+        .promo-code-box {
+            background: rgba(0, 242, 255, 0.1); color: var(--primary);
+            border: 1px dashed var(--primary); padding: 5px; width: 100%;
+            text-align: center; font-family: 'Rajdhani', sans-serif; font-weight: bold;
+            font-size: 14px; border-radius: 5px; margin-bottom: 8px;
+        }
+        .btn-copy-side {
+            width: 100%; background: var(--secondary); color: white; border: none;
+            padding: 8px; border-radius: 5px; font-weight: bold; font-size: 11px;
+            cursor: pointer; font-family: 'Rajdhani', sans-serif;
+        }
+        .btn-copy-side:active { transform: scale(0.95); }
+
+        /* OVERLAY */
+        .overlay {
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.7); z-index: 900; display: none;
+        }
+        .overlay.active { display: block; }
+
+        /* --- MAIN CARD --- */
+        .tech-card { 
+            background: var(--card-bg); backdrop-filter: blur(20px); 
+            border: 1px solid var(--border); padding: 30px; border-radius: 15px; 
+            width: 90%; max-width: 400px; text-align: center; 
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6); 
+            position: relative; z-index: 10; 
+        }
 
         h1 { 
             font-family: 'Rajdhani', sans-serif; font-weight: 700; margin: 0; font-size: 26px; 
             background: linear-gradient(to right, #fff, var(--primary)); 
             -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
-            text-transform: uppercase; letter-spacing: 1px;
-            text-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
         }
-        
-        .sub-title { font-family: 'Rajdhani', sans-serif; font-size: 11px; color: var(--primary); margin-bottom: 20px; letter-spacing: 3px; text-transform: uppercase; }
-        
-        /* Inputs & Buttons */
-        .input-box { position: relative; margin-bottom: 20px; }
+        .sub-title { font-family: 'Rajdhani', sans-serif; font-size: 11px; color: var(--primary); margin-bottom: 25px; letter-spacing: 3px; }
+
+        .input-box { position: relative; margin-bottom: 25px; }
         .input-box label { 
             position: absolute; top: -10px; left: 15px; background: #0d1624; padding: 0 8px; 
-            font-size: 10px; color: var(--primary); border: 1px solid var(--border);
-            border-radius: 4px; z-index: 10; font-weight: 600; text-transform: uppercase;
+            font-size: 10px; color: var(--primary); border: 1px solid var(--border); border-radius: 4px; 
         }
         .std-input { 
             width: 100%; background: rgba(0, 0, 0, 0.4); border: 1px solid rgba(255, 255, 255, 0.1); 
-            padding: 12px; border-radius: 8px; color: white; font-size: 18px; 
-            font-family: 'Rajdhani', sans-serif; font-weight: 600; outline: none; 
-            text-align: center; letter-spacing: 1px;
+            padding: 15px; border-radius: 8px; color: white; font-size: 18px; 
+            font-family: 'Rajdhani', sans-serif; font-weight: 600; outline: none; text-align: center; 
         }
-        .std-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
-        
         .btn-analyze { 
-            width: 100%; padding: 12px; background: linear-gradient(90deg, var(--secondary), #00c3ff); 
+            width: 100%; padding: 15px; background: linear-gradient(90deg, var(--secondary), #00c3ff); 
             border: none; border-radius: 8px; color: white; font-size: 16px; font-weight: 700; 
             font-family: 'Rajdhani', sans-serif; letter-spacing: 1px; cursor: pointer; 
-            box-shadow: 0 5px 20px rgba(0, 81, 255, 0.4); text-transform: uppercase; margin-top: 5px; 
-        }
-        .btn-analyze:active { transform: scale(0.98); }
-
-        .expiry-info { 
-            font-size: 11px; color: var(--primary); margin-bottom: 15px; border: 1px solid var(--primary); 
-            padding: 4px 12px; border-radius: 50px; background: rgba(0, 242, 255, 0.1); 
-            display: inline-block; font-family: 'Rajdhani', sans-serif; font-weight: 600;
+            box-shadow: 0 5px 20px rgba(0, 81, 255, 0.4); text-transform: uppercase; margin-top: 10px; 
         }
 
-        /* --- PROMO CODE SECTION STYLES --- */
-        .promo-section-title {
-            color: var(--gold); font-family: 'Rajdhani', sans-serif; font-size: 14px; margin-top: 25px; margin-bottom: 10px;
-            letter-spacing: 1px; text-transform: uppercase; font-weight: bold; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 15px;
-        }
-        .promo-grid {
-            display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px;
-        }
-        .promo-card {
-            background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 10px; padding: 10px;
-            display: flex; flex-direction: column; align-items: center; transition: 0.3s;
-        }
-        .promo-card:hover { border-color: var(--gold); transform: translateY(-2px); }
-        
-        /* LOGO STYLES - Replace URLs in HTML */
-        .site-logo {
-            width: 80px; height: 30px; object-fit: contain; margin-bottom: 8px; filter: drop-shadow(0 0 5px rgba(255,255,255,0.2));
-        }
-        
-        .code-box {
-            background: rgba(255, 215, 0, 0.1); color: var(--gold); border: 1px dashed var(--gold);
-            padding: 5px; width: 100%; border-radius: 5px; font-size: 12px; font-weight: bold;
-            font-family: 'Rajdhani', sans-serif; margin-bottom: 5px; cursor: pointer;
-        }
-        .btn-copy-mini {
-            background: var(--secondary); color: white; border: none; font-size: 10px; padding: 4px 10px;
-            border-radius: 4px; cursor: pointer; width: 100%; font-weight: bold; font-family: 'Rajdhani', sans-serif;
-        }
-
-        /* Results & Clock */
-        #resultArea { display: none; margin-top: 20px; border-top: 1px solid rgba(255, 255, 255, 0.1); padding-top: 15px; animation: fadeIn 0.5s ease; }
-        .result-panel { background: rgba(0, 242, 255, 0.05); border-radius: 10px; padding: 10px; margin-bottom: 10px; border: 1px solid var(--border); }
-        .time-display { font-size: 32px; font-weight: 800; color: var(--primary); text-shadow: 0 0 20px rgba(0, 242, 255, 0.4); margin: 5px 0; font-family: 'Rajdhani', sans-serif; }
-        .zone-display { font-size: 18px; color: var(--gold); font-weight: 600; font-family: 'Rajdhani', sans-serif; }
-        
-        .clock-wrapper { display: flex; align-items: stretch; gap: 10px; }
-        .clock-container { flex: 2; display: flex; justify-content: center; align-items: center; background: rgba(0, 0, 0, 0.3); border-radius: 8px; padding: 8px; border: 1px solid rgba(255, 255, 255, 0.1); }
-        .clock-input { background: transparent; border: none; color: white; font-size: 32px; font-weight: 600; width: 50px; text-align: center; outline: none; font-family: 'Rajdhani', sans-serif; }
-        .clock-colon { font-size: 25px; margin: 0 2px; color: var(--primary); animation: blink 1s infinite; }
-        .ampm-toggle { flex: 1; display: flex; flex-direction: column; background: rgba(0, 0, 0, 0.3); border-radius: 8px; border: 1px solid rgba(255, 255, 255, 0.1); overflow: hidden; }
-        .ampm-btn { flex: 1; border: none; background: transparent; color: #555; font-weight: bold; cursor: pointer; font-size: 12px; font-family: 'Rajdhani', sans-serif; }
+        /* CLOCK & RESULTS */
+        .clock-wrapper { display: flex; gap: 10px; }
+        .clock-container { flex: 2; display: flex; justify-content: center; align-items: center; background: rgba(0,0,0,0.3); border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; }
+        .clock-input { background: transparent; border: none; color: white; font-size: 38px; width: 55px; text-align: center; outline: none; font-family: 'Rajdhani', sans-serif; font-weight: bold; }
+        .clock-colon { font-size: 30px; color: var(--primary); animation: blink 1s infinite; }
+        .ampm-toggle { flex: 1; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.1); border-radius: 8px; overflow: hidden; }
+        .ampm-btn { flex: 1; background: rgba(0,0,0,0.3); color: #555; border: none; font-weight: bold; cursor: pointer; }
         .ampm-btn.active { background: var(--primary); color: #000; }
 
-        .btn-logout { width: 100%; padding: 10px; background: rgba(255, 0, 0, 0.1); border: 1px solid #ff4d4d; border-radius: 8px; color: #ff4d4d; font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 15px; }
+        #resultArea { display: none; margin-top: 25px; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 20px; animation: fadeIn 0.5s ease; }
+        .time-display { font-size: 36px; font-weight: 800; color: var(--primary); text-shadow: 0 0 20px rgba(0, 242, 255, 0.4); margin: 5px 0; font-family: 'Rajdhani', sans-serif; }
+        .zone-display { font-size: 20px; color: var(--gold); font-weight: 600; font-family: 'Rajdhani', sans-serif; }
+        
+        .expiry-info { font-size: 12px; color: var(--primary); margin-bottom: 20px; border: 1px solid var(--primary); padding: 5px 15px; border-radius: 50px; background: rgba(0, 242, 255, 0.1); display: inline-block; font-family: 'Rajdhani', sans-serif; }
+        
+        .btn-logout { width: 100%; padding: 12px; background: rgba(255,0,0,0.1); border: 1px solid #ff4d4d; border-radius: 8px; color: #ff4d4d; font-weight: 600; cursor: pointer; margin-top: 25px; }
+
         #loginScreen, #noticeModal { display: none; }
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
         @keyframes blink { 50% { opacity: 0; } }
+
+        /* Social Buttons */
+        .social-area { margin-top: 25px; padding-top: 15px; border-top: 1px solid rgba(255, 255, 255, 0.1); display: flex; gap: 10px; }
+        .social-btn { flex: 1; display: flex; align-items: center; justify-content: center; padding: 10px; border-radius: 8px; text-decoration: none; color: white; font-size: 12px; font-weight: bold; border: 1px solid transparent; }
+        .yt { background: rgba(255, 0, 0, 0.1); border-color: red; }
+        .wa { background: rgba(0, 255, 0, 0.1); border-color: lime; }
+
+        /* Notice Modal */
+        #noticeModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0,0,0,0.95); z-index: 9999; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .notice-content { background: #0b111a; border: 1px solid var(--primary); padding: 30px 20px; border-radius: 15px; width: 100%; max-width: 380px; text-align: center; }
+        .btn-notice { width: 100%; padding: 14px; background: var(--secondary); color: white; border: none; border-radius: 8px; font-weight: bold; margin-top: 20px; cursor: pointer; }
+
     </style>
 </head>
 <body>
 
     <div class="glow-bg"></div>
+    <div class="overlay" id="overlay" onclick="toggleMenu()"></div>
 
-    <div id="noticeModal">
+    <button class="menu-btn" onclick="toggleMenu()"><i class="fa-solid fa-bars"></i></button>
+
+    <div class="side-menu" id="sideMenu">
+        <div class="menu-header">
+            <span class="menu-title"><i class="fa-solid fa-gift"></i> VIP PROMOS</span>
+            <button class="close-btn" onclick="toggleMenu()"><i class="fa-solid fa-xmark"></i></button>
         </div>
 
-    <div id="loginScreen" class="tech-card" style="display: block;">
+        <div class="promo-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/1xBet_Logo.svg" class="promo-logo" alt="1xBet">
+            <div class="promo-code-box">SUWAHAS1X</div>
+            <button class="btn-copy-side" onclick="copyPromo('SUWAHAS1X')">COPY CODE</button>
+        </div>
+
+        <div class="promo-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Melbet_Logo.svg/2560px-Melbet_Logo.svg.png" class="promo-logo" alt="Melbet">
+            <div class="promo-code-box">SUWAHASMEL</div>
+            <button class="btn-copy-side" onclick="copyPromo('SUWAHASMEL')">COPY CODE</button>
+        </div>
+
+        <div class="promo-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/1win-logo.svg" class="promo-logo" alt="1Win">
+            <div class="promo-code-box">SUWAHASWIN</div>
+            <button class="btn-copy-side" onclick="copyPromo('SUWAHASWIN')">COPY CODE</button>
+        </div>
+
+        <div class="promo-item">
+            <img src="https://logowik.com/content/uploads/images/paripesa5617.jpg" class="promo-logo" alt="Paripesa">
+            <div class="promo-code-box">SUWAHASPESA</div>
+            <button class="btn-copy-side" onclick="copyPromo('SUWAHASPESA')">COPY CODE</button>
+        </div>
+
+        <div class="promo-item">
+            <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Megapari_logo.svg" class="promo-logo" alt="Megapari">
+            <div class="promo-code-box">SUWAHASMEGA</div>
+            <button class="btn-copy-side" onclick="copyPromo('SUWAHASMEGA')">COPY CODE</button>
+        </div>
+
+        <div class="promo-item">
+            <img src="https://888starz.bet/assets/img/logo.svg" class="promo-logo" alt="888Starz">
+            <div class="promo-code-box">SUWAHAS888</div>
+            <button class="btn-copy-side" onclick="copyPromo('SUWAHAS888')">COPY CODE</button>
+        </div>
+    </div>
+
+    <div id="noticeModal">
+        <div class="notice-content">
+            <div style="color:var(--primary); font-weight:bold; font-size:18px; margin-bottom:15px; border-bottom:1px solid rgba(255,255,255,0.1); padding-bottom:10px;">⚠️ SYSTEM NOTICE</div>
+            <div style="font-size:14px; color:#ccc; line-height:1.6;">
+                මෙම Aviator Signal Web App එක ගණිතමය ක්‍රමයකට සාදා ඇත. Hack App එකක් නොවේ.<br><br>
+                සම්පූර්ණ මුදල් Bet කිරීමෙන් වළකින්න. අවම අගය රු.20 කින් Bet කරන්න.
+            </div>
+            <button class="btn-notice" onclick="acceptNotice()">I UNDERSTAND</button>
+        </div>
+    </div>
+
+    <div id="loginScreen" class="tech-card">
         <h1>LOGIN</h1>
         <div class="sub-title">SECURE TERMINAL ACCESS</div>
+
         <div class="input-box">
             <label>EMAIL ADDRESS</label>
             <input type="email" id="email" class="std-input" placeholder="user@email.com">
@@ -173,15 +241,15 @@
             <input type="password" id="password" class="std-input" placeholder="••••••••">
         </div>
         <button class="btn-analyze" id="loginBtn">INITIALIZE SESSION <i class="fa-solid fa-arrow-right"></i></button>
-        <div id="loginError" style="color:#ff4d4d; font-size:12px; margin-top:10px; display:none;"></div>
-        <div class="footer" style="margin-top:20px; font-size:10px; color:#555;">SYSTEM ID: 2.0.4</div>
+        <div id="loginError" style="color: #ff4d4d; margin-top: 15px; font-size: 13px; display: none;"></div>
+        <div style="margin-top: 25px; font-size: 10px; color: #555;">SYSTEM ID: 2.0.4</div>
     </div>
 
     <div id="mainApp" class="tech-card">
         <h1>SUWAHAS SATHSARA</h1>
         <div class="sub-title">SIGNAL PREDICTION PRO</div>
         
-        <div id="userExpiryDisplay" class="expiry-info"><i class="fa-solid fa-spinner fa-spin"></i> Checking...</div>
+        <div id="userExpiryDisplay" class="expiry-info">Checking...</div>
 
         <div class="input-box">
             <label>LAST BIG ODD (x)</label>
@@ -206,63 +274,22 @@
         <button class="btn-analyze" onclick="calculateSignal()">CALCULATE SIGNAL <i class="fa-solid fa-bolt"></i></button>
 
         <div id="resultArea">
-            <div class="result-panel">
+            <div style="background: rgba(0, 242, 255, 0.05); border: 1px solid var(--border); border-radius: 10px; padding: 15px; margin-bottom: 10px;">
                 <div style="font-size: 10px; color: #8b9bb4; letter-spacing: 2px;">PREDICTED TIME</div>
                 <div class="time-display" id="displaySignal">00:00 AM</div>
             </div>
-            <div class="result-panel" style="border-color: #ffd700; background: rgba(255, 215, 0, 0.05);">
+            <div style="background: rgba(255, 215, 0, 0.05); border: 1px solid #ffd700; border-radius: 10px; padding: 15px;">
                 <div style="font-size: 10px; color: #ffd700; letter-spacing: 2px;">ACTIVE ZONE</div>
-                <div class="zone-display">
-                    <span id="zoneStart">00:00</span> - <span id="zoneEnd">00:00</span>
-                </div>
+                <div class="zone-display"><span id="zoneStart">00:00</span> - <span id="zoneEnd">00:00</span></div>
             </div>
         </div>
 
-        <div class="promo-section-title"><i class="fa-solid fa-gift"></i> VIP PROMO CODES</div>
-        
-        <div class="promo-grid">
-            <div class="promo-card">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/1xBet_Logo.svg" class="site-logo" alt="1xBet">
-                <div class="code-box" onclick="copyPromo('SUWAHAS1X')">SUWAHAS1X</div>
-                <button class="btn-copy-mini" onclick="copyPromo('SUWAHAS1X')">COPY</button>
-            </div>
-
-            <div class="promo-card">
-                 <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/d/d5/Melbet_Logo.svg/2560px-Melbet_Logo.svg.png" class="site-logo" alt="Melbet">
-                <div class="code-box" onclick="copyPromo('SUWAHASMEL')">SUWAHASMEL</div>
-                <button class="btn-copy-mini" onclick="copyPromo('SUWAHASMEL')">COPY</button>
-            </div>
-
-            <div class="promo-card">
-                 <img src="https://upload.wikimedia.org/wikipedia/commons/3/30/1win-logo.svg" class="site-logo" alt="1Win">
-                <div class="code-box" onclick="copyPromo('SUWAHASWIN')">SUWAHASWIN</div>
-                <button class="btn-copy-mini" onclick="copyPromo('SUWAHASWIN')">COPY</button>
-            </div>
-
-            <div class="promo-card">
-                 <img src="https://logowik.com/content/uploads/images/paripesa5617.jpg" class="site-logo" alt="Paripesa">
-                <div class="code-box" onclick="copyPromo('SUWAHASPESA')">SUWAHASPESA</div>
-                <button class="btn-copy-mini" onclick="copyPromo('SUWAHASPESA')">COPY</button>
-            </div>
-
-             <div class="promo-card">
-                <img src="https://upload.wikimedia.org/wikipedia/commons/e/e1/Megapari_logo.svg" class="site-logo" alt="Megapari">
-               <div class="code-box" onclick="copyPromo('SUWAHASMEGA')">SUWAHASMEGA</div>
-               <button class="btn-copy-mini" onclick="copyPromo('SUWAHASMEGA')">COPY</button>
-           </div>
-
-           <div class="promo-card">
-                <img src="https://888starz.bet/assets/img/logo.svg" class="site-logo" alt="888Starz">
-               <div class="code-box" onclick="copyPromo('SUWAHAS888')">SUWAHAS888</div>
-               <button class="btn-copy-mini" onclick="copyPromo('SUWAHAS888')">COPY</button>
-           </div>
-        </div>
-        <div class="social-area" style="margin-top:15px; display:flex; gap:10px;">
-            <a href="https://www.youtube.com/@suwahas-sathsara-chandrasiri" target="_blank" class="social-btn yt" style="flex:1; padding:10px; background:rgba(255,0,0,0.1); border:1px solid red; color:white; text-decoration:none; border-radius:8px; text-align:center; font-size:12px;"><i class="fab fa-youtube"></i> Channel</a>
-            <a href="https://chat.whatsapp.com/FSpAUoHvFSYLWKmfwwLBqC" target="_blank" class="social-btn wa" style="flex:1; padding:10px; background:rgba(0,255,0,0.1); border:1px solid lime; color:white; text-decoration:none; border-radius:8px; text-align:center; font-size:12px;"><i class="fab fa-whatsapp"></i> Group</a>
+        <div class="social-area">
+            <a href="https://www.youtube.com/@suwahas-sathsara-chandrasiri" target="_blank" class="social-btn yt"><i class="fab fa-youtube"></i> Channel</a>
+            <a href="https://chat.whatsapp.com/FSpAUoHvFSYLWKmfwwLBqC" target="_blank" class="social-btn wa"><i class="fab fa-whatsapp"></i> Group</a>
         </div>
 
-        <button class="btn-logout" id="logoutBtn">TERMINATE SESSION <i class="fa-solid fa-power-off"></i></button>
+        <button class="btn-logout" id="logoutBtn">LOGOUT <i class="fa-solid fa-power-off"></i></button>
     </div>
 
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
@@ -270,7 +297,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // --- FIREBASE CONFIG ---
         const firebaseConfig = {
           apiKey: "AIzaSyBmLvGb0vXkJhKVKew1sYZpHuVPo-mHvjk",
           authDomain: "aviatorsignal-ff90c.firebaseapp.com",
@@ -286,33 +312,47 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // --- NEW: PROMO COPY FUNCTION ---
+        // --- MENU TOGGLE FUNCTION ---
+        function toggleMenu() {
+            const menu = document.getElementById('sideMenu');
+            const overlay = document.getElementById('overlay');
+            menu.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        // --- COPY PROMO FUNCTION ---
         function copyPromo(code) {
             navigator.clipboard.writeText(code).then(() => {
-                alert("Copied Code: " + code);
+                alert("✅ Code Copied: " + code);
+                toggleMenu(); // Auto close menu after copy
             }).catch(err => {
-                // Fallback
-                var textArea = document.createElement("textarea");
-                textArea.value = code;
-                document.body.appendChild(textArea);
-                textArea.select();
-                document.execCommand('copy');
-                document.body.removeChild(textArea);
-                alert("Copied Code: " + code);
+                const ta = document.createElement("textarea");
+                ta.value = code; document.body.appendChild(ta); ta.select();
+                document.execCommand('copy'); document.body.removeChild(ta);
+                alert("✅ Code Copied: " + code);
+                toggleMenu();
             });
         }
 
         // --- EXISTING LOGIC ---
+        function showNotice() {
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("mainApp").style.display = "none";
+            document.getElementById("noticeModal").style.display = "flex";
+        }
+        function acceptNotice() {
+            document.getElementById("noticeModal").style.display = "none";
+            document.getElementById("mainApp").style.display = "block";
+        }
+
         document.getElementById("loginBtn").addEventListener("click", () => {
             const email = document.getElementById("email").value;
             const password = document.getElementById("password").value;
             const errorMsg = document.getElementById("loginError");
             const btn = document.getElementById("loginBtn");
 
-            if(!email || !password) {
-                errorMsg.style.display = "block"; errorMsg.innerText = "⚠️ ENTER CREDENTIALS"; return;
-            }
-            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> CONNECTING...';
+            if(!email || !password) { errorMsg.style.display = "block"; errorMsg.innerText = "⚠️ Credentials Required"; return; }
+            btn.innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i> Checking...';
             errorMsg.style.display = "none";
             
             auth.signInWithEmailAndPassword(email, password).then((userCredential) => {
@@ -327,35 +367,26 @@
                              btn.innerHTML = 'INITIALIZE SESSION';
                         } else {
                              document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-clock"></i> Valid: ' + (data.expiryDate || "Unlimited");
-                             document.getElementById("loginScreen").style.display = "none";
-                             document.getElementById("mainApp").style.display = "block";
+                             showNotice();
                         }
                     } else {
                         auth.signOut();
-                        errorMsg.style.display = "block";
-                        errorMsg.innerText = "⚠️ USER NOT FOUND IN DB";
-                        btn.innerHTML = "LOGIN";
+                        errorMsg.style.display = "block"; errorMsg.innerText = "⚠️ User not found"; btn.innerHTML = "LOGIN";
                     }
                 });
             }).catch((error) => {
-                btn.innerHTML = 'INITIALIZE SESSION';
-                errorMsg.style.display = "block";
-                errorMsg.innerText = "❌ FAILED: " + error.code;
+                btn.innerHTML = 'INITIALIZE SESSION'; errorMsg.style.display = "block"; errorMsg.innerText = "❌ Error: " + error.code;
             });
         });
 
-        document.getElementById("logoutBtn").addEventListener("click", () => {
-            auth.signOut();
-            window.location.reload();
-        });
+        document.getElementById("logoutBtn").addEventListener("click", () => { auth.signOut(); window.location.reload(); });
 
         auth.onAuthStateChanged((user) => {
             if (user) {
                 db.collection("users").doc(user.uid).get().then((doc) => {
                     if (doc.exists) {
                          document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-clock"></i> Valid: ' + (doc.data().expiryDate || "Unlimited");
-                         document.getElementById("loginScreen").style.display = "none";
-                         document.getElementById("mainApp").style.display = "block";
+                         if(document.getElementById("mainApp").style.display === "none" && document.getElementById("noticeModal").style.display === "none") showNotice();
                     }
                 });
             } else {
@@ -371,41 +402,28 @@
             document.getElementById('btnPM').className = val === 'PM' ? 'ampm-btn active' : 'ampm-btn';
         }
         function checkInput(el, nextId) {
-            if (el.value.length >= 2) {
-                if(nextId) document.getElementById(nextId).focus();
-                else el.blur();
-            }
+            if (el.value.length >= 2) { if(nextId) document.getElementById(nextId).focus(); else el.blur(); }
         }
         function calculateSignal() {
             var oddInput = document.getElementById("lastOdd").value;
             var hhInput = document.getElementById("inputHour").value;
             var mmInput = document.getElementById("inputMinute").value;
-
-            if (oddInput === "" || hhInput === "" || mmInput === "") { alert("Please enter all details!"); return; }
-
+            if (oddInput === "" || hhInput === "" || mmInput === "") { alert("Enter details!"); return; }
             var odd = parseFloat(oddInput);
             var minutesToAdd = Math.floor(odd / 2);
             var hours = parseInt(hhInput);
             var minutes = parseInt(mmInput);
-
             if (currentAmpm === 'PM' && hours < 12) hours = hours + 12;
             if (currentAmpm === 'AM' && hours === 12) hours = 0;
-
-            var date = new Date();
-            date.setHours(hours); date.setMinutes(minutes);
-            
+            var date = new Date(); date.setHours(hours); date.setMinutes(minutes);
             var signalDate = new Date(date.getTime() + (minutesToAdd * 60000));
             var startZone = new Date(signalDate.getTime() - (2 * 60000));
             var endZone = new Date(signalDate.getTime() + (2 * 60000));
-
             function formatTime(dateObj) {
-                var h = dateObj.getHours();
-                var m = dateObj.getMinutes().toString().padStart(2, '0');
-                var ampm = h >= 12 ? 'PM' : 'AM';
-                h = h % 12; h = h ? h : 12;
+                var h = dateObj.getHours(); var m = dateObj.getMinutes().toString().padStart(2, '0');
+                var ampm = h >= 12 ? 'PM' : 'AM'; h = h % 12; h = h ? h : 12;
                 return h + ":" + m + " " + ampm;
             }
-
             document.getElementById("displaySignal").innerText = formatTime(signalDate);
             document.getElementById("zoneStart").innerText = formatTime(startZone);
             document.getElementById("zoneEnd").innerText = formatTime(endZone);
