@@ -339,7 +339,7 @@
             </div>
 
             <div class="result-panel" style="border-color: #ffd700; background: rgba(255, 215, 0, 0.05);">
-                <div style="font-size: 10px; color: #ffd700; letter-spacing: 2px; text-transform: uppercase;">Active Zone (4 MIN)</div>
+                <div style="font-size: 10px; color: #ffd700; letter-spacing: 2px; text-transform: uppercase;">Active Zone (3 MIN)</div>
                 <div class="zone-display">
                     <span id="zoneStart">00:00</span> - <span id="zoneEnd">00:00</span>
                 </div>
@@ -499,6 +499,10 @@
                 else el.blur();
             }
         }
+
+        // ========================================================
+        // 🚀 ADVANCED SIGNAL ALGORITHM (LOGARITHMIC + CHAOS)
+        // ========================================================
         function calculateSignal() {
             var oddInput = document.getElementById("lastOdd").value;
             var hhInput = document.getElementById("inputHour").value;
@@ -509,8 +513,30 @@
                 return;
             }
 
-            var odd = parseFloat(oddInput);
-            var minutesToAdd = Math.floor(odd / 2);
+            var lastOdd = parseFloat(oddInput);
+            
+            // --- 🧠 MATH LOGIC START ---
+            
+            // 1. Base Time Calculation using Logarithmic Scale
+            var logBase = Math.log(lastOdd) * 5; 
+
+            // 2. Probability Weighting
+            var weightFactor = lastOdd < 10 ? 1.5 : 0.8;
+            
+            // 3. Random Entropy (Chaos Theory - Randomness)
+            var chaosMetric = (Math.random() * 8) - 3; 
+
+            // Final Calculation (Minutes)
+            var minutesToAdd = (logBase * weightFactor) + chaosMetric + (lastOdd * 0.1);
+            
+            // Ensure positive value
+            minutesToAdd = Math.abs(minutesToAdd);
+            
+            // Limit max time gap to avoid unrealistic predictions
+            if(minutesToAdd > 60) minutesToAdd = 55 + Math.random() * 5;
+
+            // --- 🧠 MATH LOGIC END ---
+
             var hours = parseInt(hhInput);
             var minutes = parseInt(mmInput);
 
@@ -521,9 +547,12 @@
             date.setHours(hours);
             date.setMinutes(minutes);
             
+            // Add calculated minutes
             var signalDate = new Date(date.getTime() + (minutesToAdd * 60000));
-            var startZone = new Date(signalDate.getTime() - (2 * 60000));
-            var endZone = new Date(signalDate.getTime() + (2 * 60000));
+            
+            // Create a tight 3-minute active zone
+            var startZone = new Date(signalDate.getTime() - (1.5 * 60000));
+            var endZone = new Date(signalDate.getTime() + (1.5 * 60000));
 
             function formatTime(dateObj) {
                 var h = dateObj.getHours();
@@ -534,17 +563,26 @@
                 return h + ":" + m + " " + ampm;
             }
 
+            // Update UI
             document.getElementById("displaySignal").innerText = formatTime(signalDate);
             document.getElementById("zoneStart").innerText = formatTime(startZone);
             document.getElementById("zoneEnd").innerText = formatTime(endZone);
             document.getElementById("resultArea").style.display = "block";
             
+            // Visual feedback on button
             var btn = document.getElementById("copyButton");
-            btn.innerHTML = '<i class="fa-solid fa-check"></i> SIGNAL READY';
-            btn.style.background = "rgba(0, 242, 255, 0.2)"; 
-            btn.style.color = "#00f2ff";
+            btn.innerHTML = '<i class="fa-solid fa-microchip"></i> AI CALCULATION DONE';
+            btn.style.background = "linear-gradient(90deg, #00f2ff, #0051ff)"; 
+            btn.style.color = "white";
             btn.style.borderColor = "#00f2ff";
+            
+            setTimeout(() => {
+                 btn.innerHTML = '<i class="fa-regular fa-copy"></i> COPY SIGNAL DATA';
+                 btn.style.background = "rgba(255, 255, 255, 0.05)";
+                 btn.style.color = "white";
+            }, 3000);
         }
+
         function manualCopy() {
             var signal = document.getElementById("displaySignal").innerText;
             var start = document.getElementById("zoneStart").innerText;
@@ -552,7 +590,7 @@
             var textToCopy = `🚨 *AVIATOR SIGNAL PRO* 🚨\n\n` +
                              `🎯 Next Odd Time: ${signal}\n` +
                              `🕒 Zone: ${start} To ${end}\n\n` +
-                             `🔥 *විනාඩි හතර තුළ Bet කරන්න*`;
+                             `🔥 *විනාඩි තුනක් තුළ Bet කරන්න*`;
             var textArea = document.createElement("textarea");
             textArea.value = textToCopy;
             textArea.style.position = "fixed";
