@@ -196,7 +196,7 @@
         }
         .btn-logout:hover { background: rgba(255, 0, 0, 0.2); }
         
-        #loginError { color: #ff4d4d; font-size: 13px; margin-top: 15px; display: none; font-weight: bold; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,0,0,0.3); }
+        #loginError, #verifyError { color: #ff4d4d; font-size: 13px; margin-top: 15px; display: none; font-weight: bold; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,0,0,0.3); }
         
         /* Renew Button */
         .btn-renew {
@@ -256,7 +256,7 @@
         
         .footer { margin-top: 25px; font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; }
         
-        #mainApp, #noticeModal { display: none; }
+        #mainApp, #noticeModal, #phoneVerifyScreen, #otpSection { display: none; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
         @keyframes blink { 50% { opacity: 0; } }
@@ -304,6 +304,34 @@
         <div class="footer">SYSTEM ID: 2.0.4 | POWERED BY SUWAHAS SATHSARA</div>
     </div>
 
+    <div id="phoneVerifyScreen" class="tech-card">
+        <h1>VERIFICATION</h1>
+        <div class="sub-title">LINK YOUR PHONE NUMBER</div>
+        <p style="font-size: 12px; color: #8b9bb4; margin-bottom: 20px;">
+            ආරක්ෂක පියවරක් ලෙස ඔබේ ජංගම දුරකථන අංකය තහවුරු කරන්න.
+        </p>
+
+        <div id="phoneSection">
+            <div class="input-box">
+                <label>PHONE NUMBER</label>
+                <input type="tel" id="phoneNumber" class="std-input" placeholder="+947XXXXXXXX" value="+94">
+            </div>
+            <div id="recaptcha-container"></div>
+            <button class="btn-analyze" id="sendOtpBtn" onclick="sendOTP()">SEND OTP <i class="fa-solid fa-paper-plane"></i></button>
+        </div>
+
+        <div id="otpSection">
+            <div class="input-box">
+                <label>ENTER OTP CODE</label>
+                <input type="number" id="otpCode" class="std-input" placeholder="123456">
+            </div>
+            <button class="btn-analyze" id="verifyOtpBtn" onclick="verifyOTP()">VERIFY & ACCESS <i class="fa-solid fa-check-circle"></i></button>
+        </div>
+
+        <div id="verifyError"></div>
+        <button class="btn-logout" onclick="firebase.auth().signOut(); window.location.reload();">CANCEL LOGIN</button>
+    </div>
+
     <div id="mainApp" class="tech-card">
         <h1>SUWAHAS SATHSARA</h1>
         <div class="sub-title">SIGNAL PREDICTION PRO</div>
@@ -339,7 +367,7 @@
             </div>
 
             <div class="result-panel" style="border-color: #ffd700; background: rgba(255, 215, 0, 0.05);">
-                <div style="font-size: 10px; color: #ffd700; letter-spacing: 2px; text-transform: uppercase;">Active Zone (3 MIN)</div>
+                <div style="font-size: 10px; color: #ffd700; letter-spacing: 2px; text-transform: uppercase;">Active Zone (4 MIN)</div>
                 <div class="zone-display">
                     <span id="zoneStart">00:00</span> - <span id="zoneEnd">00:00</span>
                 </div>
@@ -388,8 +416,96 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
+        // ----------------------------------------------------
+        // NEW: PHONE VERIFICATION LOGIC
+        // ----------------------------------------------------
+        let confirmationResultGlobal = null;
+
+        function setupRecaptcha() {
+            if(!window.recaptchaVerifier) {
+                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
+                    'size': 'invisible',
+                    'callback': (response) => {
+                        // reCAPTCHA solved
+                    }
+                });
+            }
+        }
+
+        function sendOTP() {
+            const phoneNumber = document.getElementById("phoneNumber").value;
+            const btn = document.getElementById("sendOtpBtn");
+            const errorDiv = document.getElementById("verifyError");
+
+            if(phoneNumber.length < 10) {
+                errorDiv.style.display = 'block';
+                errorDiv.innerText = "Check Phone Number!";
+                return;
+            }
+
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> SENDING...';
+            errorDiv.style.display = 'none';
+
+            setupRecaptcha();
+            const appVerifier = window.recaptchaVerifier;
+            const user = auth.currentUser;
+
+            if (user) {
+                user.linkWithPhoneNumber(phoneNumber, appVerifier)
+                    .then((confirmationResult) => {
+                        confirmationResultGlobal = confirmationResult;
+                        document.getElementById("phoneSection").style.display = "none";
+                        document.getElementById("otpSection").style.display = "block";
+                        btn.innerHTML = 'SEND OTP <i class="fa-solid fa-paper-plane"></i>';
+                        alert("OTP Sent to " + phoneNumber);
+                    }).catch((error) => {
+                        btn.innerHTML = 'SEND OTP <i class="fa-solid fa-paper-plane"></i>';
+                        errorDiv.style.display = 'block';
+                        errorDiv.innerText = "Error: " + error.message;
+                        console.log(error);
+                    });
+            } else {
+                errorDiv.style.display = 'block';
+                errorDiv.innerText = "User not logged in!";
+            }
+        }
+
+        function verifyOTP() {
+            const code = document.getElementById("otpCode").value;
+            const btn = document.getElementById("verifyOtpBtn");
+            const errorDiv = document.getElementById("verifyError");
+            
+            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> VERIFYING...';
+
+            if(confirmationResultGlobal) {
+                confirmationResultGlobal.confirm(code).then((result) => {
+                    const user = result.user;
+                    const phoneNumber = user.phoneNumber;
+                    
+                    // Save to Firestore that phone is verified
+                    db.collection("users").doc(user.uid).update({
+                        phoneNumber: phoneNumber,
+                        phoneVerified: true
+                    }).then(() => {
+                        document.getElementById("phoneVerifyScreen").style.display = "none";
+                        checkUserStatus(user); // Go to main app
+                    });
+
+                }).catch((error) => {
+                    btn.innerHTML = 'VERIFY & ACCESS <i class="fa-solid fa-check-circle"></i>';
+                    errorDiv.style.display = 'block';
+                    errorDiv.innerText = "Invalid OTP or Error!";
+                });
+            }
+        }
+
+        // ----------------------------------------------------
+        // DISPLAY LOGIC
+        // ----------------------------------------------------
+
         function showNotice() {
             document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("phoneVerifyScreen").style.display = "none";
             document.getElementById("mainApp").style.display = "none";
             document.getElementById("noticeModal").style.display = "flex";
         }
@@ -397,6 +513,61 @@
         function acceptNotice() {
             document.getElementById("noticeModal").style.display = "none";
             document.getElementById("mainApp").style.display = "block";
+        }
+
+        function checkUserStatus(user) {
+            db.collection("users").doc(user.uid).get().then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+
+                    // CHECK PHONE VERIFICATION FIRST
+                    if (!data.phoneNumber && !user.phoneNumber) {
+                        // User needs to verify phone
+                        document.getElementById("loginScreen").style.display = "none";
+                        document.getElementById("phoneVerifyScreen").style.display = "block";
+                        return;
+                    }
+
+                    // CHECK EXPIRY
+                    if (data.expiryDate) {
+                        const expiryDate = new Date(data.expiryDate);
+                        const today = new Date();
+
+                        if (today > expiryDate) {
+                            auth.signOut();
+                            let message = `Hello Admin, My Aviator App subscription expired. My UID: ${user.uid}`;
+                            let waLink = `https://wa.me/${adminWhatsapp}?text=${encodeURIComponent(message)}`;
+                            
+                            const errorMsg = document.getElementById("loginError");
+                            errorMsg.style.display = "block";
+                            errorMsg.innerHTML = `🚫 <b>ACCESS DENIED (EXPIRED)</b><br>
+                                                  Valid until: ${data.expiryDate}<br>
+                                                  <a href="${waLink}" class="btn-renew">
+                                                    <i class="fab fa-whatsapp"></i> RENEW LICENSE
+                                                  </a>`;
+                            document.getElementById("loginBtn").innerHTML = 'INITIALIZE SESSION <i class="fa-solid fa-arrow-right"></i>';
+                            document.getElementById("loginScreen").style.display = "block";
+                        } else {
+                            document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-clock"></i> Valid: ' + data.expiryDate;
+                            showNotice(); 
+                        }
+                    } else {
+                        document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-infinity"></i> Unlimited Access';
+                        showNotice();
+                    }
+                } else {
+                    // Create basic user doc if not exists
+                    db.collection("users").doc(user.uid).set({
+                        email: user.email,
+                        createdAt: new Date()
+                    }).then(() => {
+                        document.getElementById("loginScreen").style.display = "none";
+                        document.getElementById("phoneVerifyScreen").style.display = "block";
+                    });
+                }
+            }).catch((error) => {
+                alert("DB Error: " + error.message);
+            });
         }
 
         document.getElementById("loginBtn").addEventListener("click", () => {
@@ -415,47 +586,8 @@
             auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    btn.innerHTML = '<i class="fa-solid fa-database"></i> CHECKING DB...';
-
-                    db.collection("users").doc(user.uid).get().then((doc) => {
-                        if (doc.exists) {
-                            const data = doc.data();
-                            
-                            if (data.expiryDate) {
-                                const expiryDate = new Date(data.expiryDate);
-                                const today = new Date();
-
-                                if (today > expiryDate) {
-                                    auth.signOut();
-                                    let message = `Hello Admin, My Aviator App subscription expired. My UID: ${user.uid}`;
-                                    let waLink = `https://wa.me/${adminWhatsapp}?text=${encodeURIComponent(message)}`;
-                                    
-                                    errorMsg.style.display = "block";
-                                    errorMsg.innerHTML = `🚫 <b>ACCESS DENIED (EXPIRED)</b><br>
-                                                          Valid until: ${data.expiryDate}<br>
-                                                          <a href="${waLink}" class="btn-renew">
-                                                            <i class="fab fa-whatsapp"></i> RENEW LICENSE
-                                                          </a>`;
-                                    btn.innerHTML = 'INITIALIZE SESSION <i class="fa-solid fa-arrow-right"></i>';
-                                } else {
-                                    document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-clock"></i> Valid: ' + data.expiryDate;
-                                    showNotice(); 
-                                }
-                            } else {
-                                document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-infinity"></i> Unlimited Access';
-                                showNotice();
-                            }
-                        } else {
-                            auth.signOut();
-                            errorMsg.style.display = "block";
-                            errorMsg.innerHTML = "⚠️ <b>DB ERROR:</b><br>User ID Missing.<br>UID: " + user.uid;
-                            btn.innerHTML = "SETUP REQUIRED";
-                        }
-                    }).catch((error) => {
-                        errorMsg.style.display = "block";
-                        errorMsg.innerText = "❌ DB Error: " + error.message;
-                        btn.innerHTML = "TRY AGAIN";
-                    });
+                    btn.innerHTML = '<i class="fa-solid fa-database"></i> CHECKING DATA...';
+                    checkUserStatus(user);
                 })
                 .catch((error) => {
                     btn.innerHTML = 'INITIALIZE SESSION <i class="fa-solid fa-arrow-right"></i>';
@@ -471,22 +603,18 @@
 
         auth.onAuthStateChanged((user) => {
             if (user) {
-                db.collection("users").doc(user.uid).get().then((doc) => {
-                    if (doc.exists) {
-                        const data = doc.data();
-                        document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-clock"></i> Valid: ' + (data.expiryDate || "Unlimited");
-                        if(document.getElementById("mainApp").style.display === "none" && document.getElementById("noticeModal").style.display === "none") {
-                            showNotice();
-                        }
-                    }
-                }).catch(() => {});
+                // User is signed in, check status (DB + Phone)
+                checkUserStatus(user);
             } else {
+                // User is not signed in
                 document.getElementById("loginScreen").style.display = "block";
                 document.getElementById("noticeModal").style.display = "none";
                 document.getElementById("mainApp").style.display = "none";
+                document.getElementById("phoneVerifyScreen").style.display = "none";
             }
         });
 
+        // EXISTING CALCULATION LOGIC
         let currentAmpm = 'AM';
         function setAMPM(val) {
             currentAmpm = val;
@@ -499,10 +627,6 @@
                 else el.blur();
             }
         }
-
-        // ========================================================
-        // 🚀 ADVANCED SIGNAL ALGORITHM (LOGARITHMIC + CHAOS)
-        // ========================================================
         function calculateSignal() {
             var oddInput = document.getElementById("lastOdd").value;
             var hhInput = document.getElementById("inputHour").value;
@@ -513,30 +637,8 @@
                 return;
             }
 
-            var lastOdd = parseFloat(oddInput);
-            
-            // --- 🧠 MATH LOGIC START ---
-            
-            // 1. Base Time Calculation using Logarithmic Scale
-            var logBase = Math.log(lastOdd) * 5; 
-
-            // 2. Probability Weighting
-            var weightFactor = lastOdd < 10 ? 1.5 : 0.8;
-            
-            // 3. Random Entropy (Chaos Theory - Randomness)
-            var chaosMetric = (Math.random() * 8) - 3; 
-
-            // Final Calculation (Minutes)
-            var minutesToAdd = (logBase * weightFactor) + chaosMetric + (lastOdd * 0.1);
-            
-            // Ensure positive value
-            minutesToAdd = Math.abs(minutesToAdd);
-            
-            // Limit max time gap to avoid unrealistic predictions
-            if(minutesToAdd > 60) minutesToAdd = 55 + Math.random() * 5;
-
-            // --- 🧠 MATH LOGIC END ---
-
+            var odd = parseFloat(oddInput);
+            var minutesToAdd = Math.floor(odd / 2);
             var hours = parseInt(hhInput);
             var minutes = parseInt(mmInput);
 
@@ -547,12 +649,9 @@
             date.setHours(hours);
             date.setMinutes(minutes);
             
-            // Add calculated minutes
             var signalDate = new Date(date.getTime() + (minutesToAdd * 60000));
-            
-            // Create a tight 3-minute active zone
-            var startZone = new Date(signalDate.getTime() - (1.5 * 60000));
-            var endZone = new Date(signalDate.getTime() + (1.5 * 60000));
+            var startZone = new Date(signalDate.getTime() - (2 * 60000));
+            var endZone = new Date(signalDate.getTime() + (2 * 60000));
 
             function formatTime(dateObj) {
                 var h = dateObj.getHours();
@@ -563,26 +662,17 @@
                 return h + ":" + m + " " + ampm;
             }
 
-            // Update UI
             document.getElementById("displaySignal").innerText = formatTime(signalDate);
             document.getElementById("zoneStart").innerText = formatTime(startZone);
             document.getElementById("zoneEnd").innerText = formatTime(endZone);
             document.getElementById("resultArea").style.display = "block";
             
-            // Visual feedback on button
             var btn = document.getElementById("copyButton");
-            btn.innerHTML = '<i class="fa-solid fa-microchip"></i> AI CALCULATION DONE';
-            btn.style.background = "linear-gradient(90deg, #00f2ff, #0051ff)"; 
-            btn.style.color = "white";
+            btn.innerHTML = '<i class="fa-solid fa-check"></i> SIGNAL READY';
+            btn.style.background = "rgba(0, 242, 255, 0.2)"; 
+            btn.style.color = "#00f2ff";
             btn.style.borderColor = "#00f2ff";
-            
-            setTimeout(() => {
-                 btn.innerHTML = '<i class="fa-regular fa-copy"></i> COPY SIGNAL DATA';
-                 btn.style.background = "rgba(255, 255, 255, 0.05)";
-                 btn.style.color = "white";
-            }, 3000);
         }
-
         function manualCopy() {
             var signal = document.getElementById("displaySignal").innerText;
             var start = document.getElementById("zoneStart").innerText;
@@ -590,7 +680,7 @@
             var textToCopy = `🚨 *AVIATOR SIGNAL PRO* 🚨\n\n` +
                              `🎯 Next Odd Time: ${signal}\n` +
                              `🕒 Zone: ${start} To ${end}\n\n` +
-                             `🔥 *විනාඩි තුනක් තුළ Bet කරන්න*`;
+                             `🔥 *විනාඩි හතර තුළ Bet කරන්න*`;
             var textArea = document.createElement("textarea");
             textArea.value = textToCopy;
             textArea.style.position = "fixed";
