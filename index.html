@@ -9,7 +9,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     
     <style>
-        /* --- NEW CYBER-TECH STYLES --- */
+        /* --- CYBER-TECH STYLES --- */
         :root {
             --primary: #00f2ff;
             --secondary: #0051ff;
@@ -68,7 +68,7 @@
         }
         .tech-card::-webkit-scrollbar { width: 0; }
 
-        /* --- ADDED PROFILE PHOTO STYLES --- */
+        /* Login Profile Image */
         .profile-wrapper {
             position: relative;
             width: 100px;
@@ -89,6 +89,57 @@
         .profile-img:hover {
             transform: scale(1.05);
             box-shadow: 0 0 35px rgba(0, 242, 255, 0.8);
+        }
+
+        /* --- NEW USER PROFILE SECTION STYLES --- */
+        .profile-section {
+            display: flex;
+            align-items: center;
+            background: linear-gradient(90deg, rgba(0, 242, 255, 0.05), rgba(0, 0, 0, 0.2));
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 12px 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            text-align: left;
+            box-shadow: inset 0 0 20px rgba(0, 242, 255, 0.02);
+        }
+
+        .profile-pic-small {
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            border: 2px solid var(--primary);
+            margin-right: 15px;
+            box-shadow: 0 0 10px rgba(0, 242, 255, 0.3);
+            object-fit: cover;
+        }
+
+        .profile-details {
+            flex: 1;
+            overflow: hidden;
+        }
+
+        .profile-email {
+            font-size: 13px;
+            font-weight: 600;
+            color: white;
+            margin-bottom: 2px;
+            white-space: nowrap;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            font-family: 'Poppins', sans-serif;
+        }
+
+        .profile-status {
+            font-size: 10px;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            background: rgba(0, 242, 255, 0.1);
+            padding: 2px 8px;
+            border-radius: 4px;
+            display: inline-block;
+            font-weight: 700;
         }
 
         /* Typography */
@@ -196,7 +247,7 @@
         }
         .btn-logout:hover { background: rgba(255, 0, 0, 0.2); }
         
-        #loginError, #verifyError { color: #ff4d4d; font-size: 13px; margin-top: 15px; display: none; font-weight: bold; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,0,0,0.3); }
+        #loginError { color: #ff4d4d; font-size: 13px; margin-top: 15px; display: none; font-weight: bold; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 8px; border: 1px solid rgba(255,0,0,0.3); }
         
         /* Renew Button */
         .btn-renew {
@@ -206,19 +257,6 @@
             box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3);
             text-transform: uppercase;
             font-family: 'Rajdhani', sans-serif;
-        }
-
-        .expiry-info { 
-            font-size: 12px; 
-            color: var(--primary); 
-            margin-bottom: 20px; 
-            border: 1px solid var(--primary); 
-            padding: 5px 15px; 
-            border-radius: 50px; 
-            background: rgba(0, 242, 255, 0.1); 
-            display: inline-block;
-            font-family: 'Rajdhani', sans-serif;
-            font-weight: 600;
         }
 
         /* Modal */
@@ -256,7 +294,7 @@
         
         .footer { margin-top: 25px; font-size: 10px; color: var(--text-muted); letter-spacing: 0.5px; }
         
-        #mainApp, #noticeModal, #phoneVerifyScreen, #otpSection { display: none; }
+        #mainApp, #noticeModal { display: none; }
         input::-webkit-outer-spin-button, input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
         input[type=number] { -moz-appearance: textfield; }
         @keyframes blink { 50% { opacity: 0; } }
@@ -304,40 +342,17 @@
         <div class="footer">SYSTEM ID: 2.0.4 | POWERED BY SUWAHAS SATHSARA</div>
     </div>
 
-    <div id="phoneVerifyScreen" class="tech-card">
-        <h1>VERIFICATION</h1>
-        <div class="sub-title">LINK YOUR PHONE NUMBER</div>
-        <p style="font-size: 12px; color: #8b9bb4; margin-bottom: 20px;">
-            ආරක්ෂක පියවරක් ලෙස ඔබේ ජංගම දුරකථන අංකය තහවුරු කරන්න.
-        </p>
-
-        <div id="phoneSection">
-            <div class="input-box">
-                <label>PHONE NUMBER</label>
-                <input type="tel" id="phoneNumber" class="std-input" placeholder="+947XXXXXXXX" value="+94">
-            </div>
-            <div id="recaptcha-container"></div>
-            <button class="btn-analyze" id="sendOtpBtn" onclick="sendOTP()">SEND OTP <i class="fa-solid fa-paper-plane"></i></button>
-        </div>
-
-        <div id="otpSection">
-            <div class="input-box">
-                <label>ENTER OTP CODE</label>
-                <input type="number" id="otpCode" class="std-input" placeholder="123456">
-            </div>
-            <button class="btn-analyze" id="verifyOtpBtn" onclick="verifyOTP()">VERIFY & ACCESS <i class="fa-solid fa-check-circle"></i></button>
-        </div>
-
-        <div id="verifyError"></div>
-        <button class="btn-logout" onclick="firebase.auth().signOut(); window.location.reload();">CANCEL LOGIN</button>
-    </div>
-
     <div id="mainApp" class="tech-card">
         <h1>SUWAHAS SATHSARA</h1>
         <div class="sub-title">SIGNAL PREDICTION PRO</div>
         
-        <div id="userExpiryDisplay" class="expiry-info"><i class="fa-solid fa-spinner fa-spin"></i> Checking...</div>
-
+        <div class="profile-section">
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-pic-small" alt="User">
+            <div class="profile-details">
+                <div id="appUserEmail" class="profile-email">Loading User...</div>
+                <div id="appUserExpiry" class="profile-status"><i class="fa-solid fa-spinner fa-spin"></i> VERIFYING</div>
+            </div>
+        </div>
         <div class="input-box">
             <label>LAST BIG ODD (x)</label>
             <input type="number" id="lastOdd" class="std-input" placeholder="43.06" step="0.01">
@@ -397,7 +412,7 @@
 
     <script>
         // ========================================================
-        // 🔥 FIREBASE CONFIGURATION (UNCHANGED) 🔥
+        // 🔥 FIREBASE CONFIGURATION 🔥
         // ========================================================
         const firebaseConfig = {
           apiKey: "AIzaSyBmLvGb0vXkJhKVKew1sYZpHuVPo-mHvjk",
@@ -416,96 +431,26 @@
         const auth = firebase.auth();
         const db = firebase.firestore();
 
-        // ----------------------------------------------------
-        // NEW: PHONE VERIFICATION LOGIC
-        // ----------------------------------------------------
-        let confirmationResultGlobal = null;
-
-        function setupRecaptcha() {
-            if(!window.recaptchaVerifier) {
-                window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('recaptcha-container', {
-                    'size': 'invisible',
-                    'callback': (response) => {
-                        // reCAPTCHA solved
-                    }
-                });
-            }
-        }
-
-        function sendOTP() {
-            const phoneNumber = document.getElementById("phoneNumber").value;
-            const btn = document.getElementById("sendOtpBtn");
-            const errorDiv = document.getElementById("verifyError");
-
-            if(phoneNumber.length < 10) {
-                errorDiv.style.display = 'block';
-                errorDiv.innerText = "Check Phone Number!";
-                return;
-            }
-
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> SENDING...';
-            errorDiv.style.display = 'none';
-
-            setupRecaptcha();
-            const appVerifier = window.recaptchaVerifier;
-            const user = auth.currentUser;
-
-            if (user) {
-                user.linkWithPhoneNumber(phoneNumber, appVerifier)
-                    .then((confirmationResult) => {
-                        confirmationResultGlobal = confirmationResult;
-                        document.getElementById("phoneSection").style.display = "none";
-                        document.getElementById("otpSection").style.display = "block";
-                        btn.innerHTML = 'SEND OTP <i class="fa-solid fa-paper-plane"></i>';
-                        alert("OTP Sent to " + phoneNumber);
-                    }).catch((error) => {
-                        btn.innerHTML = 'SEND OTP <i class="fa-solid fa-paper-plane"></i>';
-                        errorDiv.style.display = 'block';
-                        errorDiv.innerText = "Error: " + error.message;
-                        console.log(error);
-                    });
-            } else {
-                errorDiv.style.display = 'block';
-                errorDiv.innerText = "User not logged in!";
-            }
-        }
-
-        function verifyOTP() {
-            const code = document.getElementById("otpCode").value;
-            const btn = document.getElementById("verifyOtpBtn");
-            const errorDiv = document.getElementById("verifyError");
+        // Helper function to update Profile UI
+        function updateProfileUI(email, expiryDate) {
+            const emailDiv = document.getElementById("appUserEmail");
+            const expiryDiv = document.getElementById("appUserExpiry");
             
-            btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> VERIFYING...';
-
-            if(confirmationResultGlobal) {
-                confirmationResultGlobal.confirm(code).then((result) => {
-                    const user = result.user;
-                    const phoneNumber = user.phoneNumber;
-                    
-                    // Save to Firestore that phone is verified
-                    db.collection("users").doc(user.uid).update({
-                        phoneNumber: phoneNumber,
-                        phoneVerified: true
-                    }).then(() => {
-                        document.getElementById("phoneVerifyScreen").style.display = "none";
-                        checkUserStatus(user); // Go to main app
-                    });
-
-                }).catch((error) => {
-                    btn.innerHTML = 'VERIFY & ACCESS <i class="fa-solid fa-check-circle"></i>';
-                    errorDiv.style.display = 'block';
-                    errorDiv.innerText = "Invalid OTP or Error!";
-                });
+            if(emailDiv) emailDiv.innerText = email;
+            
+            if(expiryDiv) {
+                if(expiryDate) {
+                    expiryDiv.innerHTML = '<i class="fa-solid fa-clock"></i> VALID: ' + expiryDate;
+                    expiryDiv.style.color = "#00f2ff"; 
+                } else {
+                    expiryDiv.innerHTML = '<i class="fa-solid fa-infinity"></i> LIFETIME ACCESS';
+                    expiryDiv.style.color = "#00ff88"; 
+                }
             }
         }
-
-        // ----------------------------------------------------
-        // DISPLAY LOGIC
-        // ----------------------------------------------------
 
         function showNotice() {
             document.getElementById("loginScreen").style.display = "none";
-            document.getElementById("phoneVerifyScreen").style.display = "none";
             document.getElementById("mainApp").style.display = "none";
             document.getElementById("noticeModal").style.display = "flex";
         }
@@ -513,61 +458,6 @@
         function acceptNotice() {
             document.getElementById("noticeModal").style.display = "none";
             document.getElementById("mainApp").style.display = "block";
-        }
-
-        function checkUserStatus(user) {
-            db.collection("users").doc(user.uid).get().then((doc) => {
-                if (doc.exists) {
-                    const data = doc.data();
-
-                    // CHECK PHONE VERIFICATION FIRST
-                    if (!data.phoneNumber && !user.phoneNumber) {
-                        // User needs to verify phone
-                        document.getElementById("loginScreen").style.display = "none";
-                        document.getElementById("phoneVerifyScreen").style.display = "block";
-                        return;
-                    }
-
-                    // CHECK EXPIRY
-                    if (data.expiryDate) {
-                        const expiryDate = new Date(data.expiryDate);
-                        const today = new Date();
-
-                        if (today > expiryDate) {
-                            auth.signOut();
-                            let message = `Hello Admin, My Aviator App subscription expired. My UID: ${user.uid}`;
-                            let waLink = `https://wa.me/${adminWhatsapp}?text=${encodeURIComponent(message)}`;
-                            
-                            const errorMsg = document.getElementById("loginError");
-                            errorMsg.style.display = "block";
-                            errorMsg.innerHTML = `🚫 <b>ACCESS DENIED (EXPIRED)</b><br>
-                                                  Valid until: ${data.expiryDate}<br>
-                                                  <a href="${waLink}" class="btn-renew">
-                                                    <i class="fab fa-whatsapp"></i> RENEW LICENSE
-                                                  </a>`;
-                            document.getElementById("loginBtn").innerHTML = 'INITIALIZE SESSION <i class="fa-solid fa-arrow-right"></i>';
-                            document.getElementById("loginScreen").style.display = "block";
-                        } else {
-                            document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-clock"></i> Valid: ' + data.expiryDate;
-                            showNotice(); 
-                        }
-                    } else {
-                        document.getElementById("userExpiryDisplay").innerHTML = '<i class="fa-solid fa-infinity"></i> Unlimited Access';
-                        showNotice();
-                    }
-                } else {
-                    // Create basic user doc if not exists
-                    db.collection("users").doc(user.uid).set({
-                        email: user.email,
-                        createdAt: new Date()
-                    }).then(() => {
-                        document.getElementById("loginScreen").style.display = "none";
-                        document.getElementById("phoneVerifyScreen").style.display = "block";
-                    });
-                }
-            }).catch((error) => {
-                alert("DB Error: " + error.message);
-            });
         }
 
         document.getElementById("loginBtn").addEventListener("click", () => {
@@ -586,8 +476,48 @@
             auth.signInWithEmailAndPassword(email, password)
                 .then((userCredential) => {
                     const user = userCredential.user;
-                    btn.innerHTML = '<i class="fa-solid fa-database"></i> CHECKING DATA...';
-                    checkUserStatus(user);
+                    btn.innerHTML = '<i class="fa-solid fa-database"></i> CHECKING DB...';
+
+                    db.collection("users").doc(user.uid).get().then((doc) => {
+                        if (doc.exists) {
+                            const data = doc.data();
+                            
+                            // UPDATE PROFILE UI
+                            updateProfileUI(user.email, data.expiryDate);
+
+                            if (data.expiryDate) {
+                                const expiryDate = new Date(data.expiryDate);
+                                const today = new Date();
+
+                                if (today > expiryDate) {
+                                    auth.signOut();
+                                    let message = `Hello Admin, My Aviator App subscription expired. My UID: ${user.uid}`;
+                                    let waLink = `https://wa.me/${adminWhatsapp}?text=${encodeURIComponent(message)}`;
+                                    
+                                    errorMsg.style.display = "block";
+                                    errorMsg.innerHTML = `🚫 <b>ACCESS DENIED (EXPIRED)</b><br>
+                                                          Valid until: ${data.expiryDate}<br>
+                                                          <a href="${waLink}" class="btn-renew">
+                                                            <i class="fab fa-whatsapp"></i> RENEW LICENSE
+                                                          </a>`;
+                                    btn.innerHTML = 'INITIALIZE SESSION <i class="fa-solid fa-arrow-right"></i>';
+                                } else {
+                                    showNotice(); 
+                                }
+                            } else {
+                                showNotice();
+                            }
+                        } else {
+                            auth.signOut();
+                            errorMsg.style.display = "block";
+                            errorMsg.innerHTML = "⚠️ <b>DB ERROR:</b><br>User ID Missing.<br>UID: " + user.uid;
+                            btn.innerHTML = "SETUP REQUIRED";
+                        }
+                    }).catch((error) => {
+                        errorMsg.style.display = "block";
+                        errorMsg.innerText = "❌ DB Error: " + error.message;
+                        btn.innerHTML = "TRY AGAIN";
+                    });
                 })
                 .catch((error) => {
                     btn.innerHTML = 'INITIALIZE SESSION <i class="fa-solid fa-arrow-right"></i>';
@@ -603,18 +533,25 @@
 
         auth.onAuthStateChanged((user) => {
             if (user) {
-                // User is signed in, check status (DB + Phone)
-                checkUserStatus(user);
+                db.collection("users").doc(user.uid).get().then((doc) => {
+                    if (doc.exists) {
+                        const data = doc.data();
+                        
+                        // UPDATE PROFILE UI
+                        updateProfileUI(user.email, data.expiryDate);
+
+                        if(document.getElementById("mainApp").style.display === "none" && document.getElementById("noticeModal").style.display === "none") {
+                            showNotice();
+                        }
+                    }
+                }).catch(() => {});
             } else {
-                // User is not signed in
                 document.getElementById("loginScreen").style.display = "block";
                 document.getElementById("noticeModal").style.display = "none";
                 document.getElementById("mainApp").style.display = "none";
-                document.getElementById("phoneVerifyScreen").style.display = "none";
             }
         });
 
-        // EXISTING CALCULATION LOGIC
         let currentAmpm = 'AM';
         function setAMPM(val) {
             currentAmpm = val;
