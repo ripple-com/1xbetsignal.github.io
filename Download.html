@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Suwahas Sathsara - PRO SIGNAL APP</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;600;700&family=Poppins:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        /* --- Styles from your Uploaded File + New Grid Styles --- */
+        :root {
+            --primary: #00f2ff;
+            --secondary: #0051ff;
+            --bg-dark: #050b14;
+            --card-bg: rgba(10, 20, 35, 0.9);
+            --border: rgba(0, 242, 255, 0.3);
+            --text-main: #ffffff;
+            --text-muted: #8b9bb4;
+        }
+
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        
+        body { 
+            margin: 0; padding: 0; 
+            font-family: 'Poppins', sans-serif; 
+            background-color: var(--bg-dark);
+            background-image: 
+                linear-gradient(rgba(0, 242, 255, 0.05) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 242, 255, 0.05) 1px, transparent 1px);
+            background-size: 30px 30px;
+            min-height: 100vh; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            color: var(--text-main); 
+        }
+
+        .glow-bg {
+            position: fixed;
+            width: 100%;
+            height: 100%;
+            background: radial-gradient(circle at 50% 50%, rgba(0, 81, 255, 0.15) 0%, transparent 70%);
+            z-index: -1;
+            animation: pulseBg 5s infinite ease-in-out;
+        }
+        @keyframes pulseBg { 0%, 100% { opacity: 0.5; } 50% { opacity: 1; } }
+
+        /* Tech Card (Container) */
+        .tech-card { 
+            background: var(--card-bg); 
+            backdrop-filter: blur(20px); 
+            -webkit-backdrop-filter: blur(20px); 
+            border: 1px solid var(--border); 
+            padding: 30px; 
+            border-radius: 15px; 
+            width: 90%; 
+            max-width: 450px; 
+            text-align: center; 
+            box-shadow: 0 0 40px rgba(0, 0, 0, 0.6); 
+            position: relative; 
+            z-index: 10; 
+            display: none; /* Controlled by JS */
+            margin: 20px 0;
+        }
+
+        /* Profile & Login Styles */
+        .profile-wrapper {
+            width: 100px; height: 100px; margin: 0 auto 20px;
+            display: flex; align-items: center; justify-content: center;
+            border-radius: 50%; border: 2px solid var(--primary);
+            box-shadow: 0 0 25px rgba(0, 242, 255, 0.5);
+            background: rgba(5, 11, 20, 0.8);
+        }
+        .profile-img { width: 100%; height: 100%; border-radius: 50%; padding: 4px; object-fit: cover; }
+
+        .profile-section {
+            display: flex; align-items: center;
+            background: linear-gradient(90deg, rgba(0, 242, 255, 0.05), rgba(0, 0, 0, 0.2));
+            border: 1px solid rgba(0, 242, 255, 0.2);
+            padding: 12px 15px; border-radius: 12px;
+            margin-bottom: 20px; text-align: left;
+        }
+        .profile-pic-small { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--primary); margin-right: 15px; }
+        .profile-email { font-size: 13px; font-weight: 600; color: white; margin-bottom: 2px; }
+        .profile-status { font-size: 10px; color: var(--primary); text-transform: uppercase; background: rgba(0, 242, 255, 0.1); padding: 2px 8px; border-radius: 4px; font-weight: 700; }
+
+        /* Typography */
+        h1 { 
+            font-family: 'Rajdhani', sans-serif; font-weight: 700; margin: 0; font-size: 28px; 
+            background: linear-gradient(to right, #fff, var(--primary)); 
+            -webkit-background-clip: text; -webkit-text-fill-color: transparent; 
+            text-transform: uppercase; letter-spacing: 1px;
+        }
+        .sub-title { font-family: 'Rajdhani', sans-serif; font-size: 12px; color: var(--primary); margin-bottom: 25px; letter-spacing: 3px; text-transform: uppercase; }
+
+        /* Inputs */
+        .input-box { position: relative; margin-bottom: 25px; }
+        .input-box label { 
+            position: absolute; top: -10px; left: 15px; 
+            background: #0d1624; padding: 0 8px; font-size: 11px; 
+            color: var(--primary); border: 1px solid var(--border); border-radius: 4px; 
+            font-weight: 600; text-transform: uppercase;
+        }
+        .std-input { 
+            width: 100%; background: rgba(0, 0, 0, 0.4); 
+            border: 1px solid rgba(255, 255, 255, 0.1); padding: 15px; 
+            border-radius: 8px; color: white; font-size: 16px; 
+            font-family: 'Rajdhani', sans-serif; outline: none; transition: 0.3s;
+        }
+        textarea.std-input { height: 100px; resize: none; font-family: 'Poppins', sans-serif; font-size: 13px; }
+        .std-input:focus { border-color: var(--primary); box-shadow: 0 0 15px rgba(0, 242, 255, 0.2); }
+
+        /* Buttons */
+        .btn-analyze { 
+            width: 100%; padding: 15px; 
+            background: linear-gradient(90deg, var(--secondary), #00c3ff); 
+            border: none; border-radius: 8px; color: white; 
+            font-size: 16px; font-weight: 700; font-family: 'Rajdhani', sans-serif; 
+            letter-spacing: 1px; cursor: pointer; 
+            box-shadow: 0 5px 20px rgba(0, 81, 255, 0.4); 
+            text-transform: uppercase; transition: 0.2s;
+        }
+        .btn-analyze:active { transform: scale(0.98); }
+        
+        .btn-logout { 
+            width: 100%; padding: 12px; background: rgba(255, 0, 0, 0.1); 
+            border: 1px solid #ff4d4d; border-radius: 8px; color: #ff4d4d; 
+            font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 25px;
+        }
+
+        /* Signal Grid (New Logic) */
+        .result-grid {
+            display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; display: none;
+        }
+        .signal-card {
+            background: rgba(0, 242, 255, 0.03); border: 1px solid var(--border);
+            border-radius: 12px; padding: 15px 10px; text-align: center;
+            animation: slideUp 0.5s ease forwards; position: relative; overflow: hidden;
+        }
+        .card-odd { font-size: 24px; font-weight: 700; color: #00ff88; margin: 5px 0; font-family: 'Rajdhani', sans-serif; }
+        .card-time { font-size: 14px; font-weight: 600; color: #fff; background: rgba(255, 255, 255, 0.1); padding: 4px 10px; border-radius: 4px; display: inline-block; }
+        .card-label { font-size: 10px; color: var(--text-muted); letter-spacing: 1px; text-transform: uppercase; }
+
+        /* Loader */
+        .loader { display: none; text-align: center; margin-top: 20px; color: var(--primary); font-size: 14px; font-family: 'Rajdhani', sans-serif; letter-spacing: 2px; }
+
+        /* Notice Modal */
+        #noticeModal { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(0, 0, 0, 0.95); z-index: 9999; display: none; justify-content: center; align-items: center; padding: 20px; }
+        .notice-content { background: #0b111a; border: 1px solid var(--primary); padding: 30px 20px; border-radius: 15px; width: 100%; max-width: 380px; text-align: center; }
+        .btn-notice { width: 100%; padding: 14px; background: var(--secondary); color: white; border: none; border-radius: 8px; font-weight: bold; cursor: pointer; text-transform: uppercase; }
+        
+        #loginError { color: #ff4d4d; font-size: 13px; margin-top: 15px; display: none; background: rgba(255,0,0,0.1); padding: 10px; border-radius: 8px; }
+
+        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+    </style>
+</head>
+<body>
+
+    <div class="glow-bg"></div>
+
+    <div id="noticeModal">
+        <div class="notice-content">
+            <div style="color:var(--primary); font-size:18px; font-weight:800; margin-bottom:20px; font-family:'Rajdhani', sans-serif;">SYSTEM NOTICE</div>
+            <div style="font-size:13px; color:#ccc; line-height:1.6; margin-bottom:25px;">
+                මෙම Web App එක ගණිතමය සම්භාවිතාව (Probability) මත පදනම්ව නිර්මාණය කර ඇත.<br><br>
+                ඔබේ සම්පූර්ණ මුදල යොදවා Bet කිරීමෙන් වලකින්න. වගකීමෙන් ක්‍රීඩා කරන්න.
+            </div>
+            <button class="btn-notice" onclick="acceptNotice()">I UNDERSTAND</button>
+        </div>
+    </div>
+
+    <div id="loginScreen" class="tech-card" style="display:block;"> <div class="profile-wrapper">
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" class="profile-img">
+        </div>
+        <h1>LOGIN</h1>
+        <div class="sub-title">SECURE TERMINAL ACCESS</div>
+
+        <div class="input-box">
+            <label>EMAIL ADDRESS</label>
+            <input type="email" id="email" class="std-input" placeholder="user@email.com">
+        </div>
+        <div class="input-box">
+            <label>PASSWORD</label>
+            <input type="password" id="password" class="std-input" placeholder="••••••••">
+        </div>
+
+        <button class="btn-analyze" id="loginBtn">INITIALIZE SESSION <i class="fa-solid fa-arrow-right"></i></button>
+        <div id="loginError"></div>
+    </div>
+
+    <div id="deviceLockScreen" class="tech-card">
+        <div class="profile-wrapper">
+            <i class="fa-solid fa-mobile-screen-button" style="font-size: 40px; color: var(--primary);"></i>
+        </div>
+        <h1>DEVICE LOCK</h1>
+        <div class="sub-title">AUTHORIZATION REQUIRED</div>
+
+        <div style="background: rgba(0,0,0,0.3); padding: 15px; border-radius: 8px; border: 1px dashed var(--primary); margin-bottom: 20px;">
+            <div style="font-size: 10px; color: #8b9bb4; margin-bottom: 5px;">YOUR DEVICE ID</div>
+            <div id="showDeviceId" style="font-size: 16px; color: #fff; font-weight: bold; font-family: 'Rajdhani', sans-serif; word-break: break-all;">LOADING...</div>
+            <button onclick="copyDeviceId()" style="background: transparent; color: var(--primary); border: 1px solid var(--primary); border-radius: 4px; margin-top: 8px; cursor: pointer; font-size: 10px; padding: 5px;">TAP TO COPY</button>
+        </div>
+
+        <p style="font-size: 12px; color: #ccc;">Please send this ID to Admin for approval.</p>
+        <a id="waLink" href="#" target="_blank" style="display:block; padding:12px; background:#25D366; color:white; text-decoration:none; border-radius:8px; font-weight:bold; font-size:14px; margin-bottom:10px;">
+            <i class="fab fa-whatsapp"></i> Send to Admin
+        </a>
+        <button class="btn-logout" onclick="auth.signOut(); location.reload();">SIGN OUT</button>
+    </div>
+
+    <div id="mainApp" class="tech-card">
+        <h1>SUWAHAS SATHSARA</h1>
+        <div class="sub-title">AI SIGNAL PREDICTOR PRO</div>
+        
+        <div class="profile-section">
+            <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-pic-small">
+            <div>
+                <div id="appUserEmail" class="profile-email">User</div>
+                <div id="appUserExpiry" class="profile-status">VERIFYING...</div>
+            </div>
+        </div>
+
+        <div class="input-box">
+            <label>PASTE ODDS HISTORY</label>
+            <textarea id="historyInput" class="std-input" placeholder="Example: 1.20, 2.50, 15.00, 1.10..."></textarea>
+        </div>
+
+        <button class="btn-analyze" onclick="generateSignals()">ANALYZE DATA <i class="fa-solid fa-microchip"></i></button>
+
+        <div class="loader" id="loader">
+            <i class="fa-solid fa-circle-notch fa-spin"></i> ANALYZING PATTERNS...
+        </div>
+
+        <div class="result-grid" id="resultArea"></div>
+
+        <button class="btn-logout" id="logoutBtn">TERMINATE SESSION <i class="fa-solid fa-power-off"></i></button>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+
+    <script>
+        // --- 1. FIREBASE CONFIG (From your file) ---
+        const firebaseConfig = {
+          apiKey: "AIzaSyBmLvGb0vXkJhKVKew1sYZpHuVPo-mHvjk",
+          authDomain: "aviatorsignal-ff90c.firebaseapp.com",
+          projectId: "aviatorsignal-ff90c",
+          storageBucket: "aviatorsignal-ff90c.firebasestorage.app",
+          messagingSenderId: "656549146292",
+          appId: "1:656549146292:web:f35944e4ae7b6db943f1e1",
+          measurementId: "G-B5N5DG523J"
+        };
+        const adminWhatsapp = "94768701677"; 
+
+        firebase.initializeApp(firebaseConfig);
+        const auth = firebase.auth();
+        const db = firebase.firestore();
+
+        // --- 2. DEVICE ID LOGIC ---
+        function getDeviceId() {
+            let deviceId = localStorage.getItem("aviator_device_id");
+            if (!deviceId) {
+                deviceId = 'DEV-' + Math.random().toString(36).substr(2, 6).toUpperCase() + 
+                           '-' + Math.random().toString(36).substr(2, 6).toUpperCase();
+                localStorage.setItem("aviator_device_id", deviceId);
+            }
+            return deviceId;
+        }
+
+        function copyDeviceId() {
+            const id = document.getElementById("showDeviceId").innerText;
+            navigator.clipboard.writeText(id).then(() => alert("ID Copied!"));
+        }
+
+        // --- 3. AUTH & SECURITY FLOW ---
+        function updateProfileUI(email, expiryDate) {
+            document.getElementById("appUserEmail").innerText = email;
+            const expiryDiv = document.getElementById("appUserExpiry");
+            if(expiryDate) {
+                const today = new Date();
+                const exp = new Date(expiryDate);
+                if(today > exp) {
+                    expiryDiv.innerText = "EXPIRED";
+                    expiryDiv.style.color = "red";
+                } else {
+                    expiryDiv.innerText = "VALID UNTIL: " + expiryDate;
+                }
+            } else {
+                expiryDiv.innerText = "LIFETIME ACCESS";
+            }
+        }
+
+        function showScreen(screenId) {
+            document.getElementById("loginScreen").style.display = "none";
+            document.getElementById("deviceLockScreen").style.display = "none";
+            document.getElementById("mainApp").style.display = "none";
+            document.getElementById("noticeModal").style.display = "none";
+            
+            if(screenId === "noticeModal") {
+                 document.getElementById("noticeModal").style.display = "flex";
+            } else {
+                 document.getElementById(screenId).style.display = "block";
+            }
+        }
+
+        function checkUserAccess(user) {
+            const myDeviceId = getDeviceId();
+            
+            db.collection("users").doc(user.uid).get().then((doc) => {
+                if (doc.exists) {
+                    const data = doc.data();
+                    
+                    if (data.expiryDate && new Date() > new Date(data.expiryDate)) {
+                        auth.signOut(); alert("Subscription Expired!"); location.reload(); return;
+                    }
+
+                    if (data.allowed_devices && data.allowed_devices.includes(myDeviceId)) {
+                        updateProfileUI(user.email, data.expiryDate);
+                        showScreen("noticeModal"); // Show notice before Main App
+                    } else {
+                        updateProfileUI(user.email, data.expiryDate);
+                        document.getElementById("showDeviceId").innerText = myDeviceId;
+                        let msg = `Admin, Approve my Device.\nEmail: ${user.email}\nID: ${myDeviceId}`;
+                        document.getElementById("waLink").href = `https://wa.me/${adminWhatsapp}?text=${encodeURIComponent(msg)}`;
+                        showScreen("deviceLockScreen");
+                    }
+                } else {
+                    // Create new user entry
+                    db.collection("users").doc(user.uid).set({
+                        email: user.email, createdAt: new Date().toISOString(), allowed_devices: []
+                    }).then(() => {
+                        document.getElementById("showDeviceId").innerText = myDeviceId;
+                        showScreen("deviceLockScreen");
+                    });
+                }
+            });
+        }
+
+        function acceptNotice() {
+            document.getElementById("noticeModal").style.display = "none";
+            document.getElementById("mainApp").style.display = "block";
+        }
+
+        // --- 4. LOGIN HANDLERS ---
+        document.getElementById("loginBtn").addEventListener("click", () => {
+            const e = document.getElementById("email").value;
+            const p = document.getElementById("password").value;
+            const err = document.getElementById("loginError");
+            const btn = document.getElementById("loginBtn");
+
+            if(!e || !p) return;
+            btn.innerHTML = 'CHECKING...';
+            
+            auth.signInWithEmailAndPassword(e, p).catch((error) => {
+                btn.innerHTML = 'INITIALIZE SESSION';
+                err.style.display = "block"; err.innerText = "Login Failed: " + error.message;
+            });
+        });
+
+        document.getElementById("logoutBtn").addEventListener("click", () => {
+            auth.signOut(); location.reload();
+        });
+
+        auth.onAuthStateChanged((user) => {
+            if (user) {
+                checkUserAccess(user);
+            } else {
+                showScreen("loginScreen");
+            }
+        });
+
+        // --- 5. NEW 4-SIGNAL LOGIC (From previous chat) ---
+        function generateSignals() {
+            const inputRaw = document.getElementById('historyInput').value;
+            const resultArea = document.getElementById('resultArea');
+            const loader = document.getElementById('loader');
+
+            if (inputRaw.trim().length < 5) { alert("Please paste Odds History!"); return; }
+
+            resultArea.style.display = 'none';
+            resultArea.innerHTML = '';
+            loader.style.display = 'block';
+
+            setTimeout(() => {
+                let cleanData = inputRaw.replace(/x/gi, '').replace(/[^\d.]/g, ' ').split(' ');
+                let oddsArray = cleanData.map(num => parseFloat(num)).filter(num => !isNaN(num) && num > 0);
+
+                let highOddsCount = oddsArray.filter(o => o >= 10.00).length;
+                let totalRounds = oddsArray.length;
+                let avgGap = (highOddsCount > 0) ? Math.ceil(totalRounds / (highOddsCount + 1)) : 30;
+                if(avgGap < 10) avgGap = 12; 
+
+                let gapTimeMs = avgGap * 45 * 1000;
+                const now = new Date();
+                let htmlContent = '';
+
+                for (let i = 1; i <= 4; i++) {
+                    let variance = (Math.random() * 60000) - 30000;
+                    let futureTime = new Date(now.getTime() + (gapTimeMs * i) + variance);
+                    let timeString = futureTime.toLocaleTimeString('en-US', { hour: 'numeric', minute: '2-digit', hour12: true });
+                    let predictedOdd = (Math.random() * (35.00 - 12.00) + 12.00).toFixed(2);
+
+                    htmlContent += `
+                        <div class="signal-card" style="animation-delay: ${i * 0.1}s">
+                            <div class="card-label">SIGNAL 0${i}</div>
+                            <div class="card-odd">x${predictedOdd}</div>
+                            <div class="card-time">${timeString}</div>
+                        </div>
+                    `;
+                }
+
+                loader.style.display = 'none';
+                resultArea.innerHTML = htmlContent;
+                resultArea.style.display = 'grid';
+
+            }, 1500);
+        }
+    </script>
+</body>
+</html>
