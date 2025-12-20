@@ -83,7 +83,18 @@
             margin-bottom: 20px; text-align: left;
         }
         .profile-pic-small { width: 45px; height: 45px; border-radius: 50%; border: 2px solid var(--primary); margin-right: 15px; }
-        .profile-email { font-size: 13px; font-weight: 600; color: white; margin-bottom: 2px; }
+        
+        /* Updated Username Style */
+        .profile-email { 
+            font-size: 16px; /* Increased Size */
+            font-weight: 700; 
+            color: white; 
+            margin-bottom: 2px; 
+            font-family: 'Rajdhani', sans-serif;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
         .profile-status { font-size: 10px; color: var(--primary); text-transform: uppercase; background: rgba(0, 242, 255, 0.1); padding: 2px 8px; border-radius: 4px; font-weight: 700; }
 
         /* Typography */
@@ -130,7 +141,7 @@
             font-size: 12px; font-weight: 600; cursor: pointer; margin-top: 25px;
         }
 
-        /* Signal Grid (New Logic) */
+        /* Signal Grid */
         .result-grid {
             display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; display: none;
         }
@@ -171,7 +182,8 @@
         </div>
     </div>
 
-    <div id="loginScreen" class="tech-card" style="display:block;"> <div class="profile-wrapper">
+    <div id="loginScreen" class="tech-card" style="display:block;">
+        <div class="profile-wrapper">
             <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" alt="Profile" class="profile-img">
         </div>
         <h1>LOGIN</h1>
@@ -217,7 +229,7 @@
         <div class="profile-section">
             <img src="https://cdn-icons-png.flaticon.com/512/149/149071.png" class="profile-pic-small">
             <div>
-                <div id="appUserEmail" class="profile-email">User</div>
+                <div id="appUserName" class="profile-email">Loading User...</div>
                 <div id="appUserExpiry" class="profile-status">VERIFYING...</div>
             </div>
         </div>
@@ -243,7 +255,7 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // --- 1. FIREBASE CONFIG (From your file) ---
+        // --- 1. FIREBASE CONFIG ---
         const firebaseConfig = {
           apiKey: "AIzaSyBmLvGb0vXkJhKVKew1sYZpHuVPo-mHvjk",
           authDomain: "aviatorsignal-ff90c.firebaseapp.com",
@@ -276,8 +288,12 @@
         }
 
         // --- 3. AUTH & SECURITY FLOW ---
-        function updateProfileUI(email, expiryDate) {
-            document.getElementById("appUserEmail").innerText = email;
+        
+        // --- 🔥 NEW FUNCTION: DISPLAY USERNAME 🔥 ---
+        function updateProfileUI(displayName, expiryDate) {
+            // Display User Name
+            document.getElementById("appUserName").innerText = displayName;
+            
             const expiryDiv = document.getElementById("appUserExpiry");
             if(expiryDate) {
                 const today = new Date();
@@ -317,11 +333,17 @@
                         auth.signOut(); alert("Subscription Expired!"); location.reload(); return;
                     }
 
+                    // --- 🔥 GET USERNAME LOGIC 🔥 ---
+                    // 1. Check if 'username' field exists in DB
+                    // 2. If not, split email (e.g. kamal@gmail.com -> KAMAL)
+                    let displayUser = data.username ? data.username : user.email.split('@')[0];
+                    displayUser = displayUser.toUpperCase();
+
                     if (data.allowed_devices && data.allowed_devices.includes(myDeviceId)) {
-                        updateProfileUI(user.email, data.expiryDate);
-                        showScreen("noticeModal"); // Show notice before Main App
+                        updateProfileUI(displayUser, data.expiryDate);
+                        showScreen("noticeModal"); 
                     } else {
-                        updateProfileUI(user.email, data.expiryDate);
+                        updateProfileUI(displayUser, data.expiryDate);
                         document.getElementById("showDeviceId").innerText = myDeviceId;
                         let msg = `Admin, Approve my Device.\nEmail: ${user.email}\nID: ${myDeviceId}`;
                         document.getElementById("waLink").href = `https://wa.me/${adminWhatsapp}?text=${encodeURIComponent(msg)}`;
@@ -372,7 +394,7 @@
             }
         });
 
-        // --- 5. NEW 4-SIGNAL LOGIC (From previous chat) ---
+        // --- 5. SIGNAL LOGIC ---
         function generateSignals() {
             const inputRaw = document.getElementById('historyInput').value;
             const resultArea = document.getElementById('resultArea');
