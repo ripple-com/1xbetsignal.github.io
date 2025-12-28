@@ -71,6 +71,19 @@
         th { background: rgba(0, 242, 255, 0.1); color: var(--primary); font-family: 'Rajdhani', sans-serif; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; }
         td { font-size: 13px; color: #ddd; }
         
+        /* Device IDs in Table (New Style) */
+        .table-dev-list { display: flex; flex-direction: column; gap: 4px; }
+        .table-dev-chip { 
+            background: rgba(255, 255, 255, 0.05); 
+            border: 1px solid rgba(255, 255, 255, 0.1); 
+            color: var(--primary); 
+            padding: 2px 6px; 
+            border-radius: 4px; 
+            font-size: 10px; 
+            font-family: monospace;
+            width: fit-content;
+        }
+
         .badge-new { background: linear-gradient(90deg, #ff00cc, #333399); color: white; padding: 2px 6px; border-radius: 4px; font-size: 9px; margin-left: 5px; font-weight: bold; }
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
         .badge-active { background: rgba(0, 255, 136, 0.15); color: var(--success); border: 1px solid var(--success); }
@@ -106,6 +119,7 @@
             tr { border: 1px solid rgba(0, 242, 255, 0.1); margin-bottom: 15px; border-radius: 8px; background: rgba(255,255,255,0.02); }
             td { border: none; position: relative; padding-left: 50%; text-align: right; border-bottom: 1px solid rgba(255,255,255,0.02); }
             td:before { position: absolute; top: 15px; left: 15px; width: 45%; padding-right: 10px; white-space: nowrap; text-align: left; font-weight: bold; color: var(--text-muted); content: attr(data-label); }
+            .table-dev-list { align-items: flex-end; }
         }
 
         #adminLogin { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: var(--bg-dark); z-index: 2000; display: flex; justify-content: center; align-items: center; }
@@ -169,7 +183,7 @@
                         <th>Email / User</th>
                         <th>Created Date</th>
                         <th>Expiry Date</th>
-                        <th>Allowed Devices</th>
+                        <th width="30%">Device IDs</th>
                         <th>Actions</th>
                     </tr>
                 </thead>
@@ -244,7 +258,6 @@
         const auth = primaryApp.auth();
         const db = primaryApp.firestore();
 
-        // 🟢 ONLY RESTRICT THE EMAIL (Let Firebase check the password)
         const ALLOWED_ADMIN_EMAIL = "suwahassathsara2006@gmail.com";
 
         let allUsers = [];
@@ -260,8 +273,6 @@
                 return; 
             }
 
-            // --- STRICT CHECK: Only check EMAIL here. 
-            // Password check is done by Firebase below ---
             if(email !== ALLOWED_ADMIN_EMAIL) {
                 msg.innerText = "ACCESS DENIED: You are not the Admin!";
                 return;
@@ -314,11 +325,12 @@
                         activeCount++;
                     }
 
+                    // Handles OLD (device_id) and NEW (allowed_devices) logic
                     let deviceList = [];
                     if (data.allowed_devices && Array.isArray(data.allowed_devices)) {
                         deviceList = data.allowed_devices;
                     } else if (data.device_id) {
-                        deviceList = [data.device_id]; 
+                        deviceList = [data.device_id]; // Show old devices too
                     }
                     
                     let createdStr = data.createdAt ? data.createdAt.split('T')[0] : "Unknown";
@@ -356,12 +368,24 @@
                     createdDisplay += ` <span class="badge-new">NEW</span>`;
                 }
 
+                // --- SHOW ALL DEVICE IDs ---
+                let devicesHtml = "";
+                if(user.devices.length > 0) {
+                    devicesHtml = '<div class="table-dev-list">';
+                    user.devices.forEach(dev => {
+                        devicesHtml += `<span class="table-dev-chip">${dev}</span>`;
+                    });
+                    devicesHtml += '</div>';
+                } else {
+                    devicesHtml = '<span style="opacity:0.5; font-size:11px;">No Devices</span>';
+                }
+
                 tbody.innerHTML += `
                     <tr>
                         <td data-label="User">${user.email}</td>
                         <td data-label="Created">${createdDisplay}</td>
                         <td data-label="Expiry">${user.expiryDate || "Lifetime"}</td>
-                        <td data-label="Devices">${user.devices.length} Devices</td>
+                        <td data-label="Device IDs">${devicesHtml}</td>
                         <td data-label="Actions">
                             <button class="btn-action btn-edit" onclick="openEdit(${index})"><i class="fa-solid fa-pen"></i> EDIT</button>
                             <button class="btn-action btn-delete" onclick="deleteUser('${user.uid}')"><i class="fa-solid fa-trash"></i></button>
