@@ -348,8 +348,8 @@
             let todayStr = new Date().toISOString().split('T')[0];
 
             users.forEach((user, index) => {
-                let badge = user.isExpired ? <span class="badge badge-expired">EXPIRED</span> : <span class="badge badge-active">ACTIVE</span>;
-                if(!user.expiryDate) badge = <span class="badge badge-active" style="background:#0051ff20; color:#00f2ff;">LIFETIME</span>;
+                let badge = user.isExpired ? `<span class="badge badge-expired">EXPIRED</span>` : `<span class="badge badge-active">ACTIVE</span>`;
+                if(!user.expiryDate) badge = `<span class="badge badge-active" style="background:#0051ff20; color:#00f2ff;">LIFETIME</span>`;
 
                 let createdDisplay = user.createdAt;
                 if(user.createdAt === todayStr) {
