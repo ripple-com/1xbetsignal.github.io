@@ -71,10 +71,7 @@
         th { background: rgba(0, 242, 255, 0.1); color: var(--primary); font-family: 'Rajdhani', sans-serif; text-transform: uppercase; font-size: 14px; letter-spacing: 1px; }
         td { font-size: 13px; color: #ddd; }
         
-        /* New Badge */
         .badge-new { background: linear-gradient(90deg, #ff00cc, #333399); color: white; padding: 2px 6px; border-radius: 4px; font-size: 9px; margin-left: 5px; font-weight: bold; }
-
-        /* Badges & Actions */
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
         .badge-active { background: rgba(0, 255, 136, 0.15); color: var(--success); border: 1px solid var(--success); }
         .badge-expired { background: rgba(255, 77, 77, 0.15); color: var(--danger); border: 1px solid var(--danger); }
@@ -83,7 +80,7 @@
         .btn-edit { background: var(--secondary); color: white; }
         .btn-delete { background: rgba(255,0,0,0.2); color: var(--danger); border: 1px solid var(--danger); }
 
-        /* Device Chip Style for Edit Modal */
+        /* Chips */
         .device-list { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 5px; margin-bottom: 10px; max-height: 100px; overflow-y: auto; }
         .device-chip { background: rgba(0, 242, 255, 0.1); border: 1px solid var(--primary); padding: 5px 10px; border-radius: 15px; font-size: 11px; display: flex; align-items: center; gap: 5px; color: white; }
         .btn-remove-dev { cursor: pointer; color: var(--danger); font-weight: bold; }
@@ -103,7 +100,6 @@
         .btn-save { width: 100%; padding: 12px; background: var(--primary); color: #000; border: none; font-weight: bold; border-radius: 6px; cursor: pointer; margin-top: 10px; font-family: 'Rajdhani', sans-serif; text-transform: uppercase; }
         .btn-close { margin-top: 10px; width: 100%; background: transparent; color: #777; border: none; cursor: pointer; font-size: 12px; }
 
-        /* Mobile Responsive */
         @media screen and (max-width: 768px) {
             table, thead, tbody, th, td, tr { display: block; }
             thead tr { position: absolute; top: -9999px; left: -9999px; }
@@ -188,27 +184,22 @@
         <div class="modal-content">
             <div class="modal-title">MANAGE ACCESS</div>
             <input type="hidden" id="editUid">
-            
             <div class="form-group">
                 <label>User Email</label>
                 <input type="text" id="editEmail" class="modal-input" readonly style="color: #777;">
             </div>
-            
             <div class="form-group">
                 <label>Set Expiry Date</label>
                 <input type="date" id="editDate" class="modal-input">
             </div>
-
             <div class="form-group">
-                <label>Manage Devices (Add ID from WhatsApp)</label>
+                <label>Manage Devices (Add ID)</label>
                 <div class="add-device-box">
                     <input type="text" id="newDeviceInput" class="modal-input" placeholder="Paste ID (e.g. DEV-X9...)">
                     <button class="btn-mini-add" onclick="addNewDeviceID()"><i class="fa-solid fa-plus"></i></button>
                 </div>
-                <div id="deviceListContainer" class="device-list">
-                    </div>
+                <div id="deviceListContainer" class="device-list"></div>
             </div>
-
             <button class="btn-save" onclick="saveUserChanges()">UPDATE ALL CHANGES</button>
             <button class="btn-close" onclick="closeModal('editModal')">CANCEL</button>
         </div>
@@ -239,9 +230,6 @@
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
 
     <script>
-        // ========================================================
-        // 🔥 YOUR FIREBASE CONFIG 🔥
-        // ========================================================
         const firebaseConfig = {
           apiKey: "AIzaSyBmLvGb0vXkJhKVKew1sYZpHuVPo-mHvjk",
           authDomain: "aviatorsignal-ff90c.firebaseapp.com",
@@ -251,21 +239,17 @@
           appId: "1:656549146292:web:f35944e4ae7b6db943f1e1",
           measurementId: "G-B5N5DG523J"
         };
-        // ========================================================
 
-        // Initialize Primary App
         const primaryApp = firebase.initializeApp(firebaseConfig);
         const auth = primaryApp.auth();
         const db = primaryApp.firestore();
 
-        // 🟢 HARDCODED ADMIN CREDENTIALS
+        // 🟢 ONLY RESTRICT THE EMAIL (Let Firebase check the password)
         const ALLOWED_ADMIN_EMAIL = "suwahassathsara2006@gmail.com";
-        const ALLOWED_ADMIN_PASS = "Suwahas2006";
 
         let allUsers = [];
         let currentEditingDevices = []; 
 
-        // 1. Admin Login (SECURED)
         function adminLogin() {
             const email = document.getElementById('adminEmail').value.trim();
             const pass = document.getElementById('adminPass').value.trim();
@@ -276,10 +260,14 @@
                 return; 
             }
 
-            if(email !== ALLOWED_ADMIN_EMAIL || pass !== ALLOWED_ADMIN_PASS) {
-                msg.innerText = "ACCESS DENIED: Invalid Admin Credentials";
+            // --- STRICT CHECK: Only check EMAIL here. 
+            // Password check is done by Firebase below ---
+            if(email !== ALLOWED_ADMIN_EMAIL) {
+                msg.innerText = "ACCESS DENIED: You are not the Admin!";
                 return;
             }
+
+            msg.innerText = "Verifying with Server...";
 
             auth.setPersistence(firebase.auth.Auth.Persistence.LOCAL)
                 .then(() => {
@@ -290,7 +278,7 @@
                     loadUsers();
                 })
                 .catch((err) => { 
-                    msg.innerText = "System Error: " + err.message; 
+                    msg.innerText = "Login Failed: " + err.message; 
                 });
         }
 
@@ -310,9 +298,7 @@
 
         function logout() { auth.signOut(); window.location.reload(); }
 
-        // 3. Load Users - Sorted by Created Date (Newest First)
         function loadUsers() {
-            // Updated to sort by 'createdAt' in descending order
             db.collection("users").orderBy("createdAt", "desc").onSnapshot((snapshot) => {
                 allUsers = [];
                 let activeCount = 0, expiredCount = 0;
@@ -335,11 +321,7 @@
                         deviceList = [data.device_id]; 
                     }
                     
-                    // Format Created Date neatly
-                    let createdStr = "Unknown";
-                    if(data.createdAt) {
-                        createdStr = data.createdAt.split('T')[0];
-                    }
+                    let createdStr = data.createdAt ? data.createdAt.split('T')[0] : "Unknown";
 
                     allUsers.push({
                         uid: doc.id,
@@ -363,12 +345,12 @@
             tbody.innerHTML = '';
             if(users.length === 0) { tbody.innerHTML = '<tr><td colspan="5" align="center">No Users Found</td></tr>'; return; }
 
+            let todayStr = new Date().toISOString().split('T')[0];
+
             users.forEach((user, index) => {
                 let badge = user.isExpired ? <span class="badge badge-expired">EXPIRED</span> : <span class="badge badge-active">ACTIVE</span>;
                 if(!user.expiryDate) badge = <span class="badge badge-active" style="background:#0051ff20; color:#00f2ff;">LIFETIME</span>;
 
-                // Highlight newly created users (created today)
-                let todayStr = new Date().toISOString().split('T')[0];
                 let createdDisplay = user.createdAt;
                 if(user.createdAt === todayStr) {
                     createdDisplay += ` <span class="badge-new">NEW</span>`;
@@ -393,16 +375,13 @@
             renderTable(allUsers.filter(u => u.email.toLowerCase().includes(val)));
         }
 
-        // 4. Edit User
         function openEdit(index) {
             let user = allUsers[index];
             document.getElementById('editUid').value = user.uid;
             document.getElementById('editEmail').value = user.email;
             document.getElementById('editDate').value = user.expiryDate;
-            
             currentEditingDevices = [...user.devices]; 
             renderDeviceManager();
-            
             document.getElementById('editModal').style.display = 'flex';
         }
 
@@ -440,7 +419,6 @@
         function saveUserChanges() {
             let uid = document.getElementById('editUid').value;
             let date = document.getElementById('editDate').value;
-            
             db.collection("users").doc(uid).update({ 
                 expiryDate: date,
                 allowed_devices: currentEditingDevices 
@@ -450,7 +428,6 @@
             });
         }
 
-        // 5. Create New User
         function openAddModal() {
             document.getElementById('newEmail').value = "";
             document.getElementById('newPass').value = "";
@@ -465,11 +442,8 @@
             const btn = document.getElementById('btnCreate');
 
             if(!email || !pass || !date) { alert("Please fill all fields!"); return; }
-
             btn.innerText = "CREATING...";
-
             const secondaryApp = firebase.initializeApp(firebaseConfig, "Secondary");
-
             secondaryApp.auth().createUserWithEmailAndPassword(email, pass)
                 .then((cred) => {
                     return db.collection("users").doc(cred.user.uid).set({
